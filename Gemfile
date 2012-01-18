@@ -38,3 +38,5 @@ gem "guard-rspec", ">= 0.4.3", :group => :development
 gem "guard-cucumber", ">= 0.6.1", :group => :development
 gem "devise", ">= 1.5.0"
 gem "rails-footnotes", ">= 3.7", :group => :development
+
+gem "has_scope"
