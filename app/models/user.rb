@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :timeoutable
   devise :encryptable, :encryptor => :authlogic_sha512
 
+  has_one :profile
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email#, :password, :password_confirmation, :remember_me
 end

@@ -1,0 +1,29 @@
+<% title "Branches" %>
+
+<table>
+  <tr>
+    <th>Company</th>
+    <th>Name</th>
+    <th>Address1</th>
+    <th>Address2</th>
+    <th>Zip Code</th>
+    <th>City</th>
+    <th>Approver</th>
+  </tr>
+  <% for branch in @branches %>
+    <tr>
+      <td><%= branch.company_id %></td>
+      <td><%= branch.name %></td>
+      <td><%= branch.address1 %></td>
+      <td><%= branch.address2 %></td>
+      <td><%= branch.zip_code %></td>
+      <td><%= branch.city_id %></td>
+      <td><%= branch.approver_id %></td>
+      <td><%= link_to "Show", branch %></td>
+      <td><%= link_to "Edit", edit_branch_path(branch) %></td>
+      <td><%= link_to "Destroy", branch, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Branch", new_branch_path %></p>

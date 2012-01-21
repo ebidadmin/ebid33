@@ -1,0 +1,32 @@
+<%= form_for @company do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :nickname %><br />
+    <%= f.text_field :nickname %>
+  </p>
+  <p>
+    <%= f.label :primary_role %><br />
+    <%= f.number_field :primary_role %>
+  </p>
+  <p>
+    <%= f.label :trial_start %><br />
+    <%= f.date_select :trial_start %>
+  </p>
+  <p>
+    <%= f.label :trial_end %><br />
+    <%= f.date_select :trial_end %>
+  </p>
+  <p>
+    <%= f.label :metering_date %><br />
+    <%= f.date_select :metering_date %>
+  </p>
+  <p>
+    <%= f.label :perf_ratio %><br />
+    <%= f.text_field :perf_ratio %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

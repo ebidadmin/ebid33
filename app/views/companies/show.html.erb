@@ -1,0 +1,36 @@
+<% title "Company" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @company.name %>
+</p>
+<p>
+  <strong>Nickname:</strong>
+  <%= @company.nickname %>
+</p>
+<p>
+  <strong>Primary Role:</strong>
+  <%= @company.primary_role %>
+</p>
+<p>
+  <strong>Trial Start:</strong>
+  <%= @company.trial_start %>
+</p>
+<p>
+  <strong>Trial End:</strong>
+  <%= @company.trial_end %>
+</p>
+<p>
+  <strong>Metering Date:</strong>
+  <%= @company.metering_date %>
+</p>
+<p>
+  <strong>Perf Ratio:</strong>
+  <%= @company.perf_ratio %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_company_path(@company) %> |
+  <%= link_to "Destroy", @company, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", companies_path %>
+</p>

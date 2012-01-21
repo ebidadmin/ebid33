@@ -1,0 +1,16 @@
+<%= form_for @car_model do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :car_brand_id %><br />
+    <%= f.number_field :car_brand_id %>
+  </p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :creator_id %><br />
+    <%= f.number_field :creator_id %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

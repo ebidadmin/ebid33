@@ -13,30 +13,43 @@ if HOST_OS =~ /linux/i
   gem 'therubyracer', '>= 0.9.8'
 end
 gem "rspec-rails", ">= 2.8.0.rc1", :group => [:development, :test]
-gem "factory_girl_rails", ">= 1.4.0", :group => :test
-gem "cucumber-rails", ">= 1.2.0", :group => :test
-gem "capybara", ">= 1.1.2", :group => :test
-gem "database_cleaner", ">= 0.7.0", :group => :test
-gem "launchy", ">= 2.0.5", :group => :test
-gem "guard", ">= 0.6.2", :group => :development
-case HOST_OS
-  when /darwin/i
-    gem 'rb-fsevent', :group => :development
-    gem 'growl', :group => :development
-  when /linux/i
-    gem 'libnotify', :group => :development
-    gem 'rb-inotify', :group => :development
-  when /mswin|windows/i
-    gem 'rb-fchange', :group => :development
-    gem 'win32console', :group => :development
-    gem 'rb-notifu', :group => :development
-end
-gem "guard-bundler", ">= 0.1.3", :group => :development
-gem "guard-rails", ">= 0.0.3", :group => :development
-gem "guard-livereload", ">= 0.3.0", :group => :development
-gem "guard-rspec", ">= 0.4.3", :group => :development
-gem "guard-cucumber", ">= 0.6.1", :group => :development
-gem "devise", ">= 1.5.0"
-gem "rails-footnotes", ">= 3.7", :group => :development
 
+group :test do
+	gem "factory_girl_rails", ">= 1.4.0"
+	gem "cucumber-rails", ">= 1.2.0"
+	gem "capybara", ">= 1.1.2"
+	gem "database_cleaner", ">= 0.7.0"
+	gem "launchy", ">= 2.0.5"
+	gem "mocha"
+end
+
+group :development do
+	case HOST_OS
+	  when /darwin/i
+	    gem 'rb-fsevent'
+	    gem 'growl'
+	  when /linux/i
+	    gem 'libnotify'
+	    gem 'rb-inotify'
+	  when /mswin|windows/i
+	    gem 'rb-fchange'
+	    gem 'win32console'
+	    gem 'rb-notifu'
+	end
+	gem "guard", ">= 0.6.2"
+	gem "guard-bundler", ">= 0.1.3"
+	gem "guard-rails", ">= 0.0.3"
+	gem "guard-livereload", ">= 0.3.0"
+	gem "guard-rspec", ">= 0.4.3"
+	gem "guard-cucumber", ">= 0.6.1"
+	gem "rails-footnotes", ">= 3.7"
+	gem "nifty-generators"
+end
+
+gem "devise", ">= 1.5.0"
 gem "has_scope"
+gem "simple_form"
+gem "nested_form"
+gem "paperclip", "~> 2.0"
+gem "delayed_job_active_record"
+gem "will_paginate", "~> 3.0"

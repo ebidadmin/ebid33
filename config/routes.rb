@@ -1,4 +1,16 @@
 Ebid33::Application.routes.draw do
+  resources :entries
+
+  resources :branches
+
+  resources :companies
+
+  resources :car_variants
+
+  resources :car_models
+
+  resources :car_brands
+
   #get \"users\/show\"
 
   root :to => "home#index"

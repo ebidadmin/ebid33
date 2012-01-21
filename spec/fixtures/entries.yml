@@ -1,0 +1,53 @@
+one:
+  user_id: 1
+  company_id: 1
+  ref_no: MyString
+  year_model: 
+  car_brand_id: 1
+  car_model_id: 1
+  car_variant_id: 1
+  plate_no: MyString
+  serial_no: MyString
+  motor_no: MyString
+  date_of_loss: 2012-01-19
+  city_id: 1
+  term_id: 1
+  line_items_count: 1
+  photos_count: 1
+  status: MyString
+  online: 2012-01-19 18:25:34
+  bid_until: 2012-01-19
+  bids_count: 1
+  decided: 2012-01-19 18:25:34
+  relisted: 2012-01-19 18:25:34
+  relist_count: 1
+  expired: 2012-01-19
+  chargeable_expiry: false
+  oders_count: 1
+
+two:
+  user_id: 1
+  company_id: 1
+  ref_no: MyString
+  year_model: 
+  car_brand_id: 1
+  car_model_id: 1
+  car_variant_id: 1
+  plate_no: MyString
+  serial_no: MyString
+  motor_no: MyString
+  date_of_loss: 2012-01-19
+  city_id: 1
+  term_id: 1
+  line_items_count: 1
+  photos_count: 1
+  status: MyString
+  online: 2012-01-19 18:25:34
+  bid_until: 2012-01-19
+  bids_count: 1
+  decided: 2012-01-19 18:25:34
+  relisted: 2012-01-19 18:25:34
+  relist_count: 1
+  expired: 2012-01-19
+  chargeable_expiry: false
+  oders_count: 1

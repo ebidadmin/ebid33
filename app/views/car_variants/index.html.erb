@@ -1,0 +1,33 @@
+<h1>Listing car_variants</h1>
+
+<table>
+  <tr>
+    <th>Car brand</th>
+    <th>Car model</th>
+    <th>Name</th>
+    <th>Start year</th>
+    <th>End year</th>
+    <th>Creator</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @car_variants.each do |car_variant| %>
+  <tr>
+    <td><%= car_variant.car_brand_id %></td>
+    <td><%= car_variant.car_model_id %></td>
+    <td><%= car_variant.name %></td>
+    <td><%= car_variant.start_year %></td>
+    <td><%= car_variant.end_year %></td>
+    <td><%= car_variant.creator_id %></td>
+    <td><%= link_to 'Show', car_variant %></td>
+    <td><%= link_to 'Edit', edit_car_variant_path(car_variant) %></td>
+    <td><%= link_to 'Destroy', car_variant, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Car variant', new_car_variant_path %>

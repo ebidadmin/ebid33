@@ -1,0 +1,36 @@
+<% title "Branch" %>
+
+<p>
+  <strong>Company:</strong>
+  <%= @branch.company_id %>
+</p>
+<p>
+  <strong>Name:</strong>
+  <%= @branch.name %>
+</p>
+<p>
+  <strong>Address1:</strong>
+  <%= @branch.address1 %>
+</p>
+<p>
+  <strong>Address2:</strong>
+  <%= @branch.address2 %>
+</p>
+<p>
+  <strong>Zip Code:</strong>
+  <%= @branch.zip_code %>
+</p>
+<p>
+  <strong>City:</strong>
+  <%= @branch.city_id %>
+</p>
+<p>
+  <strong>Approver:</strong>
+  <%= @branch.approver_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_branch_path(@branch) %> |
+  <%= link_to "Destroy", @branch, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", branches_path %>
+</p>

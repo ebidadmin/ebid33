@@ -1,0 +1,24 @@
+<% title "Car Models" %>
+
+<table>
+  <tr>
+    <th>Car Brand</th>
+    <th>Name</th>
+    <th>Creator</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  <% for car_model in @car_models %>
+    <tr>
+      <td><%= car_model.car_brand.name %></td>
+      <td><%= car_model.name %></td>
+      <td><%= car_model.creator_id %></td>
+      <td><%= link_to "Show", car_model %></td>
+      <td><%= link_to "Edit", edit_car_model_path(car_model) %></td>
+      <td><%= link_to "Destroy", car_model, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Car Model", new_car_model_path %></p>

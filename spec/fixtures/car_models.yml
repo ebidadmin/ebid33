@@ -1,0 +1,9 @@
+one:
+  car_brand_id: 1
+  name: MyString
+  creator_id: 1
+
+two:
+  car_brand_id: 1
+  name: MyString
+  creator_id: 1

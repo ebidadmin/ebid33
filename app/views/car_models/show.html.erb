@@ -1,0 +1,20 @@
+<% title "Car Model" %>
+
+<p>
+  <strong>Car Brand:</strong>
+  <%= @car_model.car_brand_id %>
+</p>
+<p>
+  <strong>Name:</strong>
+  <%= @car_model.name %>
+</p>
+<p>
+  <strong>Creator:</strong>
+  <%= @car_model.creator_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_car_model_path(@car_model) %> |
+  <%= link_to "Destroy", @car_model, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", car_models_path %>
+</p>

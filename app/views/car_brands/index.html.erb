@@ -1,0 +1,25 @@
+<h1>Listing car_brands</h1>
+
+<table>
+  <tr>
+    <th>Car origin</th>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @car_brands.each do |car_brand| %>
+  <tr>
+    <td><%= car_brand.car_origin.name %></td>
+    <td><%= car_brand.name %></td>
+    <td><%= link_to 'Show', car_brand %></td>
+    <td><%= link_to 'Edit', edit_car_brand_path(car_brand) %></td>
+    <td><%= link_to 'Destroy', car_brand, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Car brand', new_car_brand_path %>

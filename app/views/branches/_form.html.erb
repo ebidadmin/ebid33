@@ -1,0 +1,32 @@
+<%= form_for @branch do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :company_id %><br />
+    <%= f.number_field :company_id %>
+  </p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :address1 %><br />
+    <%= f.text_field :address1 %>
+  </p>
+  <p>
+    <%= f.label :address2 %><br />
+    <%= f.text_field :address2 %>
+  </p>
+  <p>
+    <%= f.label :zip_code %><br />
+    <%= f.number_field :zip_code %>
+  </p>
+  <p>
+    <%= f.label :city_id %><br />
+    <%= f.number_field :city_id %>
+  </p>
+  <p>
+    <%= f.label :approver_id %><br />
+    <%= f.number_field :approver_id %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

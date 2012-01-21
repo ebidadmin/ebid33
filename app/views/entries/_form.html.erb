@@ -1,0 +1,104 @@
+<%= form_for @entry do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </p>
+  <p>
+    <%= f.label :company_id %><br />
+    <%= f.number_field :company_id %>
+  </p>
+  <p>
+    <%= f.label :ref_no %><br />
+    <%= f.text_field :ref_no %>
+  </p>
+  <p>
+    <%= f.label :year_model %><br />
+    <%= f.text_field :year_model %>
+  </p>
+  <p>
+    <%= f.label :car_brand_id %><br />
+    <%= f.number_field :car_brand_id %>
+  </p>
+  <p>
+    <%= f.label :car_model_id %><br />
+    <%= f.number_field :car_model_id %>
+  </p>
+  <p>
+    <%= f.label :car_variant_id %><br />
+    <%= f.number_field :car_variant_id %>
+  </p>
+  <p>
+    <%= f.label :plate_no %><br />
+    <%= f.text_field :plate_no %>
+  </p>
+  <p>
+    <%= f.label :serial_no %><br />
+    <%= f.text_field :serial_no %>
+  </p>
+  <p>
+    <%= f.label :motor_no %><br />
+    <%= f.text_field :motor_no %>
+  </p>
+  <p>
+    <%= f.label :date_of_loss %><br />
+    <%= f.date_select :date_of_loss %>
+  </p>
+  <p>
+    <%= f.label :city_id %><br />
+    <%= f.number_field :city_id %>
+  </p>
+  <p>
+    <%= f.label :term_id %><br />
+    <%= f.number_field :term_id %>
+  </p>
+  <p>
+    <%= f.label :line_items_count %><br />
+    <%= f.number_field :line_items_count %>
+  </p>
+  <p>
+    <%= f.label :photos_count %><br />
+    <%= f.number_field :photos_count %>
+  </p>
+  <p>
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </p>
+  <p>
+    <%= f.label :online %><br />
+    <%= f.datetime_select :online %>
+  </p>
+  <p>
+    <%= f.label :bid_until %><br />
+    <%= f.date_select :bid_until %>
+  </p>
+  <p>
+    <%= f.label :bids_count %><br />
+    <%= f.number_field :bids_count %>
+  </p>
+  <p>
+    <%= f.label :decided %><br />
+    <%= f.datetime_select :decided %>
+  </p>
+  <p>
+    <%= f.label :relisted %><br />
+    <%= f.datetime_select :relisted %>
+  </p>
+  <p>
+    <%= f.label :relist_count %><br />
+    <%= f.number_field :relist_count %>
+  </p>
+  <p>
+    <%= f.label :expired %><br />
+    <%= f.date_select :expired %>
+  </p>
+  <p>
+    <%= f.label :chargeable_expiry %><br />
+    <%= f.check_box :chargeable_expiry %>
+  </p>
+  <p>
+    <%= f.label :oders_count %><br />
+    <%= f.number_field :oders_count %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

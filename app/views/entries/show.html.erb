@@ -1,0 +1,108 @@
+<% title "Entry" %>
+
+<p>
+  <strong>User:</strong>
+  <%= @entry.user_id %>
+</p>
+<p>
+  <strong>Company:</strong>
+  <%= @entry.company_id %>
+</p>
+<p>
+  <strong>Ref No:</strong>
+  <%= @entry.ref_no %>
+</p>
+<p>
+  <strong>Year Model:</strong>
+  <%= @entry.year_model %>
+</p>
+<p>
+  <strong>Car Brand:</strong>
+  <%= @entry.car_brand_id %>
+</p>
+<p>
+  <strong>Car Model:</strong>
+  <%= @entry.car_model_id %>
+</p>
+<p>
+  <strong>Car Variant:</strong>
+  <%= @entry.car_variant_id %>
+</p>
+<p>
+  <strong>Plate No:</strong>
+  <%= @entry.plate_no %>
+</p>
+<p>
+  <strong>Serial No:</strong>
+  <%= @entry.serial_no %>
+</p>
+<p>
+  <strong>Motor No:</strong>
+  <%= @entry.motor_no %>
+</p>
+<p>
+  <strong>Date Of Loss:</strong>
+  <%= @entry.date_of_loss %>
+</p>
+<p>
+  <strong>City:</strong>
+  <%= @entry.city_id %>
+</p>
+<p>
+  <strong>Term:</strong>
+  <%= @entry.term_id %>
+</p>
+<p>
+  <strong>Line Items Count:</strong>
+  <%= @entry.line_items_count %>
+</p>
+<p>
+  <strong>Photos Count:</strong>
+  <%= @entry.photos_count %>
+</p>
+<p>
+  <strong>Status:</strong>
+  <%= @entry.status %>
+</p>
+<p>
+  <strong>Online:</strong>
+  <%= @entry.online %>
+</p>
+<p>
+  <strong>Bid Until:</strong>
+  <%= @entry.bid_until %>
+</p>
+<p>
+  <strong>Bids Count:</strong>
+  <%= @entry.bids_count %>
+</p>
+<p>
+  <strong>Decided:</strong>
+  <%= @entry.decided %>
+</p>
+<p>
+  <strong>Relisted:</strong>
+  <%= @entry.relisted %>
+</p>
+<p>
+  <strong>Relist Count:</strong>
+  <%= @entry.relist_count %>
+</p>
+<p>
+  <strong>Expired:</strong>
+  <%= @entry.expired %>
+</p>
+<p>
+  <strong>Chargeable Expiry:</strong>
+  <%= @entry.chargeable_expiry %>
+</p>
+<p>
+  <strong>Oders Count:</strong>
+  <%= @entry.oders_count %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_entry_path(@entry) %> |
+  <%= link_to "Destroy", @entry, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", entries_path %>
+</p>

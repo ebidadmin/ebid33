@@ -1,0 +1,29 @@
+<% title "Companies" %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Nickname</th>
+    <th>Primary Role</th>
+    <th>Trial Start</th>
+    <th>Trial End</th>
+    <th>Metering Date</th>
+    <th>Perf Ratio</th>
+  </tr>
+  <% for company in @companies %>
+    <tr>
+      <td><%= company.name %></td>
+      <td><%= company.nickname %></td>
+      <td><%= company.primary_role %></td>
+      <td><%= company.trial_start %></td>
+      <td><%= company.trial_end %></td>
+      <td><%= company.metering_date %></td>
+      <td><%= company.perf_ratio %></td>
+      <td><%= link_to "Show", company %></td>
+      <td><%= link_to "Edit", edit_company_path(company) %></td>
+      <td><%= link_to "Destroy", company, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Company", new_company_path %></p>

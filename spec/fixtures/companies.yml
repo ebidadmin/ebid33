@@ -1,0 +1,17 @@
+one:
+  name: MyString
+  nickname: MyString
+  primary_role: 1
+  trial_start: 2012-01-19
+  trial_end: 2012-01-19
+  metering_date: 2012-01-19
+  perf_ratio: 9.99
+
+two:
+  name: MyString
+  nickname: MyString
+  primary_role: 1
+  trial_start: 2012-01-19
+  trial_end: 2012-01-19
+  metering_date: 2012-01-19
+  perf_ratio: 9.99

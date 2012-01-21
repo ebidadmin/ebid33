@@ -1,0 +1,17 @@
+one:
+  company_id: 1
+  name: MyString
+  address1: MyString
+  address2: MyString
+  zip_code: 1
+  city_id: 1
+  approver_id: 1
+
+two:
+  company_id: 1
+  name: MyString
+  address1: MyString
+  address2: MyString
+  zip_code: 1
+  city_id: 1
+  approver_id: 1
