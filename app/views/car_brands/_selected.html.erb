@@ -1,0 +1,4 @@
+<%= content_tag :option, 'Select Model/Type', :value => nil  %>
+<% for car_model in @car_models %>
+	<%= content_tag :option, car_model.name, :value => car_model.id  %>
+<% end %>

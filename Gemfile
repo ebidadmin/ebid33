@@ -49,7 +49,7 @@ end
 gem "devise", ">= 1.5.0"
 gem "has_scope"
 gem "simple_form"
-gem "nested_form"
+gem "nested_form", :git => 'git://github.com/ryanb/nested_form.git'
 gem "paperclip", "~> 2.0"
 gem "delayed_job_active_record"
 gem "will_paginate", "~> 3.0"

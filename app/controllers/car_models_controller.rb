@@ -38,4 +38,9 @@ class CarModelsController < ApplicationController
     @car_model.destroy
     redirect_to car_models_url, :notice => "Successfully destroyed car model."
   end
+
+  def selected
+    @car_variants = CarVariant.where(car_model_id: params[:id])
+    render :partial => 'car_models/selected' 
+  end
 end

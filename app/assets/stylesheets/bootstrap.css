@@ -1051,9 +1051,9 @@ textarea[readonly] {
   margin-left: -20px;
   float: left;
 }
-.form-stacked {
+/*.form-stacked {
   padding-left: 20px;
-}
+}*/
 .form-stacked fieldset {
   padding-top: 9px;
 }

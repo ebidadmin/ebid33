@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/ryanb/nested_form.git
+  revision: 54da3123d9f1b14b37df608794508adccd6ac5ba
+  specs:
+    nested_form (0.1.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -123,7 +129,6 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.0.4)
     mysql2 (0.3.10)
-    nested_form (0.1.1)
     nifty-generators (0.4.6)
     nokogiri (1.5.0)
     orm_adapter (0.0.6)
@@ -234,7 +239,7 @@ DEPENDENCIES
   launchy (>= 2.0.5)
   mocha
   mysql2
-  nested_form
+  nested_form!
   nifty-generators
   paperclip (~> 2.0)
   rails (= 3.1.3)

@@ -1,6 +1,9 @@
 class EntriesController < ApplicationController
+  before_filter :search_by_origin, only: [:new, :edit, :create, :update]
+  before_filter :search_by_region, only: [:new, :edit, :create, :update]
+
   def index
-    @entries = Entry.all
+    @entries = Entry.paginate(page: params[:page], per_page: 12).order('created_at DESC')
   end
 
   def show
@@ -9,6 +12,9 @@ class EntriesController < ApplicationController
 
   def new
     @entry = Entry.new
+    @car_models = @car_variants = @cities = []
+    2.times { @entry.photos.build }
+    @entry.term_id = 4 # default credit term is 30 days
   end
 
   def create
@@ -22,6 +28,11 @@ class EntriesController < ApplicationController
 
   def edit
     @entry = Entry.find(params[:id])
+    @car_models = CarModel.where(car_brand_id: @entry.car_brand_id)
+    @car_variants = CarVariant.where(car_model_id: @entry.car_model_id)
+    @entry.region = @entry.city.region_id
+    @cities = City.where(region_id: @entry.region)
+    @entry.photos.build
   end
 
   def update

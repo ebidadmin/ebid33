@@ -1,65 +1,23 @@
 <% title "Entries" %>
 
-<table>
-  <tr>
-    <th>User</th>
-    <th>Company</th>
-    <th>Ref No</th>
-    <th>Year Model</th>
-    <th>Car Brand</th>
-    <th>Car Model</th>
-    <th>Car Variant</th>
-    <th>Plate No</th>
-    <th>Serial No</th>
-    <th>Motor No</th>
-    <th>Date Of Loss</th>
-    <th>City</th>
-    <th>Term</th>
-    <th>Line Items Count</th>
-    <th>Photos Count</th>
-    <th>Status</th>
-    <th>Online</th>
-    <th>Bid Until</th>
-    <th>Bids Count</th>
-    <th>Decided</th>
-    <th>Relisted</th>
-    <th>Relist Count</th>
-    <th>Expired</th>
-    <th>Chargeable Expiry</th>
-    <th>Oders Count</th>
-  </tr>
-  <% for entry in @entries %>
-    <tr>
-      <td><%= entry.user_id %></td>
-      <td><%= entry.company_id %></td>
-      <td><%= entry.ref_no %></td>
-      <td><%= entry.year_model %></td>
-      <td><%= entry.car_brand_id %></td>
-      <td><%= entry.car_model_id %></td>
-      <td><%= entry.car_variant_id %></td>
-      <td><%= entry.plate_no %></td>
-      <td><%= entry.serial_no %></td>
-      <td><%= entry.motor_no %></td>
-      <td><%= entry.date_of_loss %></td>
-      <td><%= entry.city_id %></td>
-      <td><%= entry.term_id %></td>
-      <td><%= entry.line_items_count %></td>
-      <td><%= entry.photos_count %></td>
-      <td><%= entry.status %></td>
-      <td><%= entry.online %></td>
-      <td><%= entry.bid_until %></td>
-      <td><%= entry.bids_count %></td>
-      <td><%= entry.decided %></td>
-      <td><%= entry.relisted %></td>
-      <td><%= entry.relist_count %></td>
-      <td><%= entry.expired %></td>
-      <td><%= entry.chargeable_expiry %></td>
-      <td><%= entry.oders_count %></td>
-      <td><%= link_to "Show", entry %></td>
-      <td><%= link_to "Edit", edit_entry_path(entry) %></td>
-      <td><%= link_to "Destroy", entry, :confirm => 'Are you sure?', :method => :delete %></td>
-    </tr>
-  <% end %>
-</table>
+<% @entries.in_groups_of(4, false) do |row_entries| %>
+	<div class="row show-grid">
+		<% for entry in row_entries %>
+			<%= div_for entry, class: 'span3' do %>
+				<%= image_tag entry.photos.first.photo.url(:tiny), class: 'thumbnail' if entry.photos.present? %>
+				<%= content_tag :p, entry.ref_no, class: 'small' %>
+				<%= content_tag :p, entry.model_name %>
+				<%= content_tag :p, entry.plate_no, class: 'small' %>
+				<%= link_to 'Show', entry %>
+				<%= link_to 'Edit', edit_entry_path(entry) %>
+			<% end %>
+		<% end %>
+	</div>
+<% end %>
 
-<p><%= link_to "New Entry", new_entry_path %></p>
+<%= will_paginate @entries %>
+
+<div class="well">
+	<%= link_to "New Entry", new_entry_path, class: 'btn large primary' %>
+</div>
+

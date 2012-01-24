@@ -1,104 +1,70 @@
-<%= form_for @entry do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id %>
-  </p>
-  <p>
-    <%= f.label :company_id %><br />
-    <%= f.number_field :company_id %>
-  </p>
-  <p>
-    <%= f.label :ref_no %><br />
-    <%= f.text_field :ref_no %>
-  </p>
-  <p>
-    <%= f.label :year_model %><br />
-    <%= f.text_field :year_model %>
-  </p>
-  <p>
-    <%= f.label :car_brand_id %><br />
-    <%= f.number_field :car_brand_id %>
-  </p>
-  <p>
-    <%= f.label :car_model_id %><br />
-    <%= f.number_field :car_model_id %>
-  </p>
-  <p>
-    <%= f.label :car_variant_id %><br />
-    <%= f.number_field :car_variant_id %>
-  </p>
-  <p>
-    <%= f.label :plate_no %><br />
-    <%= f.text_field :plate_no %>
-  </p>
-  <p>
-    <%= f.label :serial_no %><br />
-    <%= f.text_field :serial_no %>
-  </p>
-  <p>
-    <%= f.label :motor_no %><br />
-    <%= f.text_field :motor_no %>
-  </p>
-  <p>
-    <%= f.label :date_of_loss %><br />
-    <%= f.date_select :date_of_loss %>
-  </p>
-  <p>
-    <%= f.label :city_id %><br />
-    <%= f.number_field :city_id %>
-  </p>
-  <p>
-    <%= f.label :term_id %><br />
-    <%= f.number_field :term_id %>
-  </p>
-  <p>
-    <%= f.label :line_items_count %><br />
-    <%= f.number_field :line_items_count %>
-  </p>
-  <p>
-    <%= f.label :photos_count %><br />
-    <%= f.number_field :photos_count %>
-  </p>
-  <p>
-    <%= f.label :status %><br />
-    <%= f.text_field :status %>
-  </p>
-  <p>
-    <%= f.label :online %><br />
-    <%= f.datetime_select :online %>
-  </p>
-  <p>
-    <%= f.label :bid_until %><br />
-    <%= f.date_select :bid_until %>
-  </p>
-  <p>
-    <%= f.label :bids_count %><br />
-    <%= f.number_field :bids_count %>
-  </p>
-  <p>
-    <%= f.label :decided %><br />
-    <%= f.datetime_select :decided %>
-  </p>
-  <p>
-    <%= f.label :relisted %><br />
-    <%= f.datetime_select :relisted %>
-  </p>
-  <p>
-    <%= f.label :relist_count %><br />
-    <%= f.number_field :relist_count %>
-  </p>
-  <p>
-    <%= f.label :expired %><br />
-    <%= f.date_select :expired %>
-  </p>
-  <p>
-    <%= f.label :chargeable_expiry %><br />
-    <%= f.check_box :chargeable_expiry %>
-  </p>
-  <p>
-    <%= f.label :oders_count %><br />
-    <%= f.number_field :oders_count %>
-  </p>
-  <p><%= f.submit %></p>
+<div class="clearfix row">
+	<%= f.input :ref_no, label: 'Claim No.', hint: 'What will you use to track your entry?', wrapper_class: 'span6' %>
+	<%= f.input :date_of_loss, wrapper_class: 'span6' do %>
+	  <%= f.text_field :date_of_loss, id: 'datepicker', size: 25, placeholder: 'Click to select date' %>
+		<%= f.hint 'Format: YYYY-MM-DD'  %>
+	<% end %>
+</div>
+<%= f.input :vehicle, required: true do  %>
+	<%= f.input :year_model, collection: Entry::YEAR_MODELS, label: false, wrapper_html: { id: 'veh-year' }, prompt: 'Select Year' %>
+	<%= f.input :car_brand, label: false, wrapper_html: { id: 'veh-brand' } do %>
+	  <%= f.grouped_collection_select :car_brand_id,  @car_origins, :car_brands, :name, :id, :name, :include_blank => 'Select Brand' %>
+	<% end %>
+	<%= f.input :car_model_id, collection:  @car_models, label: false, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type' %>
+	<%= f.input :car_variant_id, collection:  @car_variants, label: false, wrapper_html: { id: 'veh-variant' }, :include_blank => 'Select Variant' %>
 <% end %>
+<div class="clearfix row">
+	<%= f.input :plate_no, label: 'Plate Number', hint: "#{content_tag :strong, 'Proper format: XYZ-123'} (except diplomatic plates or conduction stickers)".html_safe, wrapper_class: 'span4' %>
+	<%= f.input :serial_no, label: 'Serial Number', hint: 'Make sure you put 17 digits here (international standard).', wrapper_class: 'span4' %>
+	<%= f.input :motor_no, label: 'Motor Number', wrapper_class: 'span4' %>
+</div>
+<div class="clearfix row">
+	<%= f.input :deliver_to, required: true, wrapper_class: 'span6' do %>
+		<%= f.input :region, collection: @regions, label: false, wrapper_html: { id: 'regions' }, prompt: 'Select Region' %>
+		<%= f.input :city_id, collection: @cities, label: false, wrapper_html: { id: 'cities' }, prompt: 'Select Location' %>
+	<% end %>
+	<%= f.association :term, label: 'Credit Term Request', collection:  Term.all.map{ |t| [t.term_name, t.id]}, prompt: 'Select Term', wrapper_class: 'span6'  %>
+</div>
+
+<%#= render 'entries/attach_photos', f: f %>
+<div class="clearfix row">
+	<%= f.fields_for :photos do |photo|  %>
+		<% unless photo.object.new_record?  %>
+			<% if photo.object.processing == false %>
+			<%= image_tag photo.object.photo.url(:tiny), class: "thumbnail" %>
+			<% else %>
+			<%= image_tag 'base/processing_photo.png', class: "photo" %>
+			<% end %>
+		<% end %>
+		
+		<%= photo.input :photo, :as => :file %>
+		<%= photo.link_to_remove "remove" %>
+	<% end %>
+	
+	<%= f.link_to_add "add another photo", :photos, class: 'span4' %>
+</div>
+
+
+<div class="actions">
+  <%= f.button :submit, class: 'btn large primary'  %>
+	<%= link_to "Cancel", entries_path, class: 'btn', type: 'reset' %>
+</div>
+
+<% content_for :javascripts do %>
+	<% stylesheet 'blitzer/jquery-ui-1.8.6.custom' %>
+	<script type="text/javascript" charset="utf-8">
+	$(function() {
+		$('#datepicker').datepicker({ 
+				dateFormat: "yy-mm-dd",
+				maxDate: 0,
+				numberOfMonths: 2,
+				showButtonPanel: true, 
+				showOn: "both",
+				buttonImage: '/assets/calendar.gif',
+				buttonImageOnly: true
+		});
+	});
+	</script>
+	<%= javascript_include_tag 'jquery_nested_form' %>
+<% end %>
+

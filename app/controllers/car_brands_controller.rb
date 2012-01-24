@@ -80,4 +80,10 @@ class CarBrandsController < ApplicationController
       format.json { head :ok }
     end
   end
+  
+  def selected
+    @car_models = CarModel.where(car_brand_id: params[:id])
+    render :partial => 'car_brands/selected'
+  end
+  
 end

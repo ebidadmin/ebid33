@@ -7,28 +7,45 @@
     <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
     <meta name="description" content="">
     <meta name="author" content="">
-    <%= stylesheet_link_tag    "application" %>
-    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag    "application", media: "all" %>
     <%= csrf_meta_tags %>
     <%= yield(:head) %>
   </head>
   <body class="<%= params[:controller] %>">
-    <div id="container" class="container">
-      <header>
-        <nav>
-          <ul class="hmenu">
-            <%= render 'shared/navigation' %>
-          </ul>
-        </nav>
-        <% flash.each do |name, msg| %>
-          <%= content_tag :div, msg, class: "alert-message #{name}" if msg.is_a?(String) %>
-        <% end %>
-      </header>
-      <div id="main" role="main">
-        <%= yield %>
-      </div>
+    <header>
+	    <div class="container">
+       <nav>
+         <ul class="hmenu">
+           <%= render 'shared/navigation' %>
+         </ul>
+       </nav>
+       <% flash.each do |name, msg| %>
+         <%= content_tag :div, msg, class: "alert-message #{name}" if msg.is_a?(String) %>
+       <% end %>
+	    </div> <!--! end of .container -->
+    </header>
+    <div class="container">
+      <section id="main" role="main">
+				<div class="row">
+					<div class="span12">
+						<div class="page-header">
+							<%= content_tag :h1, yield(:title) %>
+						</div>
+		        <%= yield %>
+					</div> <!-- end of span12 -->
+					<div class="span4">
+			     	<div class="well">
+			        <h5>Sidebar</h5>
+			      </div> <!-- end of .well -->
+					</div> <!-- end of span4 -->
+				</div>
+      </section>
+    </div> <!--! end of .container -->
       <footer>
       </footer>
-    </div> <!--! end of #container -->
+		<div id="javascripts">
+	    <%= javascript_include_tag "application" %>
+			<%= yield(:javascripts) %>
+		</div>
   </body>
 </html>

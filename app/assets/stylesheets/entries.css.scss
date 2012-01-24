@@ -1,0 +1,24 @@
+.entry {
+	.clearfix { margin-bottom: 18px; }
+	.clearfix .clearfix { margin-bottom: 0; }
+	#veh-year, #veh-brand, #veh-model, #veh-variant, #regions, #cities { clear: none; float: left; margin-right: 5px; }
+	.loading { background: url('assets/loading.gif') no-repeat 0 center; height: 32px; margin-left: 5px; text-indent: -9999px; width: 32px; }
+	img.ui-datepicker-trigger { margin-left: 5px; }
+	.thumbnail {
+	  padding: 4px;
+		background-color: white;
+	  border: 1px solid #ddd;
+	  -webkit-border-radius: 4px;
+	  -moz-border-radius: 4px;
+	  border-radius: 4px;
+	  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	}
+}
+
+.fields {
+	overflow: hidden; position: relative;
+	.remove_nested_fields { position: absolute; top: 0; right: 0; }
+}
+.add_nested_fields { float: right; margin-bottom: 15px; }

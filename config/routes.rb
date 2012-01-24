@@ -1,4 +1,5 @@
 Ebid33::Application.routes.draw do
+
   resources :entries
 
   resources :branches
@@ -7,10 +8,17 @@ Ebid33::Application.routes.draw do
 
   resources :car_variants
 
-  resources :car_models
+  resources :car_models do
+    get :selected, :on => :member
+  end
 
-  resources :car_brands
+  resources :car_brands do
+    get :selected, :on => :member
+  end
 
+  resources :regions do
+    get :selected, :on => :member
+  end
   #get \"users\/show\"
 
   root :to => "home#index"

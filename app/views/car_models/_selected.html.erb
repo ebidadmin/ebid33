@@ -1,0 +1,8 @@
+<% unless @car_variants.blank? %>
+	<%= content_tag :option, 'Select Variant', value: nil  %>
+	<% for car_variant in @car_variants %>
+		<%= content_tag :option, car_variant.name, value: car_variant.id  %>
+	<% end %>
+<% else %>
+	<%= content_tag :option, 'No variants for this Model/Type', value: nil %>
+<% end %>
