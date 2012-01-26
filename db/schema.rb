@@ -11,7 +11,34 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120119104844) do
+ActiveRecord::Schema.define(:version => 20120125083332) do
+
+  create_table "bids", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "entry_id"
+    t.integer  "line_item_id"
+    t.integer  "car_brand_id"
+    t.decimal  "amount",       :precision => 10, :scale => 2
+    t.integer  "quantity",                                    :default => 1,     :null => false
+    t.decimal  "total",        :precision => 10, :scale => 2
+    t.string   "bid_type"
+    t.integer  "bid_speed"
+    t.boolean  "lot",                                         :default => false
+    t.string   "status",                                      :default => "New", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.date     "ordered"
+    t.integer  "order_id"
+    t.date     "delivered"
+    t.date     "paid"
+    t.date     "declined"
+    t.date     "expired"
+  end
+
+  add_index "bids", ["entry_id"], :name => "index_bids_on_entry_id"
+  add_index "bids", ["line_item_id"], :name => "index_bids_on_line_item_id"
+  add_index "bids", ["order_id"], :name => "index_bids_on_order_id"
+  add_index "bids", ["user_id"], :name => "index_bids_on_user_id"
 
   create_table "branches", :force => true do |t|
     t.integer  "company_id"

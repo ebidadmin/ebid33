@@ -7,6 +7,10 @@ module LayoutHelper
     content_for(:title) { h(page_title.to_s) }
     @show_title = show_title
   end
+  
+  def subtitle(subtitle)
+    content_for(:subtitle) { (' ' + subtitle.to_s).html_safe }
+  end
 
   def show_title?
     @show_title

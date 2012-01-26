@@ -4,17 +4,7 @@
 	#veh-year, #veh-brand, #veh-model, #veh-variant, #regions, #cities { clear: none; float: left; margin-right: 5px; }
 	.loading { background: url('assets/loading.gif') no-repeat 0 center; height: 32px; margin-left: 5px; text-indent: -9999px; width: 32px; }
 	img.ui-datepicker-trigger { margin-left: 5px; }
-	.thumbnail {
-	  padding: 4px;
-		background-color: white;
-	  border: 1px solid #ddd;
-	  -webkit-border-radius: 4px;
-	  -moz-border-radius: 4px;
-	  border-radius: 4px;
-	  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-	  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-	  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-	}
+	legend { padding-bottom: 10px; }
 }
 
 .fields {
@@ -22,3 +12,39 @@
 	.remove_nested_fields { position: absolute; top: 0; right: 0; }
 }
 .add_nested_fields { float: right; margin-bottom: 15px; }
+.thumbnail {
+  padding: 4px;
+	background-color: white;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+dt, dd { float: left; }
+dt { clear: both; }
+dl .label { font-size: 16px; }
+
+table p { margin-bottom: 0; }
+.floatright { float: right; }
+.center { text-align: center; }
+
+.photo-set li { float: left; }
+.label.index { float: left; margin-left: -35px; text-align: center; width: 15px; }
+.label.black { background-color: black; font-size: 0.8em; }
+
+.bids-array { position: relative; }
+.bid-box { 
+	float: left; margin-right: 10px; text-align: right; width: 115px;
+	.label { margin-right: 5px; }
+}
+.cat { min-height: 18px; width: 120px;
+	.bid-amount { float: left; margin-right: 5px; text-align: right; width: 70px; }
+	input { text-align: right; }
+}
+.original { top: 0; left: 0;}
+.replacement { position: absolute; top: 0; left: 128px; }
+.surplus { position: absolute; top: 0; left: 256px; }

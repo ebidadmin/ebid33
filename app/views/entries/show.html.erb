@@ -1,32 +1,18 @@
-<% title "@entry" %>
+<% title "#{@entry.model_name}" %>
+<% subtitle "#{content_tag :small, @entry.plate_no}" %>
+<%= content_tag :dl, class: 'row' do %>
+	<%= dl_helper 'Claim No', @entry.ref_no %>
+	<%= dl_helper 'Vehicle', "#{@entry.model_name} #{content_tag :span, @entry.variant, class: 'label' if @entry.car_variant.present?}".html_safe %>
+	<%= dl_helper 'Serial No.', @entry.serial_no %>
+	<%= dl_helper 'Motor No.',  @entry.motor_no %>
+	<%= dl_helper 'Date of Loss', @entry.date_of_loss.to_s(:long) if @entry.date_of_loss %>
+	<%= dl_helper 'Deliver To', @entry.city.name if @entry.city %>
+	<%= dl_helper 'Credit Term', @entry.term.term_name if @entry.term %>
+	<%= dl_helper 'Created By', @entry.user.username if @entry.user  %>
+<% end %>
 
-<%= content_tag :li, (content_tag :span, 'Plate No: ') + (content_tag :strong, @entry.plate_no), :id => "plate-no" %>
-<%= content_tag :li, (content_tag :span, 'Serial No or VIN: ') + @entry.serial_no, :id => "serial-no" %>
-<%= content_tag :li, (content_tag :span, 'Motor No: ') + @entry.motor_no, :id => "motor-no" %>
-<%= content_tag :li, (content_tag :span, 'Date Of Loss: ') + @entry.date_of_loss.to_s(:long), :id => "date-of-loss" if @entry.date_of_loss %>
-<%= content_tag :li, (content_tag :span, 'Deliver To: ') + @entry.city.name, :id => "deliver-to" if @entry.city %>
-<%= content_tag :li, (content_tag :span, 'Credit Term: ') + (content_tag :strong, @entry.term.term_name), :id => "term" if @entry.term %>
-<%= content_tag :li, "#{content_tag :span, 'Created by'} #{@entry.user.username} ".html_safe if @entry.user  %>
+<%#= render :partial => 'photo_set' %>
 
-<div class="photo-set">
-	<% unless @entry.photos.blank? %>
-	<ul>
-		<li class="instruction photo">Click on photos to enlarge.</li>
-		<% @entry.photos.each do |photo| %>
-			<% if photo.processing? %>
-				<li><%= image_tag '/images/processing_photo.png', :class => "photo", :alt => "Photo of #{@entry.plate_no}" %></li>
-			<% else %>
-				<li><%= link_to (image_tag photo.photo.url(:tiny), :class => "thumbnail", :alt => "Photo of #{@entry.plate_no}"), photo.photo.url(:large), :rel => "shadowbox[#{@entry.id}]" %></li>
-			<% end %>
-		<% end %>
-	</ul>	
-	<% else %>
-		<%= content_tag :h3, 'No photos submitted yet.' %>
-	<% end %>
-</div>	
-
-<div class="well">
-	<%= link_to 'Edit', edit_entry_path(@entry) %>
-	<%= link_to "New Entry", new_entry_path, class: 'btn large primary' %>
-	<%= link_to 'List', entries_path %>
-</div>
+<%#= render :partial => 'search_form' %>
+<%#= render 'buyer' %>
+<%= render 'seller' %>

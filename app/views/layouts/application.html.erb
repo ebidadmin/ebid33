@@ -29,7 +29,7 @@
 				<div class="row">
 					<div class="span12">
 						<div class="page-header">
-							<%= content_tag :h1, yield(:title) %>
+							<%= content_tag :h1, yield(:title) + yield(:subtitle) %>
 						</div>
 		        <%= yield %>
 					</div> <!-- end of span12 -->

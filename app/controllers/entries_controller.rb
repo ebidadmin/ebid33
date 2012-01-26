@@ -7,7 +7,9 @@ class EntriesController < ApplicationController
   end
 
   def show
-    @entry = Entry.find(params[:id])
+    # @entry = Entry.find(params[:id], include: [:line_items => [:car_part, [:bids => :user]]])
+    @entry = Entry.find(params[:id], include: [:line_items => :car_part])
+    @q = CarPart.search(params[:q])
   end
 
   def new

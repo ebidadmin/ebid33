@@ -1,0 +1,19 @@
+<% title "Car Parts" %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Creator</th>
+  </tr>
+  <% for car_part in @car_parts %>
+    <tr>
+      <td><%= car_part.name %></td>
+      <td><%= car_part.creator_id %></td>
+      <td><%= link_to "Show", car_part %></td>
+      <td><%= link_to "Edit", edit_car_part_path(car_part) %></td>
+      <td><%= link_to "Destroy", car_part, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Car Part", new_car_part_path %></p>

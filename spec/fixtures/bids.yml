@@ -1,0 +1,37 @@
+one:
+  user_id: 1
+  entry_id: 1
+  line_item_id: 1
+  car_brand_id: 1
+  amount: 9.99
+  quantity: 1
+  total: 9.99
+  bid_type: MyString
+  bid_speed: 1
+  lot: false
+  status: MyString
+  ordered: 2012-01-25
+  order_id: 1
+  delivered: 2012-01-25
+  paid: 2012-01-25
+  declined: 2012-01-25
+  expired: 2012-01-25
+
+two:
+  user_id: 1
+  entry_id: 1
+  line_item_id: 1
+  car_brand_id: 1
+  amount: 9.99
+  quantity: 1
+  total: 9.99
+  bid_type: MyString
+  bid_speed: 1
+  lot: false
+  status: MyString
+  ordered: 2012-01-25
+  order_id: 1
+  delivered: 2012-01-25
+  paid: 2012-01-25
+  declined: 2012-01-25
+  expired: 2012-01-25

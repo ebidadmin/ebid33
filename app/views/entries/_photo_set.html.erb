@@ -1,0 +1,16 @@
+<div class="row photo-set">
+	<% unless @entry.photos.blank? %>
+	<ul class="unstyled span12">
+		<li class="instruction thumbnail">Click on photos to enlarge.</li>
+		<% @entry.photos.each do |photo| %>
+			<% if photo.processing? %>
+				<li><%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %></li>
+			<% else %>
+				<li><%= link_to (image_tag photo.photo.url(:tiny), class: "thumbnail", :alt => "Photo of #{@entry.plate_no}"), photo.photo.url(:large), :rel => "shadowbox[#{@entry.id}]" %></li>
+			<% end %>
+		<% end %>
+	</ul>	
+	<% else %>
+		<%= content_tag :h3, 'No photos submitted yet.' %>
+	<% end %>
+</div>	

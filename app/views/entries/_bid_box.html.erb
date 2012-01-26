@@ -1,0 +1,4 @@
+<%= content_tag :div, class: "span3 bid-box #{category}_#{item.id}" do %>
+  <%= (content_tag(:span, category[0].upcase, class: 'label important') + 
+  text_field_tag("bids[#{item.id}][#{category}]", nil, class: 'span2')).html_safe %>
+<% end %>		

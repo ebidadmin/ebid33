@@ -1,0 +1,49 @@
+<% title "Bids" %>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Entry</th>
+    <th>Line Item</th>
+    <th>Car Brand</th>
+    <th>Amount</th>
+    <th>Quantity</th>
+    <th>Total</th>
+    <th>Bid Type</th>
+    <th>Bid Speed</th>
+    <th>Lot</th>
+    <th>Status</th>
+    <th>Ordered</th>
+    <th>Order</th>
+    <th>Delivered</th>
+    <th>Paid</th>
+    <th>Declined</th>
+    <th>Expired</th>
+  </tr>
+  <% for bid in @bids %>
+    <tr>
+      <td><%= bid.user_id %></td>
+      <td><%= bid.entry_id %></td>
+      <td><%= bid.line_item_id %></td>
+      <td><%= bid.car_brand_id %></td>
+      <td><%= bid.amount %></td>
+      <td><%= bid.quantity %></td>
+      <td><%= bid.total %></td>
+      <td><%= bid.bid_type %></td>
+      <td><%= bid.bid_speed %></td>
+      <td><%= bid.lot %></td>
+      <td><%= bid.status %></td>
+      <td><%= bid.ordered %></td>
+      <td><%= bid.order_id %></td>
+      <td><%= bid.delivered %></td>
+      <td><%= bid.paid %></td>
+      <td><%= bid.declined %></td>
+      <td><%= bid.expired %></td>
+      <td><%= link_to "Show", bid %></td>
+      <td><%= link_to "Edit", edit_bid_path(bid) %></td>
+      <td><%= link_to "Destroy", bid, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Bid", new_bid_path %></p>

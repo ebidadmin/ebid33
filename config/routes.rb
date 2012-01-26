@@ -1,19 +1,24 @@
 Ebid33::Application.routes.draw do
 
+  resources :bids
+
+  resources :searches
   resources :entries
 
   resources :branches
 
   resources :companies
 
-  resources :car_variants
-
   resources :car_models do
     get :selected, :on => :member
   end
-
   resources :car_brands do
     get :selected, :on => :member
+  end
+  resources :car_variants
+  resources :car_parts do
+    get :search, :on => :collection
+    get :add_more, :on => :collection
   end
 
   resources :regions do

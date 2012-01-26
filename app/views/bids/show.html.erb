@@ -1,0 +1,76 @@
+<% title "Bid" %>
+
+<p>
+  <strong>User:</strong>
+  <%= @bid.user_id %>
+</p>
+<p>
+  <strong>Entry:</strong>
+  <%= @bid.entry_id %>
+</p>
+<p>
+  <strong>Line Item:</strong>
+  <%= @bid.line_item_id %>
+</p>
+<p>
+  <strong>Car Brand:</strong>
+  <%= @bid.car_brand_id %>
+</p>
+<p>
+  <strong>Amount:</strong>
+  <%= @bid.amount %>
+</p>
+<p>
+  <strong>Quantity:</strong>
+  <%= @bid.quantity %>
+</p>
+<p>
+  <strong>Total:</strong>
+  <%= @bid.total %>
+</p>
+<p>
+  <strong>Bid Type:</strong>
+  <%= @bid.bid_type %>
+</p>
+<p>
+  <strong>Bid Speed:</strong>
+  <%= @bid.bid_speed %>
+</p>
+<p>
+  <strong>Lot:</strong>
+  <%= @bid.lot %>
+</p>
+<p>
+  <strong>Status:</strong>
+  <%= @bid.status %>
+</p>
+<p>
+  <strong>Ordered:</strong>
+  <%= @bid.ordered %>
+</p>
+<p>
+  <strong>Order:</strong>
+  <%= @bid.order_id %>
+</p>
+<p>
+  <strong>Delivered:</strong>
+  <%= @bid.delivered %>
+</p>
+<p>
+  <strong>Paid:</strong>
+  <%= @bid.paid %>
+</p>
+<p>
+  <strong>Declined:</strong>
+  <%= @bid.declined %>
+</p>
+<p>
+  <strong>Expired:</strong>
+  <%= @bid.expired %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_bid_path(@bid) %> |
+  <%= link_to "Destroy", @bid, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", bids_path %>
+</p>

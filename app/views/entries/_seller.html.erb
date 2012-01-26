@@ -1,0 +1,51 @@
+<%= form_tag bids_path(:entry_id => @entry), remote: true do %>
+<div id="" class="row">
+	<div id="" class="span12">
+		<%= content_tag :h3, 'Parts Requested' %>
+
+		<%= content_tag :table, class: 'zebra-striped' do %>
+			<%= render 'table_titles' %>
+			<%= content_tag :tbody do %>
+				<% @entry.line_items.each_with_index do |item, index| %>
+				<%= content_tag :tr do %>
+					<%= content_tag :td, class: 'span4' do %>
+						<%= content_tag :span, index + 1, class: 'label index'  %>
+						<%= content_tag :span, item.part_name %>
+						<%= "<br> #{content_tag :span, 'Specs: ' + item.specs, class: 'label black'}".html_safe if item.specs.present? %>
+						<%= content_tag :p, item.id %>
+					<% end %>
+					<%= content_tag :td, class: 'span6' do %>
+						<% if item.is_online %>
+						<%= div_for item, class: 'bids-array' do %>
+							<%= bid_box_helper item.id, 'original' %>
+							<%= bid_box_helper item.id, 'replacement' %>
+							<%= bid_box_helper item.id, 'surplus' %>
+			 			<% end %>
+						<% end %>
+						<%= content_tag :div, class: 'bids-array' do %>
+						<% item.bids.by_user(current_user).group_by(&:bid_type).each do |type, bids| %>
+							<div class="cat <%= type %>">
+								<%= render bids %>
+							</div>
+			 			<% end %>
+						<% end %>
+					<% end %>
+					<%= content_tag :td, class: 'span2 center' do %>
+						<%= content_tag :p, item.status, class: 'label' %>
+						<!-- PO link here if ordered -->
+						<%#= content_tag :span, item.status_date, class: 'small' %>
+						<%= content_tag :span, "as of #{regular_date(item.updated_at, 2)}", class: 'small' %>
+					<% end %>
+				<% end %>
+				<% end %>
+			<% end %>
+		<% end %>
+
+	</div>
+</div>
+
+<div class="well">
+	<%= link_to 'List', entries_path, class: 'btn' %>
+	<%= submit_tag "Submit Bids", class: 'btn primary floatright' %>
+</div>
+<% end %>

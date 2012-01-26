@@ -1,0 +1,12 @@
+<% if @car_parts.count > 0 %>
+	<% @car_parts.in_groups_of(8, false).each do |car_part_array| %> 
+	<ul>
+		<% car_part_array.each do |car_part| %>
+			<%= content_tag :li, car_part.name %> 
+		<% end %>
+	</ul>
+	<% end %> 
+<% else %>
+	<%= content_tag :h3, "Sorry, #{content_tag :strong, params[:name]} could not be found.".html_safe, :class => 'instruction' %>
+	<%= content_tag :h3, "Please check your spelling OR try another keyword.", :class => 'instruction' %>
+<% end %>

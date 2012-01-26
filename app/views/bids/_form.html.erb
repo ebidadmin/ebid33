@@ -1,0 +1,72 @@
+<%= form_for @bid do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </p>
+  <p>
+    <%= f.label :entry_id %><br />
+    <%= f.number_field :entry_id %>
+  </p>
+  <p>
+    <%= f.label :line_item_id %><br />
+    <%= f.number_field :line_item_id %>
+  </p>
+  <p>
+    <%= f.label :car_brand_id %><br />
+    <%= f.number_field :car_brand_id %>
+  </p>
+  <p>
+    <%= f.label :amount %><br />
+    <%= f.text_field :amount %>
+  </p>
+  <p>
+    <%= f.label :quantity %><br />
+    <%= f.number_field :quantity %>
+  </p>
+  <p>
+    <%= f.label :total %><br />
+    <%= f.text_field :total %>
+  </p>
+  <p>
+    <%= f.label :bid_type %><br />
+    <%= f.text_field :bid_type %>
+  </p>
+  <p>
+    <%= f.label :bid_speed %><br />
+    <%= f.number_field :bid_speed %>
+  </p>
+  <p>
+    <%= f.label :lot %><br />
+    <%= f.check_box :lot %>
+  </p>
+  <p>
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </p>
+  <p>
+    <%= f.label :ordered %><br />
+    <%= f.date_select :ordered %>
+  </p>
+  <p>
+    <%= f.label :order_id %><br />
+    <%= f.number_field :order_id %>
+  </p>
+  <p>
+    <%= f.label :delivered %><br />
+    <%= f.date_select :delivered %>
+  </p>
+  <p>
+    <%= f.label :paid %><br />
+    <%= f.date_select :paid %>
+  </p>
+  <p>
+    <%= f.label :declined %><br />
+    <%= f.date_select :declined %>
+  </p>
+  <p>
+    <%= f.label :expired %><br />
+    <%= f.date_select :expired %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

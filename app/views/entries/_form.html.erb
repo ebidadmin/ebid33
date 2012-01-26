@@ -1,49 +1,53 @@
-<div class="clearfix row">
-	<%= f.input :ref_no, label: 'Claim No.', hint: 'What will you use to track your entry?', wrapper_class: 'span6' %>
-	<%= f.input :date_of_loss, wrapper_class: 'span6' do %>
-	  <%= f.text_field :date_of_loss, id: 'datepicker', size: 25, placeholder: 'Click to select date' %>
-		<%= f.hint 'Format: YYYY-MM-DD'  %>
+<%= content_tag :fieldset do %>
+	<%= content_tag :legend, 'Vehicle' %>
+	<div class="clearfix row">
+		<%= f.input :ref_no, label: 'Claim No.', hint: 'What will you use to track your entry?', wrapper_class: 'span6' %>
+		<%= f.input :date_of_loss, wrapper_class: 'span6' do %>
+		  <%= f.text_field :date_of_loss, id: 'datepicker', size: 25, placeholder: 'Click to select date' %>
+			<%= f.hint 'Format: YYYY-MM-DD'  %>
+		<% end %>
+	</div>
+	<%= f.input :vehicle, required: true do  %>
+		<%= f.input :year_model, collection: Entry::YEAR_MODELS, label: false, wrapper_html: { id: 'veh-year' }, prompt: 'Select Year' %>
+		<%= f.input :car_brand, label: false, wrapper_html: { id: 'veh-brand' } do %>
+		  <%= f.grouped_collection_select :car_brand_id,  @car_origins, :car_brands, :name, :id, :name, :include_blank => 'Select Brand' %>
+		<% end %>
+		<%= f.input :car_model_id, collection:  @car_models, label: false, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type' %>
+		<%= f.input :car_variant_id, collection:  @car_variants, label: false, wrapper_html: { id: 'veh-variant' }, :include_blank => 'Select Variant' %>
 	<% end %>
-</div>
-<%= f.input :vehicle, required: true do  %>
-	<%= f.input :year_model, collection: Entry::YEAR_MODELS, label: false, wrapper_html: { id: 'veh-year' }, prompt: 'Select Year' %>
-	<%= f.input :car_brand, label: false, wrapper_html: { id: 'veh-brand' } do %>
-	  <%= f.grouped_collection_select :car_brand_id,  @car_origins, :car_brands, :name, :id, :name, :include_blank => 'Select Brand' %>
-	<% end %>
-	<%= f.input :car_model_id, collection:  @car_models, label: false, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type' %>
-	<%= f.input :car_variant_id, collection:  @car_variants, label: false, wrapper_html: { id: 'veh-variant' }, :include_blank => 'Select Variant' %>
+	<div class="clearfix row">
+		<%= f.input :plate_no, label: 'Plate Number', hint: "#{content_tag :strong, 'Proper format: XYZ-123'} (except diplomatic plates or conduction stickers)".html_safe, wrapper_class: 'span4' %>
+		<%= f.input :serial_no, label: 'Serial Number', hint: 'Make sure you put 17 digits here (international standard).', wrapper_class: 'span4' %>
+		<%= f.input :motor_no, label: 'Motor Number', wrapper_class: 'span4' %>
+	</div>
+	<div class="clearfix row">
+		<%= f.input :deliver_to, required: true, wrapper_class: 'span6' do %>
+			<%= f.input :region, collection: @regions, label: false, wrapper_html: { id: 'regions' }, prompt: 'Select Region' %>
+			<%= f.input :city_id, collection: @cities, label: false, wrapper_html: { id: 'cities' }, prompt: 'Select Location' %>
+		<% end %>
+		<%= f.association :term, label: 'Credit Term Request', collection:  Term.all.map{ |t| [t.term_name, t.id]}, prompt: 'Select Term', wrapper_class: 'span6'  %>
+	</div>
 <% end %>
-<div class="clearfix row">
-	<%= f.input :plate_no, label: 'Plate Number', hint: "#{content_tag :strong, 'Proper format: XYZ-123'} (except diplomatic plates or conduction stickers)".html_safe, wrapper_class: 'span4' %>
-	<%= f.input :serial_no, label: 'Serial Number', hint: 'Make sure you put 17 digits here (international standard).', wrapper_class: 'span4' %>
-	<%= f.input :motor_no, label: 'Motor Number', wrapper_class: 'span4' %>
-</div>
-<div class="clearfix row">
-	<%= f.input :deliver_to, required: true, wrapper_class: 'span6' do %>
-		<%= f.input :region, collection: @regions, label: false, wrapper_html: { id: 'regions' }, prompt: 'Select Region' %>
-		<%= f.input :city_id, collection: @cities, label: false, wrapper_html: { id: 'cities' }, prompt: 'Select Location' %>
-	<% end %>
-	<%= f.association :term, label: 'Credit Term Request', collection:  Term.all.map{ |t| [t.term_name, t.id]}, prompt: 'Select Term', wrapper_class: 'span6'  %>
-</div>
 
 <%#= render 'entries/attach_photos', f: f %>
-<div class="clearfix row">
-	<%= f.fields_for :photos do |photo|  %>
-		<% unless photo.object.new_record?  %>
-			<% if photo.object.processing == false %>
-			<%= image_tag photo.object.photo.url(:tiny), class: "thumbnail" %>
-			<% else %>
-			<%= image_tag 'base/processing_photo.png', class: "photo" %>
+<%= content_tag :fieldset do %>
+	<%= content_tag :legend, 'Photos' %>
+	<div class="clearfix row">
+		<%= f.fields_for :photos do |photo|  %>
+			<% unless photo.object.new_record?  %>
+				<% if photo.object.processing == false %>
+				<%= image_tag photo.object.photo.url(:tiny), class: "thumbnail" %>
+				<% else %>
+				<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				<% end %>
 			<% end %>
-		<% end %>
 		
-		<%= photo.input :photo, :as => :file %>
-		<%= photo.link_to_remove "remove" %>
-	<% end %>
+			<%= photo.input :photo, :as => :file %>
+			<%= photo.link_to_remove "remove" %>
+		<% end %>
 	
-	<%= f.link_to_add "add another photo", :photos, class: 'span4' %>
-</div>
-
+		<%= f.link_to_add "add another photo", :photos, class: 'span4' %>
+	</div>
+<% end %>
 
 <div class="actions">
   <%= f.button :submit, class: 'btn large primary'  %>
