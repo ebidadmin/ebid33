@@ -1,6 +1,14 @@
 Ebid33::Application.routes.draw do
 
-  resources :bids
+  resources :line_items
+
+  resources :orders
+
+  resources :bids do
+    collection do
+      post :accept
+    end
+  end
 
   resources :searches
   resources :entries

@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/ryanb/cancan.git
+  revision: c94de4ab1805d2e080ebd658051c59d0ec5147ce
+  branch: 2.0
+  specs:
+    cancan (2.0.0.alpha)
+
+GIT
   remote: git://github.com/ryanb/nested_form.git
   revision: 54da3123d9f1b14b37df608794508adccd6ac5ba
   specs:
@@ -227,6 +234,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cancan!
   capybara (>= 1.1.2)
   coffee-rails (~> 3.1.1)
   cucumber-rails (>= 1.2.0)

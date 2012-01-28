@@ -1,18 +1,13 @@
-<% title "#{@entry.model_name}" %>
-<% subtitle "#{content_tag :small, @entry.plate_no}" %>
-<%= content_tag :dl, class: 'row' do %>
-	<%= dl_helper 'Claim No', @entry.ref_no %>
-	<%= dl_helper 'Vehicle', "#{@entry.model_name} #{content_tag :span, @entry.variant, class: 'label' if @entry.car_variant.present?}".html_safe %>
-	<%= dl_helper 'Serial No.', @entry.serial_no %>
-	<%= dl_helper 'Motor No.',  @entry.motor_no %>
-	<%= dl_helper 'Date of Loss', @entry.date_of_loss.to_s(:long) if @entry.date_of_loss %>
-	<%= dl_helper 'Deliver To', @entry.city.name if @entry.city %>
-	<%= dl_helper 'Credit Term', @entry.term.term_name if @entry.term %>
-	<%= dl_helper 'Created By', @entry.user.username if @entry.user  %>
+<% title @entry.model_name %>
+<% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
+
+<% content_for :sidebar do %>
+	<%= content_tag :div, @entry.status, class: "label #{@entry.status_color}" %>
 <% end %>
 
+<%= render 'shared/info_vehicle' %>
 <%#= render :partial => 'photo_set' %>
-
 <%#= render :partial => 'search_form' %>
-<%#= render 'buyer' %>
-<%= render 'seller' %>
+
+<%= render 'buyer' %>
+<%#= render 'seller' %>

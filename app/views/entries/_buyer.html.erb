@@ -1,41 +1,56 @@
+<%= form_tag accept_bids_path, method: :post do |f| %>
+<%= hidden_field_tag :entry_id, @entry.id %>
 <div id="" class="row">
 	<div id="" class="span12">
 		<%= content_tag :h3, 'Parts Requested' %>
+		
 		<%= content_tag :table, class: 'zebra-striped' do %>
 			<%= render 'table_titles' %>
+
 			<%= content_tag :tbody do %>
 				<% @entry.line_items.each_with_index do |item, index| %>
-				<%= content_tag :tr do %>
-					<%= content_tag :td, class: 'span4' do %>
-						<%= content_tag :span, index + 1, class: 'label index'  %>
-						<%= content_tag :span, item.part_name %>
-						<%= "<br> #{content_tag :span, 'Specs: ' + item.specs, class: 'label black'}".html_safe if item.specs.present? %>
-					<% end %>
-					<%= content_tag :td do %>
-						<% unless item.bids.size < 1 %>
-						<div class="bids-array">
-							<% item.bids.group_by(&:bid_type).each do |type, bids| %>
-								<div class="cat <%= type %>">
-									<%= render bids %>
-								</div>
-				 			<% end %>
-						</div>
-						<%= content_tag :p, class: 'small center' do %>
-							<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %> |
-							<%= content_tag :span, "Fastest Bid: #{distance_of_time_in_words(item.bids.last.bid_speed)}" %>
-							<%#= content_tag :p, time_in_words(item.bids.order(:bid_speed).first.bid_speed) if item.bids.first.present? %>
-			 			<% end %>
+					<%= content_tag :tr do %>
+					
+						<%= content_tag :td, class: 'span4' do %>
+							<%= content_tag :span, index + 1, class: 'label index'  %>
+							<%= content_tag :span, item.part_name %>
+							<%= "<br> #{content_tag :span, 'Specs: ' + item.specs, class: 'label black'}".html_safe if item.specs.present? %>
+							<%= content_tag :p, link_to(item.id, edit_line_item_path(item)) %>
 						<% end %>
+						
+						<%= content_tag :td do %>
+							<% unless item.bids.size < 1 %>
+								<div class="bids-array">
+									<% item.bids.group_by(&:bid_type).each do |type, bids| %>
+										<div class="cat <%= type %>">
+											<% if item.can_be_ordered %>
+												<%= render 'bids/bid_select', item: item, bids: bids, f: f %>
+											<% else %>
+												<%= render bids %>
+											<% end %>
+										</div>
+						 			<% end %>
+								</div>
+								
+								<%= content_tag :p, class: 'stats small center' do %>
+									<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %> |
+									<%= content_tag :span, "Fastest Bid: #{distance_of_time_in_words(item.bids.last.bid_speed)}" %>
+									<%#= content_tag :p, time_in_words(item.bids.order(:bid_speed).first.bid_speed) if item.bids.first.present? %>
+					 			<% end %>
+							<% end %>
+						<% end %>
+						
+						<%= content_tag :td, class: 'span3 center' do %>
+							<%= content_tag :p, item.status, class: "label #{item.status_color}" %>
+							<%#= content_tag :span, item.status_date, class: 'small' %>
+							<%= content_tag :p, "as of #{regular_date(item.updated_at)}", class: 'small' %>
+							<%= link_to "PO# #{item.order.id}", item.order if item.order %>
+						<% end %>
+						
 					<% end %>
-					<%= content_tag :td, class: 'span2 center' do %>
-						<%= content_tag :p, item.status, class: 'label' %>
-						<!-- PO link here if ordered -->
-						<%#= content_tag :span, item.status_date, class: 'small' %>
-						<%= content_tag :span, "as of #{regular_date(item.updated_at, 2)}", class: 'small' %>
-					<% end %>
-				<% end %>
 				<% end %>
 			<% end %>
+			
 		<% end %>
 	</div>
 </div>
@@ -43,5 +58,7 @@
 <div class="well">
 	<%= link_to 'Edit', edit_entry_path(@entry), class: 'btn' %>
 	<%= link_to 'List', entries_path, class: 'btn' %>
+	<%= submit_tag "Create PO", class: 'btn success floatright' %>
 	<%= link_to "New Entry", new_entry_path, class: 'btn floatright' %>
 </div>
+<% end %>

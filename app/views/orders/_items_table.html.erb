@@ -1,0 +1,37 @@
+<%= content_tag :div, class: 'row' do %>
+	<%= content_tag :div, class: 'span16' do %>
+
+	<%= content_tag :table do %>
+		<%= content_tag :thead do %>
+			<%=  content_tag :th %>
+			<%=  content_tag :th, 'Part Description', class: 'span7' %>
+			<%=  content_tag :th, 'Type', class: 'span2 center' %>
+			<%=  content_tag :th, 'Qty', class: 'span2 center' %>
+			<%=  content_tag :th, 'Unit Price', class: 'span2 right' %>
+			<%=  content_tag :th, 'Cost', class: 'span3 right' %>
+		<% end %>
+		<%= content_tag :tbody do %>
+			<% bids.each_with_index do |bid, index| %>
+				<%= content_tag :tr, class: "#{'cancelled' if bid.cancelled?}" do %>
+					<%=  content_tag :td, "#{content_tag :b, index + 1, class: 'label'}".html_safe, class: 'span1' %>
+					<%=  content_tag :td, class: 'span7' do %>
+						<%= bid.line_item.part_name %>
+						<%= content_tag :p, bid.line_item.specs, class: 'small' if bid.line_item.specs.present? %>
+					<% end %>
+					<%=  content_tag :td, (content_tag :span, bid.bid_type.upcase, class: 'label'), class: 'span2 center' %>
+					<%=  content_tag :td, bid_quantity_helper(bid, params[:action]), class: 'span2 center' %>
+					<%=  content_tag :td, currency(bid.amount), class: 'span2 right' %>
+					<%=  content_tag :td, currency(bid.total), class: 'span3 right' %>
+				<% end %>
+
+			<% end %>
+
+			<%= content_tag :tr, class: 'total' do %>
+				<%= content_tag :th, "Total (#{pluralize bids.count, 'part'})", colspan: 5, class: 'right' %>
+				<%= content_tag :th, ph_currency(bids.collect(&:total).sum), class: 'span3 right' %>
+			<% end %>
+		<% end %>
+	<% end %>
+
+	<% end %>
+<% end %>

@@ -1,0 +1,46 @@
+<%= content_tag :thead do %>
+	<%= content_tag :tr do %>
+		<%= content_tag :th, 'Vehicle', class: 'span4' %>
+		<%= content_tag :th, 'Customer', class: 'span3' %>
+		<%= content_tag :th, 'Supplier', class: 'span3' %>
+		<%= content_tag :th, 'Order ID', class: 'span1 center' %>
+		<%= content_tag :th, 'PO Total', class: 'span2 center' %>
+		<%= content_tag :th, 'Status', class: 'span3 center' %>
+	<% end %>
+<% end %>
+
+<%= content_tag :tbody do %>
+	<% @orders.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_orders| %>
+		<%= content_tag :tr do %>
+			<%= content_tag :td, colspan: 6 do %>
+				<%= content_tag :h5, regular_date(date) %>
+			<% end %>
+		<% end %>
+	
+		<% grouped_orders.group_by(&:entry).each do |entry, orders| %>
+
+		<%= content_tag :tr do %>
+			<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
+	      <%= content_tag :p, link_to(entry.model_name, entry)  %>
+				<%= content_tag :p, entry.plate_no %>
+				<%= content_tag :em, "created by #{entry.user.username}" %>
+			<% end %>
+		<% end %>
+
+		<% for order in orders %>
+			<%= content_tag :tr do %>
+				<%= content_tag :td, order.company.nickname, class: 'span3' %>
+				<%= content_tag :td, order.seller.nickname, class: 'span3' %>
+				<%= content_tag :td, link_to(order.id, order), class: 'span1 center' %>
+				<%= content_tag :td, currency(order.order_total), class: 'span2 center' %>
+				<%= content_tag :td, class: 'span3 center' do %>
+					<%= content_tag :p, order.status, class: "label center #{order.status_color}" %>
+					<%= content_tag :span, "as of #{regular_date(order.status_date, 2)}", class: 'small' %>
+				<% end %>
+			<% end %>
+		<% end %>
+	
+		<% end %>
+	
+	<% end %>
+<% end %>

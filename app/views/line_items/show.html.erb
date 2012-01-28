@@ -1,0 +1,40 @@
+<% title "Line Item" %>
+
+<p>
+  <strong>Entry:</strong>
+  <%= @line_item.entry_id %>
+</p>
+<p>
+  <strong>Car Part:</strong>
+  <%= @line_item.car_part_id %>
+</p>
+<p>
+  <strong>Specs:</strong>
+  <%= @line_item.specs %>
+</p>
+<p>
+  <strong>Quantity:</strong>
+  <%= @line_item.quantity %>
+</p>
+<p>
+  <strong>Status:</strong>
+  <%= @line_item.status %>
+</p>
+<p>
+  <strong>Bids Count:</strong>
+  <%= @line_item.bids_count %>
+</p>
+<p>
+  <strong>Relisted:</strong>
+  <%= @line_item.relisted %>
+</p>
+<p>
+  <strong>Order:</strong>
+  <%= @line_item.order_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_line_item_path(@line_item) %> |
+  <%= link_to "Destroy", @line_item, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", line_items_path %>
+</p>

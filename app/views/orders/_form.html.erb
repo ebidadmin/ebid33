@@ -1,0 +1,96 @@
+<%= form_for @order do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </p>
+  <p>
+    <%= f.label :company_id %><br />
+    <%= f.number_field :company_id %>
+  </p>
+  <p>
+    <%= f.label :entry_id %><br />
+    <%= f.number_field :entry_id %>
+  </p>
+  <p>
+    <%= f.label :deliver_to %><br />
+    <%= f.text_field :deliver_to %>
+  </p>
+  <p>
+    <%= f.label :address1 %><br />
+    <%= f.text_field :address1 %>
+  </p>
+  <p>
+    <%= f.label :address2 %><br />
+    <%= f.text_field :address2 %>
+  </p>
+  <p>
+    <%= f.label :contact_person %><br />
+    <%= f.text_field :contact_person %>
+  </p>
+  <p>
+    <%= f.label :phone %><br />
+    <%= f.text_field :phone %>
+  </p>
+  <p>
+    <%= f.label :fax %><br />
+    <%= f.text_field :fax %>
+  </p>
+  <p>
+    <%= f.label :instructions %><br />
+    <%= f.text_area :instructions %>
+  </p>
+  <p>
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </p>
+  <p>
+    <%= f.label :buyer_ip %><br />
+    <%= f.text_field :buyer_ip %>
+  </p>
+  <p>
+    <%= f.label :items_count %><br />
+    <%= f.number_field :items_count %>
+  </p>
+  <p>
+    <%= f.label :order_total %><br />
+    <%= f.text_field :order_total %>
+  </p>
+  <p>
+    <%= f.label :seller_id %><br />
+    <%= f.number_field :seller_id %>
+  </p>
+  <p>
+    <%= f.label :seller_confirmation %><br />
+    <%= f.check_box :seller_confirmation %>
+  </p>
+  <p>
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+  <p>
+    <%= f.label :confirmed %><br />
+    <%= f.datetime_select :confirmed %>
+  </p>
+  <p>
+    <%= f.label :delivered %><br />
+    <%= f.date_select :delivered %>
+  </p>
+  <p>
+    <%= f.label :due_date %><br />
+    <%= f.date_select :due_date %>
+  </p>
+  <p>
+    <%= f.label :paid_temp %><br />
+    <%= f.date_select :paid_temp %>
+  </p>
+  <p>
+    <%= f.label :paid %><br />
+    <%= f.date_select :paid %>
+  </p>
+  <p>
+    <%= f.label :ratings_count %><br />
+    <%= f.number_field :ratings_count %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

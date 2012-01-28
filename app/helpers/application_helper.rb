@@ -1,6 +1,6 @@
 module ApplicationHelper
   def dl_helper(tag, item, klass=nil)
-    (content_tag :dt, tag, class: "span2") + (content_tag :dd, item)
+    (content_tag :dt, tag, class: "span2 #{klass}") + (content_tag :dd, item.html_safe, class: "#{klass}")
   end
   
   def time_in_words(time)
@@ -14,15 +14,19 @@ module ApplicationHelper
   end
   
   def long_date(date)
-    date.strftime('%d-%b-%Y, %a %R')
+    date.strftime('%d %b %Y, %a %R')
   end
   
   def short_date(date)
-    date.strftime('%d-%b-%y, %R')
+    date.strftime('%d %b %y, %R')
   end
   
-  def regular_date(date, digits=nil)
-    digits.present? ? date.strftime("%d %b '%y") : date.strftime('%d %b %Y')
+  def regular_date(date, requirement=nil)
+    case requirement
+    when 'long' then date.strftime('%d %b %Y')
+    when 'day' then date.strftime("%d %b %Y, %a")
+    else date.strftime("%d %b %Y")
+    end
   end
 
   def ph_currency(target)

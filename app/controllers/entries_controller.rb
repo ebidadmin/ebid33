@@ -3,12 +3,12 @@ class EntriesController < ApplicationController
   before_filter :search_by_region, only: [:new, :edit, :create, :update]
 
   def index
-    @entries = Entry.paginate(page: params[:page], per_page: 12).order('created_at DESC')
+    @entries = Entry.includes(:photos, :car_brand, :car_model).paginate(page: params[:page], per_page: 12).order('created_at DESC')
   end
 
   def show
-    # @entry = Entry.find(params[:id], include: [:line_items => [:car_part, [:bids => :user]]])
-    @entry = Entry.find(params[:id], include: [:line_items => :car_part])
+    @entry = Entry.find(params[:id], include: [:line_items => [:car_part, [:bids => :user]]])
+    # @entry = Entry.find(params[:id], include: [:line_items => :car_part])
     @q = CarPart.search(params[:q])
   end
 

@@ -77,6 +77,20 @@ class BidsController < ApplicationController
     redirect_to bids_url, :notice => "Successfully destroyed bid."
   end
   
+  def accept
+    # raise params.to_yaml
+    unless params[:bids].blank?
+      @entry = Entry.find(params[:entry_id])
+      @bids = Bid.find(params[:bids].collect { |item, id| id.values }, include: [:line_item => :car_part])
+      @bidders = @bids.collect(&:user_id).uniq
+      @order = current_user.orders.build
+    else
+      flash[:error] = ("Ooops! Select the <strong>Low Bids</strong> first before you create a PO.").html_safe
+      redirect_to :back
+    end
+    render layout: 'layout2'
+  end
+  
   private
   
   # def send_email

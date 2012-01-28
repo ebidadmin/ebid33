@@ -1,0 +1,8 @@
+<% last_bid = bids[-1] %>
+<%= fields_for 'bids[]', item do |f| %>
+	<% for bid in bids[0..-2] %>
+		<%= bid_amount_helper(bid) %>
+		<%#= content_tag :p, time_in_words(bid.bid_speed) %>
+	<% end %>
+	<%= bid_amount_helper(last_bid, f) %>
+<% end %>

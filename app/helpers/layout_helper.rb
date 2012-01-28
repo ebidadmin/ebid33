@@ -9,7 +9,7 @@ module LayoutHelper
   end
   
   def subtitle(subtitle)
-    content_for(:subtitle) { (' ' + subtitle.to_s).html_safe }
+    content_for(:subtitle) { (content_tag :small, ' ' + subtitle.to_s).html_safe }
   end
 
   def show_title?

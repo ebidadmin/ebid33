@@ -36,3 +36,9 @@ form {
 	//input, select { margin-left: 5px; }
 	select { width: auto; }
 }
+
+dt, dd { float: left; }
+dt { clear: both; width: 30%; }
+dd { width: 67%; }
+dl .label { font-size: 16px; }
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120125083332) do
+ActiveRecord::Schema.define(:version => 20120127020200) do
 
   create_table "bids", :force => true do |t|
     t.integer  "user_id"
@@ -197,6 +197,40 @@ ActiveRecord::Schema.define(:version => 20120125083332) do
   add_index "line_items", ["car_part_id"], :name => "index_line_items_on_car_part_id"
   add_index "line_items", ["entry_id"], :name => "index_line_items_on_entry_id"
 
+  create_table "orders", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "company_id"
+    t.integer  "entry_id"
+    t.string   "ref_no",                                             :default => ""
+    t.string   "ref_name",                                           :default => ""
+    t.string   "deliver_to",                                         :default => ""
+    t.string   "address1",                                           :default => ""
+    t.string   "address2",                                           :default => ""
+    t.string   "contact_person",                                     :default => ""
+    t.string   "phone",                                              :default => ""
+    t.string   "fax",                                                :default => ""
+    t.text     "instructions"
+    t.string   "status",                                             :default => "New PO", :null => false
+    t.string   "buyer_ip",                                           :default => ""
+    t.integer  "items_count",                                        :default => 0,        :null => false
+    t.decimal  "order_total",         :precision => 10, :scale => 2, :default => 0.0,      :null => false
+    t.datetime "created_at"
+    t.integer  "seller_id"
+    t.boolean  "seller_confirmation",                                :default => false,    :null => false
+    t.datetime "confirmed"
+    t.date     "delivered"
+    t.date     "due_date"
+    t.date     "paid_temp"
+    t.date     "paid"
+    t.date     "cancelled"
+    t.integer  "ratings_count",                                      :default => 0,        :null => false
+  end
+
+  add_index "orders", ["company_id"], :name => "index_orders_on_company_id"
+  add_index "orders", ["entry_id"], :name => "index_orders_on_entry_id"
+  add_index "orders", ["seller_id"], :name => "index_orders_on_seller_id"
+  add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
+
   create_table "photos", :force => true do |t|
     t.integer  "entry_id"
     t.string   "photo_file_name"
@@ -243,6 +277,23 @@ ActiveRecord::Schema.define(:version => 20120125083332) do
   create_table "roles_users", :id => false, :force => true do |t|
     t.integer "user_id"
     t.integer "role_id"
+  end
+
+  create_table "temp_companies", :force => true do |t|
+    t.string   "name"
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "zip_code"
+    t.integer  "city_id"
+    t.string   "approver"
+    t.string   "approver_position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "primary_role"
+    t.date     "trial_start"
+    t.date     "trial_end"
+    t.date     "metering_date"
+    t.decimal  "perf_ratio",        :precision => 5, :scale => 2
   end
 
   create_table "terms", :force => true do |t|

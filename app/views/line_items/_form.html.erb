@@ -1,0 +1,36 @@
+<%= form_for @line_item do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :entry_id %><br />
+    <%= f.number_field :entry_id %>
+  </p>
+  <p>
+    <%= f.label :car_part_id %><br />
+    <%= f.number_field :car_part_id %>
+  </p>
+  <p>
+    <%= f.label :specs %><br />
+    <%= f.text_field :specs %>
+  </p>
+  <p>
+    <%= f.label :quantity %><br />
+    <%= f.number_field :quantity %>
+  </p>
+  <p>
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </p>
+  <p>
+    <%= f.label :bids_count %><br />
+    <%= f.number_field :bids_count %>
+  </p>
+  <p>
+    <%= f.label :relisted %><br />
+    <%= f.datetime_select :relisted %>
+  </p>
+  <p>
+    <%= f.label :order_id %><br />
+    <%= f.number_field :order_id %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

@@ -1,0 +1,15 @@
+<% title "Orders" %>
+
+<%= content_tag :div, class: 'row' do %>
+	<%= content_tag :div, class: 'span12' do %>
+		<%= content_tag :table do %>
+		<%= render 'basic_table' %>
+		<% end %>
+	<% end %>
+<% end %>
+
+
+<%= will_paginate @orders %>
+<div class="well">
+	<%= link_to 'List', orders_path, class: 'btn' %>
+</div>

@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :timeoutable
   devise :encryptable, :encryptor => :authlogic_sha512
 
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :name, :email#, :password, :password_confirmation, :remember_me
+
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile, allow_destroy: true, reject_if: proc { |obj| obj.blank? }
   has_one :company, through: :profile
@@ -14,6 +17,12 @@ class User < ActiveRecord::Base
   has_one :cart, dependent: :destroy
   has_many :entries, dependent: :destroy
   has_many :bids, dependent: :destroy
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :email#, :password, :password_confirmation, :remember_me
+  has_many :orders, dependent: :destroy
+  has_one :seller, through: :order
+  
+  delegate :address1, :address2, :city_name, to: :branch, allow_nil:true
+  delegate :phone, :fax, to: :profile
+  delegate :nickname, to: :company
+  
+  default_scope includes(:profile => [:company, :branch])
 end

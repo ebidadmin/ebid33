@@ -1,0 +1,53 @@
+<%= content_tag :thead do %>
+	<%= content_tag :tr do %>
+		<%= content_tag :th, 'Vehicle', class: 'span4' %>
+		<%= content_tag :th, 'Parts Ordered', class: 'span6' %>
+		<%= content_tag :th, 'PO Total', class: 'span2 center' %>
+		<%= content_tag :th, 'Status', class: 'span3 center' %>
+	<% end %>
+<% end %>
+
+<%= content_tag :tbody do %>
+	<% @orders.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_orders| %>
+		<%= content_tag :tr do %>
+			<%= content_tag :td, colspan: 4 do %>
+				<%= content_tag :h5, regular_date(date) %>
+			<% end %>
+		<% end %>
+	
+		<% grouped_orders.group_by(&:entry).each do |entry, orders| %>
+
+		<%= content_tag :tr do %>
+			<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
+				<%= content_tag :p, entry.ref_no, class: 'small' if entry.ref_no.present? %>
+	      <%= content_tag :p, link_to(entry.model_name, entry)  %>
+				<%= content_tag :p, entry.plate_no %>
+				<%= content_tag :em, "created by #{entry.user.username}" %>
+			<% end %>
+		<% end %>
+
+		<% for order in orders %>
+		<%= content_tag :tr do %>
+			<%= content_tag :td, class: 'span6' do %>
+	 			<% for bid in  order.bids %>
+					<%= content_tag :p, class: 'part' do %>
+				    <%= content_tag :span, bid.quantity, class: "qty#{ ' cancelled' if bid.cancelled?}" %>
+						<%= content_tag :span, bid.line_item.part_name, :class => "name#{ ' cancelled' if bid.cancelled?}" %>
+					<% end %>
+				<% end %>
+			<% end %>
+			<%= content_tag :td, class: 'span2 center' do %>
+				<%= content_tag :p, currency(order.order_total) %>
+				<%= link_to "View PO", order, :class => 'small success' %>
+		  <% end %>
+			<%= content_tag :td, class: 'span3 center' do %>
+				<%= content_tag :p, order.status, class: "label center #{order.status_color}" %>
+				<%= content_tag :span, "as of #{regular_date(order.status_date, 2)}", class: 'small' %>
+			<% end %>
+		<% end %>
+		<% end %>
+	
+		<% end %>
+	
+	<% end %>
+<% end %>

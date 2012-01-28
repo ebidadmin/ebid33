@@ -1,0 +1,78 @@
+<% title "Purchase Order" %>
+<% subtitle "ID# #{@order.id}" %>
+
+<%= content_tag :div, class: 'order row' do %>
+	<%= content_tag :div, class: 'buyer-company span4' do %>
+		<%= content_tag :p, 'Buyer', class: 'label'  %>
+		<%= content_tag :h5, @order.company.name %>
+		<%= content_tag :p, @order.branch.address1  %>
+		<%= content_tag :p, @order.branch.address2  %>
+		<%= content_tag :p, @order.branch.city.name %>
+		<%= content_tag :p, class: 'user' do %>
+		  <% if @order.user != @entry.user %>
+				<%= @order.user.profile %> /
+			<% end %>
+			  <%= @entry.user.profile %>
+			<% end %>
+		<%= content_tag :p, @order.user.phone %>
+		<%= content_tag :p, @order.user.email %>
+	<% end %>
+
+	<%= content_tag :div, class: 'seller-company span4' do %>
+		<%= content_tag :p, 'Seller', class: 'label'  %>
+		<%= content_tag :h5, @order.seller.company.name %>
+		<%= content_tag :p, @order.seller.address1  %>
+		<%= content_tag :p, @order.seller.address2  %>
+		<%= content_tag :p, @order.seller.city_name %>
+		<%= content_tag :p, @order.seller.profile, class: 'user' %>
+		<%= content_tag :p, @order.seller.phone %>
+		<%= content_tag :p, @order.seller.email %>
+	<% end %>
+
+	<%= content_tag :div, class: 'status-box span6 offset2' do %>
+			<%= content_tag :h3, "Buyer's PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
+			<dl>
+				<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
+				<% if @order.confirmed %>
+					<%= dl_helper 'PO Confirmed', long_date(@order.confirmed) %>
+				<% else %>
+					<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...') %>
+				<% end %>
+				<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
+				<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>
+				<%= dl_helper 'Paid', regular_date(@order.paid) if @order.paid %>
+			</dl>
+			<%= overdue_tag(@order) %>
+	<% end %>
+<% end %>
+
+<%= content_tag :h2, 'Order Details', id: 'order-caption'  %>
+<%= content_tag :div, class: 'order row' do %>
+	<%= content_tag :div, class: 'span8' do %>
+		<%= render 'shared/info_vehicle' %>
+	<% end %>
+	
+	<%= content_tag :div, class: 'delivery span6 offset1 well' do %>
+		<%= content_tag :h5, 'DELIVER TO'  %>
+		<%= content_tag :h4, @order.deliver_to %>
+		<%= content_tag :p do %>
+			<%= @order.address1.gsub(/\,/,"") %>
+			<%= ", #{@order.address2}" if @order.address2.present? %>
+		<% end %>
+		<%= content_tag :dl do %>
+			<%= dl_helper 'Contact person', @order.contact_person %>
+			<%= dl_helper 'Phone', @order.phone %>
+			<%= dl_helper 'Fax', @order.fax if @order.fax.present? %>
+			<%= dl_helper 'Instructions', @order.instructions, 'instr' if @order.instructions.present? %>
+		<% end %>
+	<% end %>
+<% end %>
+
+
+<%= render 'orders/items_table', bids: @order.bids %>
+
+<%= content_tag :div, class: 'well' do %>
+  <%= link_to "Edit", edit_order_path(@order) %> |
+  <%= link_to "Destroy", @order, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "Previous Page", :back %>
+<% end %>
