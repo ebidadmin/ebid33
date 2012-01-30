@@ -5,8 +5,12 @@
 <%#= render :partial => 'photo_set' %>
 <%#= render :partial => 'search_form' %>
 
-<%= render 'buyer' %>
-<%#= render 'seller' %>
+<% if @entry.line_items.present? %>
+	<%= render 'buyer' %>
+	<%#= render 'seller' %>
+<% else %>
+	
+<% end %>
 
 <% content_for :sidebar do %>
 	<%= content_tag :p, @entry.status, class: "label #{@entry.status_color}" %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120130075421) do
+ActiveRecord::Schema.define(:version => 20120130132808) do
 
   create_table "bids", :force => true do |t|
     t.integer  "user_id"
@@ -101,6 +101,46 @@ ActiveRecord::Schema.define(:version => 20120130075421) do
   add_index "car_variants", ["car_brand_id"], :name => "index_car_variants_on_car_brand_id"
   add_index "car_variants", ["car_model_id"], :name => "index_car_variants_on_car_model_id"
   add_index "car_variants", ["creator_id"], :name => "index_car_variants_on_creator_id"
+
+  create_table "cart_entries", :force => true do |t|
+    t.integer  "cart_id"
+    t.string   "ref_no"
+    t.integer  "year_model"
+    t.integer  "car_brand_id"
+    t.integer  "car_model_id"
+    t.integer  "car_variant_id"
+    t.string   "plate_no"
+    t.string   "serial_no"
+    t.string   "motor_no"
+    t.date     "date_of_loss"
+    t.integer  "city_id"
+    t.integer  "term_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cart_entries", ["car_brand_id"], :name => "index_cart_entries_on_car_brand_id"
+  add_index "cart_entries", ["car_model_id"], :name => "index_cart_entries_on_car_model_id"
+  add_index "cart_entries", ["car_variant_id"], :name => "index_cart_entries_on_car_variant_id"
+  add_index "cart_entries", ["cart_id"], :name => "index_cart_entries_on_cart_id"
+  add_index "cart_entries", ["city_id"], :name => "index_cart_entries_on_city_id"
+  add_index "cart_entries", ["term_id"], :name => "index_cart_entries_on_term_id"
+
+  create_table "cart_items", :force => true do |t|
+    t.integer  "cart_id"
+    t.integer  "car_part_id"
+    t.integer  "quantity"
+    t.string   "specs"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cart_items", ["car_part_id"], :name => "index_cart_items_on_car_part_id"
+  add_index "cart_items", ["cart_id"], :name => "index_cart_items_on_cart_id"
+
+  create_table "carts", :force => true do |t|
+    t.integer "user_id"
+  end
 
   create_table "cities", :force => true do |t|
     t.string   "name"
