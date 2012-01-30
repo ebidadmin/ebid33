@@ -12,6 +12,7 @@ class Bid < ActiveRecord::Base
   scope :by_user, lambda { |user| where(user_id: user) }
 
   # scope :cancelled, where('bids.status LIKE ?', "%Cancelled%") 
+  scope :online, where(status: ['New', 'Submitted', 'Updated'])
   scope :not_cancelled, where('bids.status NOT LIKE ?', "%Cancelled%") 
   scope :with_orders, where('bids.order_id IS NOT NULL')
   
@@ -64,7 +65,22 @@ class Bid < ActiveRecord::Base
   def cancelled?
     status.include?('Cancelled')
   end
+
+  def online? # used in Seller#Show to allow deletion of bids
+    status == 'Submitted' || status == 'New' ||status == 'Updated' 
+  end
   
+  def status_color
+    color = case status
+    when 'For-Decision' then 'highlight'
+    when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Paid', 'Closed' then 'success'
+    when 'Expired', 'Declined' then 'warning'
+    when 'Dropped' then 'highlight cancelled'
+    else nil
+    end
+    color = 'black' if self.cancelled?
+    "label #{color}" unless online?
+  end
   
 
 end

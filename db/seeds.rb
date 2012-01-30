@@ -7,6 +7,11 @@
 #     zip_code: comp.zip_code, city_id: comp.city_id, created_at: comp.created_at, updated_at: comp.updated_at)
 # end
 
-profiles = Profile.all
-# profiles.each { |p| p.update_attribute(:branch_id, p.company_id) } 
-profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name) } 
+# profiles = Profile.all
+# # profiles.each { |p| p.update_attribute(:branch_id, p.company_id) } 
+# profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name) } 
+
+# messages = Message.all
+# messages.each do |m|
+#   
+# end

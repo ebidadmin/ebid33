@@ -42,3 +42,7 @@ dt { clear: both; width: 30%; }
 dd { width: 67%; }
 dl .label { font-size: 16px; }
 
+.sidebar {
+	dt, dd { float: none; }
+	dd { margin-left: 0; width: 100%; }
+}

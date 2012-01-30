@@ -1,5 +1,7 @@
 #main { position: relative; }
 
+.pills { font-size: 0.8em; }
+.entries .pills a { line-height: 25px; }
 .entry {
 	.clearfix { margin-bottom: 18px; }
 	.clearfix .clearfix { margin-bottom: 0; }
@@ -28,7 +30,7 @@
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
-table p { margin-bottom: 0; }
+table p { margin-bottom: 0px; }
 .floatright { float: right; margin-left: 5px;}
 .center { text-align: center; }
 .right { text-align: right; }
@@ -38,20 +40,27 @@ table p { margin-bottom: 0; }
 .label.index { float: left; margin-left: -35px; text-align: center; width: 15px; }
 .label.black { background-color: black; font-size: 0.8em; }
 .label.highlight { background-color: #FFF6BF; color: black; }
+.label.cool { background-color: #049CDB }
 
-.bids-array { position: relative; min-height: 1em; margin-bottom: 5px; }
+.bids-array { 
+	position: relative; min-height: 1em; margin-bottom: 5px; 
+	p.label { font-size: 0.9em; font-weight: normal; margin-bottom:5px; position:relative; text-transform: none; }
+}
+.cat { min-height: 18px; width: 110px;
+	.bid-amount { margin-right: 5px; text-align: right; width: 68px; }
+	input { text-align: right; }
+	input[type="radio"] { margin-left: -15px; margin-right: 8px; }
+	p { text-align: center; }
+}
+
 .bid-box { 
 	float: left; margin-right: 10px; text-align: right; width: 115px;
 	.label { margin-right: 5px; }
 }
-.cat { min-height: 18px; width: 120px;
-	.bid-amount { float: left; margin-right: 5px; text-align: right; width: 70px; }
-	input { text-align: right; }
-	input[type="radio"] { float: left;	margin-left: -5px; }
-}
+
 .original { top: 0; left: 0;}
-.replacement { position: absolute; top: 0; left: 128px; }
-.surplus { position: absolute; top: 0; left: 256px; }
+.replacement { position: absolute; top: 0; left: 120px; }
+.surplus { position: absolute; top: 0; left: 242px; }
 .stats { clear: both; }
 #order-caption { border-bottom: 1px solid #DDD; margin-bottom: 17px; }
 .order { 
@@ -67,3 +76,7 @@ table p { margin-bottom: 0; }
 .total { font-size: 1.2em; }
 #address-note { font-style: italic; }
 #supplier-count { font-size: 25px; margin-bottom: 10px; }
+#order-items table { margin-bottom: 0; }
+
+.nested, .sidebar dd.nested { margin-left: 15px; }
+.level { margin-bottom: 10px; }

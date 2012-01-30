@@ -72,6 +72,7 @@ class OrdersController < ApplicationController
       @order.update_attribute(:order_total, @bids.collect(&:total).sum)
       redirect_to @order, :notice  => "Successfully updated order."
     else
+      flash[:warning] = "Failed to update PO. #{content_tag :strong, 'Please make sure you input the required information'}."
       redirect_to :back #render :action => 'edit'
     end
   end

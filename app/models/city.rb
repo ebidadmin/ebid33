@@ -3,4 +3,7 @@ class City < ActiveRecord::Base
   has_many :branches
   has_many :entries
   
+  def to_s
+    name
+  end
 end

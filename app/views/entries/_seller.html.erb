@@ -16,22 +16,22 @@
 					<% end %>
 					<%= content_tag :td, class: 'span6' do %>
 						<% if item.is_online %>
-						<%= div_for item, class: 'bids-array' do %>
-							<%= bid_box_helper item.id, 'original' %>
-							<%= bid_box_helper item.id, 'replacement' %>
-							<%= bid_box_helper item.id, 'surplus' %>
-			 			<% end %>
+							<%= div_for item, class: 'bids-array' do %>
+								<%= bid_box_helper item.id, 'original' %>
+								<%= bid_box_helper item.id, 'replacement' %>
+								<%= bid_box_helper item.id, 'surplus' %>
+				 			<% end %>
 						<% end %>
 						<%= content_tag :div, class: 'bids-array' do %>
-						<% item.bids.by_user(current_user).group_by(&:bid_type).each do |type, bids| %>
-							<div class="cat <%= type %>">
-								<%= render bids %>
-							</div>
-			 			<% end %>
+							<% item.bids.group_by(&:bid_type).each do |type, bids| %>
+								<div class="cat <%= type %>">
+									<%= render bids %>
+								</div>
+				 			<% end %>
 						<% end %>
 					<% end %>
 					<%= content_tag :td, class: 'span2 center' do %>
-						<%= content_tag :p, item.status, class: 'label' %>
+					<%= content_tag :p, item.status, class: "label #{item.status_color}" %>
 						<!-- PO link here if ordered -->
 						<%#= content_tag :span, item.status_date, class: 'small' %>
 						<%= content_tag :span, "as of #{regular_date(item.updated_at, 2)}", class: 'small' %>

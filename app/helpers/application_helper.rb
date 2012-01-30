@@ -9,8 +9,8 @@ module ApplicationHelper
 
     difference_in_words = ''
 
-    difference_in_words << "#{distance_in_hours}h " if distance_in_hours > 0
-    difference_in_words << "#{distance_in_minutes}m"
+    difference_in_words << "#{distance_in_hours} hr " if distance_in_hours > 0
+    difference_in_words << "#{distance_in_minutes} min"
   end
   
   def long_date(date)
@@ -48,5 +48,38 @@ module ApplicationHelper
   def shorten(target, size)
     truncate(target, length: size, separator: ' ')
   end
+
+  def percentage(target)
+    if target > 0
+      number_to_percentage target, :precision => 2
+    else
+      nil
+    end
+  end
+  
+  def percentage3(target)
+    if target > 0
+      number_to_percentage target, :precision => 3
+    else
+      'FREE'
+    end
+  end
+
+  # def controller?(*controller)
+  #   controller.include?(params[:controller])
+  # end
+  # 
+  # def action?(*action)
+  #   action.include?(params[:action])
+  # end
+  # 
+  # def params?(params)
+  #   params.include?(params)
+  # end
+  # 
+  # def active?(criteria)
+  #   'active' if criteria = true
+  # end
+  
 
 end

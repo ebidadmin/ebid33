@@ -1,0 +1,48 @@
+<%= form_for @message do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </p>
+  <p>
+    <%= f.label :user_type %><br />
+    <%= f.text_field :user_type %>
+  </p>
+  <p>
+    <%= f.label :alias %><br />
+    <%= f.number_field :alias %>
+  </p>
+  <p>
+    <%= f.label :user_company_id %><br />
+    <%= f.number_field :user_company_id %>
+  </p>
+  <p>
+    <%= f.label :receiver_id %><br />
+    <%= f.number_field :receiver_id %>
+  </p>
+  <p>
+    <%= f.label :receiver_company_id %><br />
+    <%= f.number_field :receiver_company_id %>
+  </p>
+  <p>
+    <%= f.label :entry_id %><br />
+    <%= f.number_field :entry_id %>
+  </p>
+  <p>
+    <%= f.label :order_id %><br />
+    <%= f.number_field :order_id %>
+  </p>
+  <p>
+    <%= f.label :message %><br />
+    <%= f.text_area :message %>
+  </p>
+  <p>
+    <%= f.label :open %><br />
+    <%= f.check_box :open %>
+  </p>
+  <p>
+    <%= f.label :ancestry %><br />
+    <%= f.text_field :ancestry %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

@@ -1,0 +1,52 @@
+<% title "Message" %>
+
+<p>
+  <strong>User:</strong>
+  <%= @message.user_id %>
+</p>
+<p>
+  <strong>User Type:</strong>
+  <%= @message.user_type %>
+</p>
+<p>
+  <strong>Alias:</strong>
+  <%= @message.alias %>
+</p>
+<p>
+  <strong>User Company:</strong>
+  <%= @message.user_company_id %>
+</p>
+<p>
+  <strong>Receiver:</strong>
+  <%= @message.receiver_id %>
+</p>
+<p>
+  <strong>Receiver Company:</strong>
+  <%= @message.receiver_company_id %>
+</p>
+<p>
+  <strong>Entry:</strong>
+  <%= @message.entry_id %>
+</p>
+<p>
+  <strong>Order:</strong>
+  <%= @message.order_id %>
+</p>
+<p>
+  <strong>Message:</strong>
+  <%= @message.message %>
+</p>
+<p>
+  <strong>Open:</strong>
+  <%= @message.open %>
+</p>
+<p>
+  <strong>Ancestry:</strong>
+  <%= @message.ancestry %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_message_path(@message) %> |
+  <%= link_to "Destroy", @message, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", messages_path %>
+</p>

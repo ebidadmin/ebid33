@@ -84,11 +84,11 @@ class BidsController < ApplicationController
       @bids = Bid.find(params[:bids].collect { |item, id| id.values }, include: [:line_item => :car_part])
       @bidders = @bids.collect(&:user_id).uniq
       @order = current_user.orders.build
+      render layout: 'layout2'
     else
       flash[:error] = ("Ooops! Select the <strong>Low Bids</strong> first before you create a PO.").html_safe
       redirect_to :back
     end
-    render layout: 'layout2'
   end
   
   private

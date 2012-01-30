@@ -8,13 +8,17 @@
 			<%= render 'table_titles' %>
 
 			<%= content_tag :tbody do %>
-				<% @entry.line_items.each_with_index do |item, index| %>
+				<% @entry.line_items.order('status DESC').each_with_index do |item, index| %>
 					<%= content_tag :tr do %>
 					
 						<%= content_tag :td, class: 'span4' do %>
 							<%= content_tag :span, index + 1, class: 'label index'  %>
 							<%= content_tag :span, item.part_name %>
 							<%= "<br> #{content_tag :span, 'Specs: ' + item.specs, class: 'label black'}".html_safe if item.specs.present? %>
+							<%= content_tag :div, class: 'stats small' do %>
+								<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %> |
+								<%= content_tag :span, "Fastest Bid: #{time_in_words(item.bids.minimum(:bid_speed))}" if item.bids.present? %>
+				 			<% end %>
 							<%= content_tag :p, link_to(item.id, edit_line_item_path(item)) %>
 						<% end %>
 						
@@ -25,18 +29,13 @@
 										<div class="cat <%= type %>">
 											<% if item.can_be_ordered %>
 												<%= render 'bids/bid_select', item: item, bids: bids, f: f %>
+												<!-- provision for reorder from next lowest -->
 											<% else %>
-												<%= render bids %>
+												<%= render bids unless item.is_online %>
 											<% end %>
 										</div>
 						 			<% end %>
 								</div>
-								
-								<%= content_tag :p, class: 'stats small center' do %>
-									<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %> |
-									<%= content_tag :span, "Fastest Bid: #{distance_of_time_in_words(item.bids.last.bid_speed)}" %>
-									<%#= content_tag :p, time_in_words(item.bids.order(:bid_speed).first.bid_speed) if item.bids.first.present? %>
-					 			<% end %>
 							<% end %>
 						<% end %>
 						
@@ -56,9 +55,10 @@
 </div>
 
 <div class="well">
+	<%= link_to "New Entry", new_entry_path, class: 'btn info' %>
 	<%= link_to 'Edit', edit_entry_path(@entry), class: 'btn' %>
 	<%= link_to 'List', entries_path, class: 'btn' %>
-	<%= submit_tag "Create PO", class: 'btn success floatright' %>
-	<%= link_to "New Entry", new_entry_path, class: 'btn floatright' %>
+	<%= submit_tag "Create PO", class: 'btn success floatright' if @entry.can_be_ordered %>
+	<%= link_to "Put Online", put_online_entry_path(@entry), class: 'btn success floatright' if @entry.can_online %>
 </div>
 <% end %>

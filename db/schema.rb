@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127020200) do
+ActiveRecord::Schema.define(:version => 20120130075421) do
 
   create_table "bids", :force => true do |t|
     t.integer  "user_id"
@@ -165,7 +165,7 @@ ActiveRecord::Schema.define(:version => 20120127020200) do
     t.integer  "relist_count",      :default => 0
     t.date     "expired"
     t.boolean  "chargeable_expiry", :default => false
-    t.integer  "oders_count",       :default => 0
+    t.integer  "orders_count",      :default => 0
   end
 
   add_index "entries", ["car_brand_id"], :name => "index_entries_on_car_brand_id"
@@ -175,6 +175,39 @@ ActiveRecord::Schema.define(:version => 20120127020200) do
   add_index "entries", ["company_id"], :name => "index_entries_on_company_id"
   add_index "entries", ["term_id"], :name => "index_entries_on_term_id"
   add_index "entries", ["user_id"], :name => "index_entries_on_user_id"
+
+  create_table "fees", :force => true do |t|
+    t.integer "buyer_company_id"
+    t.integer "buyer_id"
+    t.integer "seller_company_id"
+    t.integer "seller_id"
+    t.integer "entry_id"
+    t.integer "line_item_id"
+    t.integer "order_id"
+    t.integer "bid_id"
+    t.decimal "bid_total",         :precision => 10, :scale => 2, :default => 0.0, :null => false
+    t.string  "bid_type"
+    t.integer "bid_speed"
+    t.decimal "perf_ratio",        :precision => 5,  :scale => 2
+    t.decimal "fee_rate",          :precision => 5,  :scale => 3
+    t.decimal "fee",               :precision => 10, :scale => 2, :default => 0.0, :null => false
+    t.string  "fee_type"
+    t.date    "order_paid"
+    t.date    "created_at"
+    t.date    "billed"
+    t.date    "paid"
+    t.decimal "split_amount",      :precision => 10, :scale => 2, :default => 0.0, :null => false
+    t.date    "split_remitted"
+  end
+
+  add_index "fees", ["bid_id"], :name => "index_fees_on_bid_id"
+  add_index "fees", ["buyer_company_id"], :name => "index_fees_on_buyer_company_id"
+  add_index "fees", ["buyer_id"], :name => "index_fees_on_buyer_id"
+  add_index "fees", ["entry_id"], :name => "index_fees_on_entry_id"
+  add_index "fees", ["line_item_id"], :name => "index_fees_on_line_item_id"
+  add_index "fees", ["order_id"], :name => "index_fees_on_order_id"
+  add_index "fees", ["seller_company_id"], :name => "index_fees_on_seller_company_id"
+  add_index "fees", ["seller_id"], :name => "index_fees_on_seller_id"
 
   create_table "friendships", :force => true do |t|
     t.datetime "created_at"
@@ -196,6 +229,30 @@ ActiveRecord::Schema.define(:version => 20120127020200) do
 
   add_index "line_items", ["car_part_id"], :name => "index_line_items_on_car_part_id"
   add_index "line_items", ["entry_id"], :name => "index_line_items_on_entry_id"
+
+  create_table "messages", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.integer  "alias"
+    t.integer  "user_company_id"
+    t.integer  "receiver_id"
+    t.integer  "receiver_company_id"
+    t.integer  "entry_id"
+    t.integer  "order_id"
+    t.text     "message"
+    t.boolean  "open"
+    t.string   "ancestry"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "messages", ["ancestry"], :name => "index_messages_on_ancestry"
+  add_index "messages", ["entry_id"], :name => "index_messages_on_entry_id"
+  add_index "messages", ["order_id"], :name => "index_messages_on_order_id"
+  add_index "messages", ["receiver_company_id"], :name => "index_messages_on_receiver_company_id"
+  add_index "messages", ["receiver_id"], :name => "index_messages_on_receiver_id"
+  add_index "messages", ["user_company_id"], :name => "index_messages_on_user_company_id"
+  add_index "messages", ["user_id"], :name => "index_messages_on_user_id"
 
   create_table "orders", :force => true do |t|
     t.integer  "user_id"

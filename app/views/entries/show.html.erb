@@ -1,13 +1,33 @@
 <% title @entry.model_name %>
 <% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
 
-<% content_for :sidebar do %>
-	<%= content_tag :div, @entry.status, class: "label #{@entry.status_color}" %>
-<% end %>
-
 <%= render 'shared/info_vehicle' %>
 <%#= render :partial => 'photo_set' %>
 <%#= render :partial => 'search_form' %>
 
 <%= render 'buyer' %>
 <%#= render 'seller' %>
+
+<% content_for :sidebar do %>
+	<%= content_tag :p, @entry.status, class: "label #{@entry.status_color}" %>
+	<%= link_to 'Reveal Bids', reveal_entry_path(@entry), class: 'btn success' if @entry.can_reveal %>
+		<%= content_tag :dl, class: 'small' do %>
+			<%= dl_helper 'Created', long_date(@entry.created_at) %>
+			<% Entry::TAGS_FOR_SIDEBAR.each do |tag| %>
+				<% if tag == 'bid_until' %>
+					<%= bidding_session_time_helper(@entry) if @entry.bid_until %>
+				<% else %>
+					<%= dl_helper tag.titleize, long_date(@entry.get_date_for_sidebar(tag)) if @entry.get_date_for_sidebar(tag) %>
+				<% end %>
+			<% end %>
+		<% end %>
+<% end %>
+
+<% content_for :messages do %>
+	<%= content_tag :h5, 'Messages for this Entry' %>
+	<%= content_tag :dl, class: '' do %>
+	<%= nested_messages @entry.messages.arrange(order: :created_at) %>
+	<% end %>
+	<%= link_to "Send Message to Buyer", show_fields_messages_path(:msg_type => 'buyer', :entry => @entry, :order => @order), :class => 'btn', :remote => true %>
+<% end %>
+

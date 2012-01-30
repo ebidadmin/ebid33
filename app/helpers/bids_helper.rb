@@ -6,13 +6,14 @@ module BidsHelper
   end
 
   def bid_amount_helper(bid, f=nil)
-    content_tag :p do
+    content_tag :p, class: "#{bid.status_color}" do
       if f.present?
         ((f.radio_button 'id', bid.id) + 
         (content_tag :span, currency(bid.amount), class: 'bid-amount') + 
         (content_tag :em, bid.user.username, class: 'small')).html_safe
       else
         ((content_tag :span, currency(bid.amount), class: 'bid-amount') + 
+        # ((content_tag :span, link_to(currency(bid.amount), edit_bid_path(bid)), class: 'bid-amount') + 
         (content_tag :em, bid.user.username, class: 'small')).html_safe
       end
     end 
@@ -22,7 +23,7 @@ module BidsHelper
     if action == 'show'
       bid.quantity
     else
-      text_field_tag "bids[#{bid.id}][]", bid.quantity, class: 'span1'
+      text_field_tag "bids[#{bid.id}][]", bid.quantity, class: 'span1 center'
     end
   end
   

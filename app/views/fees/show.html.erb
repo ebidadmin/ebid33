@@ -1,0 +1,88 @@
+<% title "Fee" %>
+
+<p>
+  <strong>Buyer Company:</strong>
+  <%= @fee.buyer_company_id %>
+</p>
+<p>
+  <strong>Buyer:</strong>
+  <%= @fee.buyer_id %>
+</p>
+<p>
+  <strong>Seller Company:</strong>
+  <%= @fee.seller_company_id %>
+</p>
+<p>
+  <strong>Seller:</strong>
+  <%= @fee.seller_id %>
+</p>
+<p>
+  <strong>Entry:</strong>
+  <%= @fee.entry_id %>
+</p>
+<p>
+  <strong>Line Item:</strong>
+  <%= @fee.line_item_id %>
+</p>
+<p>
+  <strong>Order:</strong>
+  <%= @fee.order_id %>
+</p>
+<p>
+  <strong>Bid:</strong>
+  <%= @fee.bid_id %>
+</p>
+<p>
+  <strong>Bid Total:</strong>
+  <%= @fee.bid_total %>
+</p>
+<p>
+  <strong>Bid Type:</strong>
+  <%= @fee.bid_type %>
+</p>
+<p>
+  <strong>Bid Speed:</strong>
+  <%= @fee.bid_speed %>
+</p>
+<p>
+  <strong>Perf Ratio:</strong>
+  <%= @fee.perf_ratio %>
+</p>
+<p>
+  <strong>Fee Rate:</strong>
+  <%= @fee.fee_rate %>
+</p>
+<p>
+  <strong>Fee:</strong>
+  <%= @fee.fee %>
+</p>
+<p>
+  <strong>Fee Type:</strong>
+  <%= @fee.fee_type %>
+</p>
+<p>
+  <strong>Order Paid:</strong>
+  <%= @fee.order_paid %>
+</p>
+<p>
+  <strong>Billed:</strong>
+  <%= @fee.billed %>
+</p>
+<p>
+  <strong>Paid:</strong>
+  <%= @fee.paid %>
+</p>
+<p>
+  <strong>Split Amount:</strong>
+  <%= @fee.split_amount %>
+</p>
+<p>
+  <strong>Split Remitted:</strong>
+  <%= @fee.split_remitted %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_fee_path(@fee) %> |
+  <%= link_to "Destroy", @fee, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", fees_path %>
+</p>

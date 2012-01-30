@@ -60,4 +60,5 @@ gem "squeel"
 # gem 'rd_searchlogic', :require => 'searchlogic', :git => 'git://github.com/railsdog/searchlogic.git'
 gem "ransack"#, :git => "git://github.com/ernie/ransack.git"
 gem "has_scope"
+gem "ancestry"
 

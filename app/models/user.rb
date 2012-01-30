@@ -19,10 +19,14 @@ class User < ActiveRecord::Base
   has_many :bids, dependent: :destroy
   has_many :orders, dependent: :destroy
   has_one :seller, through: :order
+  has_many :messages, dependent: :destroy
+  has_many :receivers, through: :messages
+  has_many :buyers, through: :fees
+  has_many :sellers, through: :fees
   
   delegate :address1, :address2, :city_name, to: :branch, allow_nil:true
   delegate :phone, :fax, to: :profile
   delegate :nickname, to: :company
   
-  default_scope includes(:profile => [:company, :branch])
+  # default_scope includes(:profile => [:company, :branch])
 end

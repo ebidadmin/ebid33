@@ -26,7 +26,7 @@ class CreateEntries < ActiveRecord::Migration
       t.integer :relist_count,        default: 0
       t.date :expired
       t.boolean :chargeable_expiry,   default: false
-      t.integer :oders_count,         default: 0
+      t.integer :orders_count,         default: 0
     end
     add_index :entries, :user_id
     add_index :entries, :company_id

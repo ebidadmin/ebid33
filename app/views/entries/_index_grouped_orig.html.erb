@@ -1,0 +1,26 @@
+<% @entries.group_by { |e| e.created_at.beginning_of_day }.each do |date, grouped_entries| %>
+	<%= content_tag :h4, regular_date(date, 'day') %>
+	<% grouped_entries.in_groups_of(4, false) do |row_entries| %>
+		<div class="row show-grid">
+		<% for entry in row_entries %>
+			<%= div_for entry, class: 'span3' do %>
+				<% if entry.photos.first && entry.photos.first.processing? %>
+					<%#= image_tag 'image_placeholder.png', class: "thumbnail", alt: "Photo of #{entry.plate_no}" %>
+				<% elsif entry.photos.blank? %>
+					<%#= content_tag :p, 'No photos submitted', class: "thumbnail" %>
+				<% else %>
+					<%= image_tag entry.photos.first.photo.url(:tiny), class: 'thumbnail', alt: "Photo of #{entry.plate_no}"  %>
+				<% end %>
+				<%= content_tag :p, entry.ref_no, class: 'small' %>
+				<%= content_tag :p, entry.model_name %>
+				<%= content_tag :p, entry.plate_no, class: 'small' %>
+				<%= content_tag :div, entry.status, class: "label #{entry.status_color}" %>
+				<%= content_tag :p, regular_date(entry.created_at), class: 'small' %>
+				<%= content_tag :span, entry.line_items.size, class: 'label black' %>
+				<%= link_to 'Show', entry %>
+				<%= link_to 'Edit', edit_entry_path(entry) %>
+			<% end %>
+		<% end %>
+	</div>
+		<% end %>
+<% end %>

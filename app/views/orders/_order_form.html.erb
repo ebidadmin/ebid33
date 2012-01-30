@@ -4,17 +4,22 @@
 	<%= hidden_field_tag :entry_id, @entry.id %>
 
 	<!-- create an order for each supplier -->
+	<%= content_tag :h2, class: 'span16 clearfix' do %>
+		Check order items and quantities
+		<%= content_tag :small, "You have #{content_tag :span, pluralize(@bidders.count, 'supplier')}".html_safe %>
+	<% end %>
+	
 	<% @bids.group_by(&:user_id).each do |seller, seller_bids| %>
 		<%= render 'orders/items_table', bids: seller_bids %>
 	<% end %>
 
+	<%= content_tag :h2, class: 'span16 clearfix' do %>
+		Encode your delivery details
+		<%= content_tag :small, "Fields marked with #{content_tag :em, 'asterisks (*)'} are required.".html_safe %>
+	<% end %>
+
 	<%= content_tag :div, class: 'well' do %>
 		<%= content_tag :div, class: 'row' do %>
-
-		<%= content_tag :h2, class: 'span16 clearfix' do %>
-			Delivery Details
-			<%= content_tag :small, "Fields marked with #{content_tag :em, 'asterisks (*)'} are required.".html_safe %>
-		<% end %>
 
 		<%= content_tag :div, class: 'span5' do %>
 			<%= f.input :ref_no, label: "What's your PO Number?" %>
@@ -44,11 +49,10 @@
 	<%= content_tag :div, class: 'well' do %>
 		<%= f.button :submit, class: 'btn success floatright' %> 
 		<%= link_to "Cancel", (current_page?(accept_bids_path) ? @entry : @order), class: 'btn floatright' %>
-	  <%= link_to "All Orders", orders_path, class: 'btn' %>
-		<%= content_tag :p, "You have #{content_tag :span, pluralize(@bidders.count, 'supplier')}".html_safe, id: 'supplier-count' %>
+	  <%= link_to "All Orders", orders_path, class: 'btn floatright' %>
 		<%= content_tag :p, class: 'span10' do %>
 			<%= content_tag :span, 'Important', class: 'label important' %>
-			Please ensure the correctness of your order below. By creating a PO,
+			Please ensure the correctness of your order above. By creating a PO,
 			<%= content_tag :b, "you agree that you are responsible for making sure that the recipient accepts the delivery." %>
 		<% end %>
 	<% end %>

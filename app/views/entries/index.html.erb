@@ -1,30 +1,66 @@
 <% title "Entries" %>
 
-<% @entries.group_by { |e| e.created_at.beginning_of_day }.each do |date, grouped_entries| %>
-	<%= content_tag :h4, regular_date(date, 'day') %>
-	<% grouped_entries.in_groups_of(4, false) do |row_entries| %>
-		<div class="row show-grid">
-		<% for entry in row_entries %>
-			<%= div_for entry, class: 'span3' do %>
-				<% if entry.photos.first && entry.photos.first.processing? %>
-					<%= image_tag 'image_placeholder.png', class: "thumbnail", alt: "Photo of #{entry.plate_no}" %>
-				<% elsif entry.photos.blank? %>
-					<%= content_tag :p, 'No photos submitted', class: "thumbnail" %>
-				<% else %>
-					<%= image_tag entry.photos.first.photo.url(:tiny), class: 'thumbnail', alt: "Photo of #{entry.plate_no}"  %>
-				<% end %>
-				<%= content_tag :p, entry.ref_no, class: 'small' %>
-				<%= content_tag :p, entry.model_name %>
-				<%= content_tag :p, entry.plate_no, class: 'small' %>
-				<%= content_tag :div, entry.status, class: "label #{entry.status_color}" %>
-				<%= content_tag :span, entry.line_items.size, class: 'label black' %>
-				<%= link_to 'Show', entry %>
-				<%= link_to 'Edit', edit_entry_path(entry) %>
-			<% end %>
-		<% end %>
-	</div>
-		<% end %>
+<%= content_tag :ul, class: 'pills' do %>
+	<%= content_tag :li, link_to('All', entries_path), class: "" %>
+	<% Entry::TAGS_FOR_INDEX.each do |tag| %>
+		<%= content_tag :li, link_to(tag, entries_path(s: tag)), class: "" %>
+	<% end %>
 <% end %>
+
+<%#= render 'index_grouped_orig' %>
+<%= content_tag :div, class: 'row' do %>
+	<%= content_tag :div, class: 'span12' do %>
+		<%= content_tag :table do %>
+			<%= content_tag :thead do %>
+				<%= content_tag :tr do %>
+					<%= content_tag :th, 'ID', class: 'span1 center' %>
+					<%= content_tag :th, 'Vehicle', class: 'span4' %>
+					<%= content_tag :th, 'Terms', class: 'span3' %>
+					<%= content_tag :th, 'Photos', class: 'span2 center' %>
+					<%= content_tag :th, 'Bidding', class: 'span3' %>
+					<%= content_tag :th, 'Status', class: 'span3 center' %>
+				<% end %>
+			<% end %>
+		
+			<%= content_tag :tbody do %>
+				<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
+					<%= content_tag :tr do %>
+						<%= content_tag :td, colspan: 6 do %>
+							<%= content_tag :h5, regular_date(date) %>
+						<% end %>
+					<% end %>
+
+					<% entries.each do |entry| %>
+						<%= content_tag :tr do %>
+							<%= content_tag :td, entry.id, class: 'span1 center' %>
+							<%= content_tag :td, class: 'span4' do %>
+					      <%= content_tag :p, link_to(entry.model_name, entry)  %>
+								<%= content_tag :p, entry.plate_no %>
+								<%= content_tag :em, "created by #{entry.user.username}" %>
+							<% end %>
+							<%= content_tag :td, class: 'span3' do %>
+					      <%= content_tag :span, entry.city  %> /
+								<%= content_tag :span, entry.term_name %>
+								<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), entry) %>
+							<% end %>
+							<%= content_tag :td, entry.photos.size, class: 'span2 center' %>
+							<%= content_tag :td, class: 'span3' do %>
+					      <%= content_tag :p, number_of_bidders(entry)   %>
+								<%= content_tag :p, fastest_bid(entry) if entry.bids.present? %>
+							<% end %>
+							<%= content_tag :td, class: 'span3 center' do %>
+								<%= content_tag :p, entry.status, class: "label center #{entry.status_color}" %>
+								<%= content_tag :span, "as of #{regular_date(entry.status_date)}", class: 'small' %>
+							<% end %>
+						<% end %>
+					<% end %>
+				<% end %>
+			<% end %>
+			
+		<% end %>
+	<% end %>
+<% end %>
+
 
 <%= will_paginate @entries %>
 

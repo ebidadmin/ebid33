@@ -1,5 +1,12 @@
 Ebid33::Application.routes.draw do
 
+  resources :fees
+
+  resources :messages do
+    get :show_fields, :on => :collection
+    get :cancel, :on => :collection
+  end
+
   resources :line_items
 
   resources :orders
@@ -11,7 +18,17 @@ Ebid33::Application.routes.draw do
   end
 
   resources :searches
-  resources :entries
+  resources :entries, :shallow => true do
+    member do
+      get :edit_vehicle
+      get :attach_photos
+      get :print
+      get :put_online
+      get :reveal
+      get :relist
+      get :reactivate
+    end
+  end
 
   resources :branches
 

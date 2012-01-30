@@ -1,0 +1,84 @@
+<%= form_for @fee do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :buyer_company_id %><br />
+    <%= f.number_field :buyer_company_id %>
+  </p>
+  <p>
+    <%= f.label :buyer_id %><br />
+    <%= f.number_field :buyer_id %>
+  </p>
+  <p>
+    <%= f.label :seller_company_id %><br />
+    <%= f.number_field :seller_company_id %>
+  </p>
+  <p>
+    <%= f.label :seller_id %><br />
+    <%= f.number_field :seller_id %>
+  </p>
+  <p>
+    <%= f.label :entry_id %><br />
+    <%= f.number_field :entry_id %>
+  </p>
+  <p>
+    <%= f.label :line_item_id %><br />
+    <%= f.number_field :line_item_id %>
+  </p>
+  <p>
+    <%= f.label :order_id %><br />
+    <%= f.number_field :order_id %>
+  </p>
+  <p>
+    <%= f.label :bid_id %><br />
+    <%= f.number_field :bid_id %>
+  </p>
+  <p>
+    <%= f.label :bid_total %><br />
+    <%= f.text_field :bid_total %>
+  </p>
+  <p>
+    <%= f.label :bid_type %><br />
+    <%= f.text_field :bid_type %>
+  </p>
+  <p>
+    <%= f.label :bid_speed %><br />
+    <%= f.number_field :bid_speed %>
+  </p>
+  <p>
+    <%= f.label :perf_ratio %><br />
+    <%= f.text_field :perf_ratio %>
+  </p>
+  <p>
+    <%= f.label :fee_rate %><br />
+    <%= f.text_field :fee_rate %>
+  </p>
+  <p>
+    <%= f.label :fee %><br />
+    <%= f.text_field :fee %>
+  </p>
+  <p>
+    <%= f.label :fee_type %><br />
+    <%= f.text_field :fee_type %>
+  </p>
+  <p>
+    <%= f.label :order_paid %><br />
+    <%= f.date_select :order_paid %>
+  </p>
+  <p>
+    <%= f.label :billed %><br />
+    <%= f.date_select :billed %>
+  </p>
+  <p>
+    <%= f.label :paid %><br />
+    <%= f.date_select :paid %>
+  </p>
+  <p>
+    <%= f.label :split_amount %><br />
+    <%= f.text_field :split_amount %>
+  </p>
+  <p>
+    <%= f.label :split_remitted %><br />
+    <%= f.date_select :split_remitted %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

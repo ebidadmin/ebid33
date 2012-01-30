@@ -1,0 +1,25 @@
+one:
+  user_id: 1
+  user_type: MyString
+  alias: 1
+  user_company_id: 1
+  receiver_id: 1
+  receiver_company_id: 1
+  entry_id: 1
+  order_id: 1
+  message: MyText
+  open: false
+  ancestry: MyString
+
+two:
+  user_id: 1
+  user_type: MyString
+  alias: 1
+  user_company_id: 1
+  receiver_id: 1
+  receiver_company_id: 1
+  entry_id: 1
+  order_id: 1
+  message: MyText
+  open: false
+  ancestry: MyString

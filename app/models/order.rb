@@ -6,15 +6,17 @@ class Order < ActiveRecord::Base
   
   belongs_to :user
   belongs_to :seller, class_name: "User", foreign_key: :seller_id
-  belongs_to :entry
+  belongs_to :entry, counter_cache: true
   belongs_to :company
   has_one :branch, through: :user
   has_many :bids
-  has_many :line_items#, through: :bids
+  has_many :line_items
+  has_many :messages
   
   validates_presence_of :deliver_to#, :address1, :phone
   
-  default_scope includes(:user, :seller, :bids => [:line_item => :car_part]).order('created_at DESC')
+  # default_scope includes(:user, :seller, :bids => [:line_item => :car_part]).order('created_at DESC')
+  default_scope order('created_at DESC')
   scope :recent, where(status: ['PO Released', 'New', 'For-Delivery'])
   scope :delivered, where(status: 'Delivered')
   scope :paid, where(status: 'Paid')
