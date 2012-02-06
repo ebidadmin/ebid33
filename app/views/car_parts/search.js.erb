@@ -1,3 +1,3 @@
-$("div#search-results").html("<%= escape_javascript(render 'car_parts/search_results') %>").show("slide");
+$("div#search-results").html("<%= escape_javascript(render 'car_parts/search_results') %>").hide().slideDown(1000).effect("highlight", {}, 3000);
 $(".spinner").show().fadeOut(1000);
 

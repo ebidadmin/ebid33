@@ -1,0 +1,6 @@
+$("div.msg-form").html("<%= escape_javascript(content_tag :h4, flash[:notice], class: 'highlight center') %>"); 
+<% if @message.open_tag == true %>
+	$("div.messages #public").html("<%= escape_javascript(render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public') %>");
+<% else %>
+	$("div.messages #private").html("<%= escape_javascript(render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private') %>");
+<% end %>

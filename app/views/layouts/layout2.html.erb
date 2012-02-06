@@ -13,19 +13,13 @@
   </head>
   <body class="<%= params[:controller] %>">
     <header>
-	    <div class="container">
-       <nav>
-         <ul class="hmenu">
-           <%= render 'shared/navigation' %>
-         </ul>
-       </nav>
-       <% flash.each do |name, msg| %>
-         <%= content_tag :div, msg, class: "alert-message #{name}" if msg.is_a?(String) %>
-       <% end %>
-	    </div> <!--! end of .container -->
+        <%= render 'shared/navigation' %>
     </header>
     <div class="container">
       <section id="main" role="main">
+	     <% flash.each do |name, msg| %>
+	       <%= content_tag :div, msg, class: "alert-message #{name}" if msg.is_a?(String) %>
+	     <% end %>
 				<div class="row">
 					<div class="span16">
 						<div class="page-header">

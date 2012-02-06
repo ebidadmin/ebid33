@@ -1,4 +1,6 @@
 class LineItemsController < ApplicationController
+  before_filter :initialize_cart, only: :create
+
   def index
     @line_items = LineItem.all
   end
@@ -12,11 +14,19 @@ class LineItemsController < ApplicationController
   end
 
   def create
-    @line_item = LineItem.new(params[:line_item])
-    if @line_item.save
-      redirect_to @line_item, :notice => "Successfully created line item."
-    else
-      render :action => 'new'
+    # raise params.to_yaml
+    @entry = Entry.find(params[:id])
+    if @entry.line_items.blank? && @cart.cart_items.blank? 
+      flash[:error] = "Your parts selection is still empty! Choose parts before you proceed."
+      redirect_to :back
+    else #@entry.line_items.present?
+      @specs = params[:specs]
+      @entry.add_line_items_from_cart(@cart, @specs) 
+      respond_to do |format|
+        format.html { redirect_to @entry, :notice => "Successfully added parts. Next step is to put your entry Online." }
+        format.js { flash.now[:cart_notice] = "Successfully added parts to your entry. Next step is to attach photos." }
+      end      
+      # EntryMailer.delay.new_entry_alert(@entry)
     end
   end
 

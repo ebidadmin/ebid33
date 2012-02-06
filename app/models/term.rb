@@ -1,4 +1,5 @@
 class Term < ActiveRecord::Base
+  has_many :cart_entries
   has_many :entries
 
   def term_name

@@ -1,0 +1,64 @@
+<% title "Users" %>
+<%= content_tag :div, class: 'row' do %>
+	<%= content_tag :div, class: 'span12 ' do %>
+
+	<%= content_tag :table, class: 'condensed-table zebra-striped' do %>
+		<%= content_tag :thead do %>
+			<%= content_tag :th, 'Active?', class: 'span1 center' %>
+			<%= content_tag :th, 'Last Activity', class: 'span3' %>
+			<%= content_tag :th, 'User', class: 'span5' %>
+			<%= content_tag :th, 'Ave Rating', class: 'span3' %>
+			<%= content_tag :th, 'Roles', class: 'span2' %>
+			<%= content_tag :th, 'Birthday', class: 'span2' %>
+			<%= content_tag :th, '', class: 'span2' %>
+		<% end %>
+		<%= content_tag :tbody do %>
+			<% for user in @users %>
+			<%= content_tag :tr do %>
+				<%= content_tag :td, class: 'span1 center' do %>
+					<% if user.updated_at > 1.hour.ago %>
+						"Yes" <%#= image_tag '/images/base/yes.png' -%>
+					<% end %>
+					<%= user.enabled ? 'Yes' : 'No' %>  
+				<% end %>
+				<%= content_tag :td, class: 'span3' do %>
+					<%= content_tag :p, regular_date(user.updated_at) %>
+					<%= content_tag :p, "(#{time_ago_in_words(user.updated_at)})" %>
+				<% end %>
+				<%= content_tag :td, class: 'span5' do %>
+					<%= content_tag :b, user.username %>
+					<%= content_tag :em, user.nickname, class: 'small' if user.company %>
+					<%= content_tag :p, user.phone, class: 'small' if user.profile %>  
+					<%= content_tag :p, user.email, class: 'small' if user.profile %>  
+				<% end %>
+				<%= content_tag :td, class: 'span3' do %>
+					<%= content_tag :p, "ID: #{user.id}" %>
+					<%= content_tag :span, "E: #{user.entries_count}", class: 'label' %>
+					<%= content_tag :span, "B: #{user.bids_count}", class: 'label' %>
+				<% end %>
+				<%= content_tag :td, class: 'span2' do %>
+					<% for role in user.roles %>
+						<%= role.name %>
+					<% end %>
+				<% end %>
+				<%= content_tag :td, class: 'span2' do %>
+					<%= content_tag :span,regular_date(user.birthdate), class: 'small' if user.profile %>
+				<% end %>
+				<%= content_tag :td, class: 'span2 center' do %>
+		  		<%= content_tag :p, (link_to "View Info", user), class: 'small' %>
+		  		<%= content_tag :p, (link_to "Edit", edit_user_path(user)), class: 'small' %>
+					<%= content_tag :p, (link_to "Delete", user, :confirm => 'Are you sure? WARNING: This will remove all entries and bids related to this user.', :method => :delete), class: 'small'  %>
+				<% end %>
+			<% end %>
+			<% end %>
+		<% end %>
+	<% end %>
+
+	<% end %>
+<% end %>
+
+<%= will_paginate @users %>
+<div class="well">
+	<%= link_to "New User", new_user_path, class: 'btn success' %>
+</div>
+

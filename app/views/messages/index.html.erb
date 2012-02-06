@@ -9,7 +9,7 @@
 		<%= content_tag :thead do %>
 			<%= content_tag :th, 'ID', class: 'span1 center' %>
 			<%= content_tag :th, 'Sender', class: 'span2' %>
-			<%= content_tag :th, 'Receiver', class: 'span2' %>
+			<%= content_tag :th, 'reciever', class: 'span2' %>
 			<%= content_tag :th, 'Message', class: 'span11' %>
 			<%= content_tag :th, 'Order #', class: 'span2 center' %>
 		<% end %>
@@ -29,15 +29,15 @@
 							<%= content_tag :em, m.user_company.nickname, class: 'small' %>
 						<% end %>
 						<%= content_tag :td, class: 'span2' do %>
-							<%= content_tag :p, link_to(m.receiver.username, m.receiver), class: '' if m. receiver %>
-							<%= content_tag :em, m.receiver_company.nickname, class: 'small' if m. receiver %>
+							<%= content_tag :p, link_to(m.reciever.username, m.reciever), class: '' if m. reciever %>
+							<%= content_tag :em, m.reciever_company.nickname, class: 'small' if m. reciever %>
 						<% end %>
 						<%= content_tag :td, class: 'span11' do %>
 							<%= content_tag :p, m.message, class: '' %>
-							<%= content_tag :span, (m.open ? 'Open' : 'Private'), class: "label #{m.open ? 'cool' : nil}" %>
+							<%= content_tag :span, (m.open_tag ? 'Public' : 'Private'), class: "label #{m.open_tag ? 'cool' : nil}" %>
 							<%= content_tag :span, short_date(m.created_at), class: 'small' %>
 							<%= content_tag :span, link_to('edit', edit_message_path(m)) %>
-							<%= content_tag :span, link_to('delete', m), confirm: 'Are you sure you want to delete this message?', method: :delete %>
+							<%= content_tag :span, link_to('delete', m, confirm: 'Are you sure you want to delete this message?', method: :delete) %>
 						<% end %>
 						<%= content_tag :td, class: 'span2 center' do %>
 							<%= content_tag :p, link_to(m.order_id, m.order) if m.order %>
@@ -51,5 +51,5 @@
 <% end %>
 
 
-<%= will_paginate @messages %>
+<%= will_paginate @messages, inner_window: 2 %>
 <p><%= link_to "New Message", new_message_path %></p>

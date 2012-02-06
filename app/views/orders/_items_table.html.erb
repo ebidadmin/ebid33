@@ -10,6 +10,7 @@
 			<%=  content_tag :th, 'Qty', class: 'span2 center' %>
 			<%=  content_tag :th, 'Unit Price', class: 'span2 right' %>
 			<%=  content_tag :th, 'Cost', class: 'span3 right' %>
+			<%=  content_tag :th, '', class: 'span1' %>
 		<% end %>
 		<%= content_tag :tbody do %>
 			<% bids.each_with_index do |bid, index| %>
@@ -22,14 +23,18 @@
 					<%=  content_tag :td, (content_tag :span, bid.bid_type.upcase, class: 'label'), class: 'span2 center' %>
 					<%=  content_tag :td, bid_quantity_helper(bid, params[:action]), class: 'span2 center' %>
 					<%=  content_tag :td, currency(bid.amount), class: 'span2 right' %>
-					<%=  content_tag :td, currency(bid.total), class: 'span3 right' %>
+					<%=  content_tag :td, class: 'span3 right' do %>
+						<%= currency(bid.total) %>
+					<% end %>
+					<%= content_tag :td, check_box_helper(bid, @order, current_user, params[:action]), class: 'span1 center' %>
 				<% end %>
 
 			<% end %>
 
 			<%= content_tag :tr, class: 'total' do %>
-				<%= content_tag :th, "Total (#{pluralize bids.count, 'part'})", colspan: 5, class: 'right' %>
-				<%= content_tag :th, ph_currency(bids.collect(&:total).sum), class: 'span3 right' %>
+				<%= content_tag :th, total_label_helper(bids, params[:action]), colspan: 5, class: 'right' %>
+				<%= content_tag :th, total_amount_helper(bids, params[:action]), class: 'span3 right' %>
+				<%=  content_tag :th, '', class: '' %>
 			<% end %>
 		<% end %>
 	<% end %>

@@ -11,7 +11,7 @@
 
 <%= content_tag :tbody do %>
 	<% @orders.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_orders| %>
-		<%= content_tag :tr do %>
+		<%= content_tag :tr, class: 'well' do %>
 			<%= content_tag :td, colspan: 6 do %>
 				<%= content_tag :h5, regular_date(date) %>
 			<% end %>
@@ -36,6 +36,9 @@
 				<%= content_tag :td, class: 'span3 center' do %>
 					<%= content_tag :p, order.status, class: "label center #{order.status_color}" %>
 					<%= content_tag :span, "as of #{regular_date(order.status_date, 2)}", class: 'small' %>
+					<%= content_tag :span, order.messages.count, class: "label center" if order.messages.present? %>
+					<%= change_status_link(order) %>
+					<%= payment_tag(order) %>
 				<% end %>
 			<% end %>
 		<% end %>

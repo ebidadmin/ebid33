@@ -1,5 +1,30 @@
 Ebid33::Application.routes.draw do
 
+  resources :users
+
+  resources :ratings
+
+  devise_for :users, path: :account
+  
+  # match 'users/:user_id/entries(/:page)' => 'entries#index', :as => :user_entries, :via => :get
+  resources :users do
+  end
+
+  resources :entries, :shallow => true do
+    member do
+      get :put_online
+      get :reveal
+      get :relist
+      get :reactivate
+      get :print
+    end
+  end
+
+  get 'cart/add'
+  get 'cart/remove'
+  get 'cart/clear'
+
+  
   resources :fees
 
   resources :messages do
@@ -9,7 +34,20 @@ Ebid33::Application.routes.draw do
 
   resources :line_items
 
-  resources :orders
+  resources :orders do
+    member do
+      get :accept
+      get :change_status
+      put :buyer_paid
+      get :print
+      get :cancel
+      put :confirm_cancel
+    end
+    collection do
+      get :auto_paid
+    end
+    resources :ratings
+  end
 
   resources :bids do
     collection do
@@ -18,17 +56,6 @@ Ebid33::Application.routes.draw do
   end
 
   resources :searches
-  resources :entries, :shallow => true do
-    member do
-      get :edit_vehicle
-      get :attach_photos
-      get :print
-      get :put_online
-      get :reveal
-      get :relist
-      get :reactivate
-    end
-  end
 
   resources :branches
 
@@ -52,9 +79,6 @@ Ebid33::Application.routes.draw do
   #get \"users\/show\"
 
   root :to => "home#index"
-
-  devise_for :users
-  resources :users, :only => :show
 
 
   # The priority is based upon order of creation:

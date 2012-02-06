@@ -15,3 +15,8 @@
 # messages.each do |m|
 #   
 # end
+
+bwo = Bid.with_orders
+bwo.each do |b|
+  b.line_item.update_attribute(:order_id, b.order_id)
+end

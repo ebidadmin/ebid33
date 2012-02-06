@@ -17,6 +17,7 @@ class CreateBids < ActiveRecord::Migration
       t.references :order
       t.date :delivered
       t.date :paid
+      t.date :cancelled
       t.date :declined
       t.date :expired
     end

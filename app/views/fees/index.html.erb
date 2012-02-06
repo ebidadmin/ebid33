@@ -1,9 +1,5 @@
 <% title "Fees" %>
 
-<%= content_tag :div, class: '' do %>
-
-<% end %>
-
 <%= content_tag :div, class: 'span12' do %>
 	<%= content_tag :table, class: 'condensed-table' do %>
 		<%= content_tag :thead do %>
@@ -52,7 +48,7 @@
 						<% end %>
 						<%= content_tag :td, class: 'span2 right' do %>
 							<%= content_tag :p, currency(f.split_amount), class: "" %>
-							<%= content_tag :em, f.seller.nickname, class: 'small' %>
+							<%= content_tag :em, f.seller_company.nickname, class: 'small' if f.order_id.nil? %>
 						<% end %>
 					<% end %>
 				<% end %>

@@ -2,7 +2,7 @@ class CarVariantsController < ApplicationController
   # GET /car_variants
   # GET /car_variants.json
   def index
-    @car_variants = CarVariant.all
+    @car_variants = CarVariant.includes(:car_brand, :car_model).paginate(page: params[:page], per_page: 20)
 
     respond_to do |format|
       format.html # index.html.erb

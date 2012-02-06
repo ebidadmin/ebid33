@@ -1,48 +1,38 @@
-<%= form_for @message do |f| %>
+<%= simple_form_for @message do |f| %>
   <%= f.error_messages %>
-  <p>
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id %>
-  </p>
-  <p>
-    <%= f.label :user_type %><br />
-    <%= f.text_field :user_type %>
-  </p>
-  <p>
-    <%= f.label :alias %><br />
-    <%= f.number_field :alias %>
-  </p>
-  <p>
-    <%= f.label :user_company_id %><br />
-    <%= f.number_field :user_company_id %>
-  </p>
-  <p>
-    <%= f.label :receiver_id %><br />
-    <%= f.number_field :receiver_id %>
-  </p>
-  <p>
-    <%= f.label :receiver_company_id %><br />
-    <%= f.number_field :receiver_company_id %>
-  </p>
-  <p>
-    <%= f.label :entry_id %><br />
-    <%= f.number_field :entry_id %>
-  </p>
-  <p>
-    <%= f.label :order_id %><br />
-    <%= f.number_field :order_id %>
-  </p>
-  <p>
-    <%= f.label :message %><br />
-    <%= f.text_area :message %>
-  </p>
-  <p>
-    <%= f.label :open %><br />
-    <%= f.check_box :open %>
-  </p>
-  <p>
-    <%= f.label :ancestry %><br />
-    <%= f.text_field :ancestry %>
-  </p>
-  <p><%= f.submit %></p>
+	<%= f.input :message, input_html: { rows: 2, class: 'span12' } %>
+	<%= f.input :open_tag, as: :radio, label: 'Public Message' %>
+	<fieldset>
+		<div class="row">
+			<div class="span6">
+				<%= f.input :user do %>
+				  <%= f.grouped_collection_select :user_id,  @company_users, :users, :name, :id, :username, {:include_blank => true} %>
+				<% end %>
+				<%=  f.input :user_company do %>
+				  <%= f.grouped_collection_select :user_company_id,  @company_type, :companies, :name, :id, :name, {:include_blank => true} %>
+				<% end %>
+				<%= f.input :user_type, :collection => ['admin', 'buyer', 'seller'] %>
+			</div>
+			<div class="span6">
+				<%= f.input :reciever do %>
+				  <%= f.grouped_collection_select :reciever_id,  @company_users, :users, :name, :id, :username, {:include_blank => true} %>
+				<% end %>
+				<%=  f.input :reciever_company do %>
+				  <%= f.grouped_collection_select :reciever_company_id,  @company_type, :companies, :name, :id, :name, {:include_blank => true} %>
+				<% end %>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span6">
+				<%= f.input :entry_id %>
+			</div>
+			<div class="span6">
+				<%= f.input :order_id %>
+			</div>
+		</div>
+	</fieldset>
+	<div class="well">
+		<%= f.button :submit, class: 'btn success' %>
+	  <%= link_to "Back to List", messages_path, class: 'btn' %>
+	</div>
 <% end %>

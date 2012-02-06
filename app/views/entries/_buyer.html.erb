@@ -2,7 +2,6 @@
 <%= hidden_field_tag :entry_id, @entry.id %>
 <div id="" class="row">
 	<div id="" class="span12">
-		<%= content_tag :h3, 'Parts Requested' %>
 		
 		<%= content_tag :table, class: 'zebra-striped' do %>
 			<%= render 'table_titles' %>
@@ -13,16 +12,16 @@
 					
 						<%= content_tag :td, class: 'span4' do %>
 							<%= content_tag :span, index + 1, class: 'label index'  %>
-							<%= content_tag :span, item.part_name %>
-							<%= "<br> #{content_tag :span, 'Specs: ' + item.specs, class: 'label black'}".html_safe if item.specs.present? %>
+							<%= content_tag :span, item.name %>
+							<%= "<br> #{content_tag :span, 'Specs: ' + item.specs, class: 'highlight small'}".html_safe if item.specs.present? %>
 							<%= content_tag :div, class: 'stats small' do %>
-								<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %> |
-								<%= content_tag :span, "Fastest Bid: #{time_in_words(item.bids.minimum(:bid_speed))}" if item.bids.present? %>
+								<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %>
+								<%= content_tag :span, "| Fastest: #{time_in_words(item.bids.minimum(:bid_speed))}" if item.bids.present? %>
 				 			<% end %>
 							<%= content_tag :p, link_to(item.id, edit_line_item_path(item)) %>
 						<% end %>
 						
-						<%= content_tag :td do %>
+						<%= content_tag :td, class: 'span9' do %>
 							<% unless item.bids.size < 1 %>
 								<div class="bids-array">
 									<% item.bids.group_by(&:bid_type).each do |type, bids| %>
@@ -41,7 +40,6 @@
 						
 						<%= content_tag :td, class: 'span3 center' do %>
 							<%= content_tag :p, item.status, class: "label #{item.status_color}" %>
-							<%#= content_tag :span, item.status_date, class: 'small' %>
 							<%= content_tag :p, "as of #{regular_date(item.updated_at)}", class: 'small' %>
 							<%= link_to "PO# #{item.order.id}", item.order if item.order %>
 						<% end %>
@@ -60,5 +58,7 @@
 	<%= link_to 'List', entries_path, class: 'btn' %>
 	<%= submit_tag "Create PO", class: 'btn success floatright' if @entry.can_be_ordered %>
 	<%= link_to "Put Online", put_online_entry_path(@entry), class: 'btn success floatright' if @entry.can_online %>
+	<%= link_to 'Reveal Bids', reveal_entry_path(@entry), class: 'btn success floatright' if @entry.can_reveal %>
+	<%= link_to 'Relist Un-bidded', relist_entry_path(@entry), class: 'btn info floatright' if @entry.can_relist %>
 </div>
 <% end %>

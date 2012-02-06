@@ -5,10 +5,14 @@ class LineItem < ActiveRecord::Base
   has_many :bids, dependent: :destroy
   has_many :fees
   
+  default_scope includes(:car_part, :bids)
+
   scope :fresh, where(status: ['New', 'Edited'])
   scope :online, where(status: ['Online', 'Relisted', 'Additional'])
-  scope :Declined, where(status: ['Declined', 'Expired'])
+  scope :declined, where(status: ['Declined', 'Expired'])
+  scope :relistable, where(:status => 'No Bids')
   scope :with_bids, where('line_items.bids_count > 0')
+  scope :without_bids, where('line_items.bids_count < 1')
 
   STATUS_TAGS = %w(Online Additional Relisted For-Decision New PO PO Released For-Delivery Delivered Paid Closed Expired) 
   
@@ -17,6 +21,14 @@ class LineItem < ActiveRecord::Base
   def part_name
 	  car_part.name if car_part
 	end
+
+	def self.from_cart_item(cart_item, cart_spec)
+		li = self.new
+		li.quantity = cart_item.quantity
+		li.car_part_id = cart_item.car_part_id
+		li.specs = cart_spec
+		li 
+	end 
 
 	def update_for_decision
 	  if bids.present?
@@ -64,9 +76,10 @@ class LineItem < ActiveRecord::Base
     when 'For-Decision' then 'highlight'
     when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Paid', 'Closed' then 'success'
     when 'Expired', 'Declined' then 'warning'
-    when 'Cancelled by admin', 'Cancelled by buyer', 'Cancelled by seller' then 'black'
+    when 'Cancelled by admin', 'Cancelled by buyer', 'Cancelled by seller', 'Cancelled' then 'black'
     else nil
     end
+    # 'black' if status.include?('Cancelled')
   end
 	
 end

@@ -3,6 +3,7 @@ class CarPart < ActiveRecord::Base
   attr_accessible :name
   before_validation :strip_blanks
 
+  has_many :cart_items
   has_many :line_items
   has_many :entries, through: :line_items
   has_many :bids, through: :line_items

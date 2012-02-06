@@ -10,7 +10,7 @@
 <%#= render 'index_grouped_orig' %>
 <%= content_tag :div, class: 'row' do %>
 	<%= content_tag :div, class: 'span12' do %>
-		<%= content_tag :table do %>
+		<%= content_tag :table, class: 'condensed-table' do %>
 			<%= content_tag :thead do %>
 				<%= content_tag :tr do %>
 					<%= content_tag :th, 'ID', class: 'span1 center' %>
@@ -36,7 +36,7 @@
 							<%= content_tag :td, class: 'span4' do %>
 					      <%= content_tag :p, link_to(entry.model_name, entry)  %>
 								<%= content_tag :p, entry.plate_no %>
-								<%= content_tag :em, "created by #{entry.user.username}" %>
+								<%= content_tag :em, "created by #{entry.user.username}" if entry.user %>
 							<% end %>
 							<%= content_tag :td, class: 'span3' do %>
 					      <%= content_tag :span, entry.city  %> /
@@ -51,6 +51,7 @@
 							<%= content_tag :td, class: 'span3 center' do %>
 								<%= content_tag :p, entry.status, class: "label center #{entry.status_color}" %>
 								<%= content_tag :span, "as of #{regular_date(entry.status_date)}", class: 'small' %>
+								<%= content_tag :span, entry.messages.count, class: "label center" if entry.messages.present? %>
 							<% end %>
 						<% end %>
 					<% end %>
@@ -62,9 +63,9 @@
 <% end %>
 
 
-<%= will_paginate @entries %>
+<%= will_paginate @entries, inner_window: 2 %>
 
 <div class="well">
-	<%= link_to "New Entry", new_entry_path, class: 'btn large primary' %>
+	<%= link_to "New Entry", new_entry_path, class: 'btn large primary floatright' %>
 </div>
 

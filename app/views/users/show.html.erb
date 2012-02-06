@@ -1,4 +1,92 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
-<p>User: <%= @user.username %></p>
-<p>Email: <%= @user.email if @user.email %></p>
+<% title "User" %>
+
+<p>
+  <strong>Username:</strong>
+  <%= @user.username %>
+</p>
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+<p>
+  <strong>Encrypted Password:</strong>
+  <%= @user.encrypted_password %>
+</p>
+<p>
+  <strong>Password Salt:</strong>
+  <%= @user.password_salt %>
+</p>
+<p>
+  <strong>Remember Token:</strong>
+  <%= @user.remember_token %>
+</p>
+<p>
+  <strong>Remember Created At:</strong>
+  <%= @user.remember_created_at %>
+</p>
+<p>
+  <strong>Sign In Count:</strong>
+  <%= @user.sign_in_count %>
+</p>
+<p>
+  <strong>Current Sign In At:</strong>
+  <%= @user.current_sign_in_at %>
+</p>
+<p>
+  <strong>Last Sign In At:</strong>
+  <%= @user.last_sign_in_at %>
+</p>
+<p>
+  <strong>Current Sign In Ip:</strong>
+  <%= @user.current_sign_in_ip %>
+</p>
+<p>
+  <strong>Last Sign In Ip:</strong>
+  <%= @user.last_sign_in_ip %>
+</p>
+<p>
+  <strong>Reset Password Token:</strong>
+  <%= @user.reset_password_token %>
+</p>
+<p>
+  <strong>Reset Password Sent At:</strong>
+  <%= @user.reset_password_sent_at %>
+</p>
+<p>
+  <strong>Failed Attempts:</strong>
+  <%= @user.failed_attempts %>
+</p>
+<p>
+  <strong>Unlock Token:</strong>
+  <%= @user.unlock_token %>
+</p>
+<p>
+  <strong>Locked At:</strong>
+  <%= @user.locked_at %>
+</p>
+<p>
+  <strong>Enabled:</strong>
+  <%= @user.enabled %>
+</p>
+<p>
+  <strong>Entries Count:</strong>
+  <%= @user.entries_count %>
+</p>
+<p>
+  <strong>Bids Count:</strong>
+  <%= @user.bids_count %>
+</p>
+<p>
+  <strong>Tos Agreed:</strong>
+  <%= @user.tos_agreed %>
+</p>
+<p>
+  <strong>Opt In:</strong>
+  <%= @user.opt_in %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_user_path(@user) %> |
+  <%= link_to "Destroy", @user, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", users_path %>
+</p>

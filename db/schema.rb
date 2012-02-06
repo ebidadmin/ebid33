@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120130132808) do
+ActiveRecord::Schema.define(:version => 20120204142014) do
 
   create_table "bids", :force => true do |t|
     t.integer  "user_id"
@@ -275,12 +275,12 @@ ActiveRecord::Schema.define(:version => 20120130132808) do
     t.string   "user_type"
     t.integer  "alias"
     t.integer  "user_company_id"
-    t.integer  "receiver_id"
-    t.integer  "receiver_company_id"
+    t.integer  "reciever_id"
+    t.integer  "reciever_company_id"
     t.integer  "entry_id"
     t.integer  "order_id"
     t.text     "message"
-    t.boolean  "open"
+    t.boolean  "open_tag",            :default => false
     t.string   "ancestry"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -289,8 +289,8 @@ ActiveRecord::Schema.define(:version => 20120130132808) do
   add_index "messages", ["ancestry"], :name => "index_messages_on_ancestry"
   add_index "messages", ["entry_id"], :name => "index_messages_on_entry_id"
   add_index "messages", ["order_id"], :name => "index_messages_on_order_id"
-  add_index "messages", ["receiver_company_id"], :name => "index_messages_on_receiver_company_id"
-  add_index "messages", ["receiver_id"], :name => "index_messages_on_receiver_id"
+  add_index "messages", ["reciever_company_id"], :name => "index_messages_on_reciever_company_id"
+  add_index "messages", ["reciever_id"], :name => "index_messages_on_reciever_id"
   add_index "messages", ["user_company_id"], :name => "index_messages_on_user_company_id"
   add_index "messages", ["user_id"], :name => "index_messages_on_user_id"
 
@@ -361,6 +361,16 @@ ActiveRecord::Schema.define(:version => 20120130132808) do
 
   create_table "ranks", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "ratings", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "user_id"
+    t.integer  "ratee_id"
+    t.decimal  "stars",      :precision => 10, :scale => 0
+    t.text     "review"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "regions", :force => true do |t|

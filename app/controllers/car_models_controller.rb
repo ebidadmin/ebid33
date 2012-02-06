@@ -1,6 +1,6 @@
 class CarModelsController < ApplicationController
   def index
-    @car_models = CarModel.scoped.includes(:car_brand)
+    @car_models = CarModel.includes(:car_brand).paginate(page: params[:page], per_page: 20)
   end
 
   def show
@@ -40,7 +40,7 @@ class CarModelsController < ApplicationController
   end
 
   def selected
-    @car_variants = CarVariant.where(car_model_id: params[:id])
+    @car_variants = CarVariant.where(car_model_id: params[:id]).order(:name)
     render :partial => 'car_models/selected' 
   end
 end

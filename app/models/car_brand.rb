@@ -4,6 +4,7 @@ class CarBrand < ActiveRecord::Base
   belongs_to :car_origin
   has_many :car_models, dependent: :destroy
   has_many :car_variants, dependent: :destroy
+  has_many :cart_entries
   has_many :entries
   has_many :bids
   

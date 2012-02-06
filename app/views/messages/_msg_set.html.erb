@@ -1,0 +1,15 @@
+<div id="<%= msg_type.downcase %>">
+	<%= content_tag :h3, "#{msg_type} Messages", class: 'span4' %>
+
+	<div id="" class="msg-buttons span8 floatright">
+		<%= message_buttons(msg_type, @entry, @order) %>
+	</div>
+
+	<% if messages.present? %>
+		<%= content_tag :dl, class: '' do %>
+			<%= nested_messages messages.arrange(order: :created_at) %>
+		<% end %>
+	<% else %>
+		<%= content_tag :h6, "No #{msg_type} messages yet." %>
+	<% end %>
+</div>

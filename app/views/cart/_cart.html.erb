@@ -1,0 +1,27 @@
+<%= content_tag :p, class: 'alert-message info' do %> 
+	There are <%= content_tag :strong, "#{pluralize(@cart.cart_items.count, 'part')} saved" %>  in your temporary parts list.
+<% end %>
+
+<%= form_tag line_items_path(id: @entry) do %>
+	<%= content_tag :table, class: 'condensed-table' do %>
+		<%= content_tag :thead do %>
+			<%= content_tag :th, 'Part Description', class: 'span6'  %>
+			<%= content_tag :th, 'Any Specs or Requirements?', class: 'span8'  %>
+			<%= content_tag :th, 'Status', class: ''  %>
+		<% end %>
+
+		<%= content_tag :tbody do %>
+			<% @cart.cart_items.each_with_index do |item, index| %>
+				<%= render 'cart/item', item: item, index: index %>
+			<% end %>
+		<% end %>
+	<% end %>
+
+	<%= content_tag :div, '', id: 'cart-notice', class: 'alert-message info' %>
+	<%= content_tag :div, class: 'well' do %>
+		<%= clear_cart_link(@entry) %>
+		<%= submit_tag 'Save Parts List', class: 'btn success floatright'  %>
+	<% end %>
+<% end %>
+
+

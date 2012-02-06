@@ -1,17 +1,19 @@
 class OrdersController < ApplicationController
   include ActionView::Helpers::TagHelper
-  has_scope :recent
-  has_scope :delivered
-  has_scope :paid
-  
   
   def index
-    @orders = apply_scopes(Order).includes(:entry => [:car_brand, :car_model, :user]).paginate(page: params[:page], per_page: 10)
+    @orders = Order.find_status(params[:s]).includes(:entry => [:car_brand, :car_model, :user]).paginate(page: params[:page], per_page: 10)
   end
 
   def show
     @order = Order.find(params[:id])
     @entry = @order.entry
+    
+    if current_user.role?(:admin)
+      @pvt_messages = @order.messages.pvt
+    else              
+      @pvt_messages = @order.messages.pvt.restricted(current_user.company)
+    end
     render layout: 'layout2'
   end
 
@@ -82,5 +84,64 @@ class OrdersController < ApplicationController
     @order.destroy
     redirect_to orders_url, :notice => "Successfully destroyed order."
   end
+  
+  def accept
+    @order = Order.find(params[:id])
+    @entry = @order.entry
+    
+    if @order.update_attributes(status: "For-Delivery", confirmed: Time.now, seller_confirmation: true)
+      @order.update_associated_status("For-Delivery")
+      flash[:notice] = ("You buyer is #{content_tag :strong, @entry.user.nickname}.<br> Please deliver ASAP. Thanks!").html_safe
+    else
+      flash[:error] = "Something went wrong with your request ... please try again later."
+    end
+    redirect_to :back
+  end
+  
+  def change_status # For seller to update status of Orders
+    @order = Order.find(params[:id])
+    flash[:notice] = @order.change_status(params[:cs])
+    @order.update_associated_status(params[:cs])
+    redirect_to @order#:back
+  end
+
+  def cancel
+      @order = Order.find(params[:id])
+    if params[:bid_ids]
+      @entry = @order.entry
+      @bids = Bid.find(params[:bid_ids])
+      @message = current_user.messages.build
+      @msg_sender = current_user.roles.first.name
+      render layout: 'layout2'
+    else
+      flash[:warning] = "Please select an item you want to cancel. Use the checkboxes."
+      redirect_to @order
+    end
+  end
+  
+  def confirm_cancel
+    # raise params.to_yaml
+    if params[:order][:message].present?
+      @order = Order.find(params[:id])
+      @bids = Bid.find(params[:bid_ids])
+      @bids.each { |bid| bid.process_cancellation }
+      @message = Message.for_cancelled_order(current_user, params[:msg_sender], @order, @bids, params[:order][:message])
+      flash[:info] = "Order cancelled. Sayang ..."
+      # MessageMailer.delay.cancelled_order_message(@order, @message)
+    else
+      flash[:warning] = "Please indicate your reason for cancelling the order."
+    end
+    redirect_to @order and return
+  end
+  
+  
+  private
+  
+  def tag_as_paid
+    @order.update_attribute(:paid, Date.today)
+    flash[:notice] = ("Successfully updated the status of the order to <strong>Paid</strong>.<br>
+    Please rate your buyer to close the order.").html_safe
+  end
+  
   
 end

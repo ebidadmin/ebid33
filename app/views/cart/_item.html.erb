@@ -1,0 +1,8 @@
+<%= content_tag :tr, id: item.id do %>
+	<%= content_tag :td, class: 'span6' do %>
+		<%= content_tag :span, index + 1, class: 'label index'  %>
+		<%= content_tag :span, item.part_name %>
+	<% end %>
+	<%= content_tag :td, (text_field_tag "specs[#{item.id}][]", item.specs), class: 'span8'  %>
+	<%= content_tag :td, "Temporary #{remove_link(item.car_part, @entry)}".html_safe, class: ''  %>
+<% end %>

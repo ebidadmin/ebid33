@@ -1,31 +1,43 @@
 class EntriesController < ApplicationController
+  load_and_authorize_resource
+  
   include ActionView::Helpers::TagHelper
+  before_filter :initialize_cart, :only => [:show, :edit]
   before_filter :search_by_origin, only: [:new, :edit, :create, :update]
   before_filter :search_by_region, only: [:new, :edit, :create, :update]
+  
 
   def index
-    @entries = Entry.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 12).order('created_at DESC')
+    # @entries = current_user.entries.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 12).order('created_at DESC')
+    @entries = Entry.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 10).order('created_at DESC')
   end
 
   def show
-    @entry = Entry.find(params[:id], include: [:line_items => [:car_part, [:bids => :user]]])
-    # @entry = Entry.find(params[:id], include: [:line_items => :car_part])
+    @entry = Entry.find(params[:id], include: [:messages => [[:user => :roles], [:reciever => :roles]]])
     @q = CarPart.search(params[:q])
+
+    if current_user.role?(:admin)
+      @pvt_messages = @entry.messages.pvt
+    else
+      @pvt_messages = @entry.messages.pvt.restricted(current_user.company)
+    end
+    @pub_messages = @entry.messages.pub
   end
 
   def new
-    @entry = Entry.new
+    @entry = current_user.entries.build
     @car_models = @car_variants = @cities = []
     2.times { @entry.photos.build }
     @entry.term_id = 4 # default credit term is 30 days
   end
 
   def create
-    @entry = Entry.new(params[:entry])
-    if @entry.save
+    @entry = current_user.entries.build(params[:entry])
+    if current_user.company.entries << @entry
       redirect_to @entry, :notice => "Successfully created entry."
     else
-      render :action => 'new'
+      flash[:error] = "Looks like you forgot to complete the required vehicle info.  Try again!"
+      render 'new'
     end
   end
 
@@ -71,9 +83,9 @@ class EntriesController < ApplicationController
   end
   
   def reveal 
-    @entry = Entry.find(params[:id], include: [:line_items, :bids])
+    @entry = Entry.find(params[:id], include: [:line_items => :bids])
     unless @entry.bids.blank?
-      if @entry.update_attributes(status: "For-Decision", decided: Date.today)
+      if @entry.update_attributes(status: "For-Decision", decided: Time.now)
         for item in @entry.line_items.online#.includes(:bids, :order_item)
           item.update_for_decision #unless item.order_item.present?
         end
@@ -83,6 +95,34 @@ class EntriesController < ApplicationController
       flash[:warning] = "Sorry, there no bids to reveal."
     end 
     redirect_to @entry
+  end
+  
+  def relist
+    @entry = Entry.find(params[:id])
+    @line_items = @entry.line_items
+    unless @line_items.without_bids.blank?
+      if @line_items.relistable.present?
+        @line_items.relistable.update_all(status: 'Relisted', relisted: Time.now)
+        @entry.update_attributes(status: 'Relisted', bid_until: 1.week.from_now, relisted: Time.now, relist_count: @entry.relist_count += 1, chargeable_expiry: nil, expired: nil)
+        flash[:notice] = "The items without bids have been re-listed and available again for bidding.".html_safe
+      end
+      if @line_items.fresh.present?
+        @line_items.fresh.update_all(status: 'Online')
+        @entry.update_attributes(status: 'Additional', bid_until: 1.week.from_now, relisted: Time.now, relist_count: @entry.relist_count += 1, chargeable_expiry: nil, expired: nil)
+        flash[:notice] = "New parts are now online and available for bidding.".html_safe
+      end
+      redirect_to @entry
+    else
+      flash[:error] = "Sorry, there are no items to relist."
+      redirect_to :back
+    end
+    # for friend in @entry.user.company.friends
+    #   unless friend.users.nil?
+    #     for seller in friend.users
+    #       EntryMailer.delay.relisted_entry_alert(seller, @entry) if seller.opt_in == true
+    #     end
+    #   end
+    # end
   end
   
 end

@@ -1,21 +1,10 @@
 <% title @entry.model_name %>
 <% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
 
-<%= render 'shared/info_vehicle' %>
-<%#= render :partial => 'photo_set' %>
-<%#= render :partial => 'search_form' %>
-
-<% if @entry.line_items.present? %>
-	<%= render 'buyer' %>
-	<%#= render 'seller' %>
-<% else %>
-	
-<% end %>
-
 <% content_for :sidebar do %>
-	<%= content_tag :p, @entry.status, class: "label #{@entry.status_color}" %>
-	<%= link_to 'Reveal Bids', reveal_entry_path(@entry), class: 'btn success' if @entry.can_reveal %>
-		<%= content_tag :dl, class: 'small' do %>
+	<%= render 'shared/info_vehicle' %>
+	<%= content_tag :p, @entry.status, class: "label #{@entry.status_color} sidebar-status" %>
+		<%= content_tag :dl do %>
 			<%= dl_helper 'Created', long_date(@entry.created_at) %>
 			<% Entry::TAGS_FOR_SIDEBAR.each do |tag| %>
 				<% if tag == 'bid_until' %>
@@ -27,11 +16,40 @@
 		<% end %>
 <% end %>
 
-<% content_for :messages do %>
-	<%= content_tag :h5, 'Messages for this Entry' %>
-	<%= content_tag :dl, class: '' do %>
-	<%= nested_messages @entry.messages.arrange(order: :created_at) %>
+<%# content_for :sidebar2 do %>
+	<%= content_tag :div, class: '' do %>
+		<%= render 'photo_set' %>
 	<% end %>
-	<%= link_to "Send Message to Buyer", show_fields_messages_path(:msg_type => 'buyer', :entry => @entry, :order => @order), :class => 'btn', :remote => true %>
+<%# end %>
+
+<%#= content_tag :h3, 'Parts Requested' %>
+
+<% if @entry.line_items.present? %>
+	<% if current_user.role?(:admin) %>
+		<%= render 'seller' %>
+	<% else %>
+		<%= render 'buyer' %>
+	<% end %>
+<% else %>
+	
+	<%= content_tag :div, id: 'cart', class: '' do %>
+		<% if @cart.cart_items.present? %>
+			<%= render 'cart/cart' %>
+		<% else %>
+			<%= content_tag :h2, 'Your parts list is empty.' %>
+		<% end %>
+	<% end %>
+	<%= render 'cart/search_form' %>
+
 <% end %>
+<hr>
+<%= content_tag :div, class: 'entry messages' do %>
+	<%= content_tag :div, '', class: 'msg-form' %>
+	<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' %>
+	<%= render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public' %>
+<% end %>
+
+
+
+
 

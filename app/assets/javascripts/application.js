@@ -5,6 +5,7 @@
 // the compiled file.
 //
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require_tree .
 
@@ -47,10 +48,12 @@ $(function() {
 			complete: function() { $('span.loading').remove(); }
 		});
 	});
-	$('div.fields').addClass('span4')
+	$('div.fields').addClass('span4');
+	$('div#cart-notice').hide();
 	// function autosaveForm() {
 	//   $('form[data-remote]').submit();
 	// }
 	// window.setInterval("autosaveForm()", 1000);
 	// 
+	// $("a .group").colorbox();
 });

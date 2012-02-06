@@ -64,7 +64,7 @@ module ApplicationHelper
       'FREE'
     end
   end
-
+  
   # def controller?(*controller)
   #   controller.include?(params[:controller])
   # end

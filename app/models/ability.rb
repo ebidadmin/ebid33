@@ -6,12 +6,18 @@ class Ability
     if user.role?(:admin)
       can :access, :all
     elsif user.role?(:buyer)
-      can :access, [:entries, :cart], user_id: user.id
-      can :access, :users
+      can :access, :home, :cart
+      can :access, :users#, id: user.id
+      can :access, [:entries, :orders]#, user_id: [user.company.users]
       can :access, [:car_brands, :car_models, :car_variants, :regions]
+      can :access, :messages, user_id: user.id
+      can :read, :fees
+    elsif user.role?(:seller)
+      can :access, :home, :bids
+      can :access, :users, id: user.id
+      can :read, :entries, :orders
     else
-      can :read, :entries
-      can :create, [:users, :sessions]
+      can :access, :home
     end
     
     # The first argument to `can` is the action the user can perform. The second argument

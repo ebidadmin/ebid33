@@ -1,15 +1,22 @@
 <% title "Orders" %>
 
+<%= content_tag :ul, class: 'pills' do %>
+	<%= content_tag :li, link_to('All', orders_path), class: "" %>
+	<% Order::TAGS_FOR_INDEX.each do |tag| %>
+		<%= content_tag :li, link_to(tag, orders_path(s: tag)), class: "" %>
+	<% end %>
+<% end %>
+
 <%= content_tag :div, class: 'row' do %>
 	<%= content_tag :div, class: 'span12' do %>
-		<%= content_tag :table do %>
+		<%= content_tag :table, class: 'condensed-table' do %>
 		<%= render 'basic_table' %>
 		<% end %>
 	<% end %>
 <% end %>
 
 
-<%= will_paginate @orders %>
+<%= will_paginate @orders, inner_window: 2 %>
 <div class="well">
 	<%= link_to 'List', orders_path, class: 'btn' %>
 </div>

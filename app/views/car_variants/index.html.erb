@@ -15,8 +15,8 @@
 
 <% @car_variants.each do |car_variant| %>
   <tr>
-    <td><%= car_variant.car_brand_id %></td>
-    <td><%= car_variant.car_model_id %></td>
+    <td><%= car_variant.car_brand.name %></td>
+    <td><%= car_variant.car_model.name %></td>
     <td><%= car_variant.name %></td>
     <td><%= car_variant.start_year %></td>
     <td><%= car_variant.end_year %></td>
@@ -28,6 +28,6 @@
 <% end %>
 </table>
 
-<br />
+<%= will_paginate @car_variants %>
 
 <%= link_to 'New Car variant', new_car_variant_path %>

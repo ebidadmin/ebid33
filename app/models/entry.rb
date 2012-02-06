@@ -7,6 +7,8 @@ class Entry < ActiveRecord::Base
   :expired, :chargeable_expiry, :oders_count, :photos_attributes
   attr_accessor :region
 
+  before_save :convert_numbers
+
   belongs_to :user
   belongs_to :company
   belongs_to :car_brand
@@ -36,7 +38,7 @@ class Entry < ActiveRecord::Base
   STATUS_TAGS = %w(New Online Additional Relisted For-Decision Ordered-IP Ordered-All Ordered-Declined Declined-IP Declined-All) 
   TAGS_FOR_INDEX = %w(New Online Decision Closed)
   TAGS_FOR_SIDEBAR = %w(online relisted bid_until decided expired)
-  MIN_BIDDING_TIME = 150.minutes
+  MIN_BIDDING_TIME = 5.minutes
   
   def model_name
     "#{year_model} #{car_brand.name if car_brand} #{car_model.name if car_model}".html_safe 
@@ -56,6 +58,15 @@ class Entry < ActiveRecord::Base
     status.present? ? where(status: [finder]) : scoped
   end
     
+	def add_line_items_from_cart(cart, specs)
+		cart.cart_items.each do |item|
+			li = LineItem.from_cart_item(item, specs.fetch(item.id.to_s)[0].to_s)
+			line_items << li 
+		end
+    cart.cart_items.destroy_all
+    # session[:cart_id] = nil 
+	end 
+
   def update_associated_status(status)
     if status == "Online"
       line_items.update_all(:status => status)
@@ -125,6 +136,14 @@ class Entry < ActiveRecord::Base
     end
     ready_for_reveal && (bids.present? && bids.online.present?)
 	end
+	
+	def can_relist
+    allowed = case status
+    when 'New', 'Edited', 'Online', 'Additional', 'Relisted' then false
+    else true
+    end
+    allowed && line_items.collect(&:status).include?('No Bids')
+	end
 
   def can_be_ordered
     status_ok = status == "For-Decision" || status == "Ordered-IP" || status == "Declined-IP"
@@ -162,4 +181,14 @@ class Entry < ActiveRecord::Base
 	def get_date_for_sidebar(tag)
 	  self.send(tag.downcase)
 	end
+	
+	private
+	
+	def convert_numbers
+	  self.ref_no.upcase!
+	  self.plate_no.upcase!
+	  self.motor_no.upcase!
+	  self.serial_no.upcase!
+	end
+	
 end

@@ -1,0 +1,28 @@
+<% title "Rating" %>
+
+<p>
+  <strong>Order:</strong>
+  <%= @rating.order_id %>
+</p>
+<p>
+  <strong>User:</strong>
+  <%= @rating.user_id %>
+</p>
+<p>
+  <strong>Ratee:</strong>
+  <%= @rating.ratee_id %>
+</p>
+<p>
+  <strong>Stars:</strong>
+  <%= @rating.stars %>
+</p>
+<p>
+  <strong>Review:</strong>
+  <%= @rating.review %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_rating_path(@rating) %> |
+  <%= link_to "Destroy", @rating, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", ratings_path %>
+</p>

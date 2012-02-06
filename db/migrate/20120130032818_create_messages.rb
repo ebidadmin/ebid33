@@ -5,19 +5,19 @@ class CreateMessages < ActiveRecord::Migration
       t.string :user_type
       t.integer :alias
       t.integer :user_company_id
-      t.integer :receiver_id
-      t.integer :receiver_company_id
+      t.integer :reciever_id
+      t.integer :reciever_company_id
       t.integer :entry_id
       t.integer :order_id
       t.text :message
-      t.boolean :open
+      t.boolean :open_tag,    default: false
       t.string :ancestry
       t.timestamps
     end
     add_index :messages, :user_id
     add_index :messages, :user_company_id
-    add_index :messages, :receiver_id
-    add_index :messages, :receiver_company_id
+    add_index :messages, :reciever_id
+    add_index :messages, :reciever_company_id
     add_index :messages, :entry_id
     add_index :messages, :order_id
     add_index :messages, :ancestry

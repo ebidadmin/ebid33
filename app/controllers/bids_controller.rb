@@ -2,7 +2,8 @@ class BidsController < ApplicationController
   # after_create :send_email
   
   def index
-    @bids = Bid.all
+    # @bids = Bid.unscoped.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], :user).order('created_at DESC').paginate(page: params[:page], per_page: 30)
+    @line_items = LineItem.with_bids.includes([:entry => [:car_brand, :car_model, :user]]).order('bids.created_at DESC').paginate(page: params[:page], per_page: 30)
   end
 
   def show
@@ -59,13 +60,15 @@ class BidsController < ApplicationController
   end
 
   def edit
+    session['referer'] = request.env["HTTP_REFERER"]
     @bid = Bid.find(params[:id])
   end
 
   def update
     @bid = Bid.find(params[:id])
     if @bid.update_attributes(params[:bid])
-      redirect_to @bid, :notice  => "Successfully updated bid."
+      redirect_to session['referer'], :notice => 'Bid successfully updated.'
+      session['referer'] = nil
     else
       render :action => 'edit'
     end

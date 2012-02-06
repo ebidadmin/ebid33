@@ -1,4 +1,5 @@
 class Bid < ActiveRecord::Base
+  
   attr_accessible :user_id, :entry_id, :line_item_id, :car_brand_id, :amount, :quantity, :total, 
   :bid_type, :bid_speed, :lot, :status, :ordered, :order_id, :delivered, :paid, :declined, :expired
 
@@ -7,6 +8,10 @@ class Bid < ActiveRecord::Base
   belongs_to :line_item, counter_cache: true
   belongs_to :car_brand
   belongs_to :order
+  
+  has_many :fees
+
+  STATUS_TAGS = %w(New Updated For-Decision For-Delivery Delivered Overdue Paid Closed Lose Declined Dropped Cancelled)
 
   default_scope includes(:user).order('amount DESC').order('bid_speed DESC')
   scope :by_user, lambda { |user| where(user_id: user) }
@@ -57,6 +62,12 @@ class Bid < ActiveRecord::Base
     line_item.update_attributes(status: "New PO", order_id: order.id)
   end
   
+  def process_cancellation
+    update_attribute(:status, "Cancelled")
+    line_item.update_attribute(:status, "Cancelled")
+  end
+  
+  
   def update_peer_bids(line_item)
     peer_bids = Bid.where(line_item_id: line_item, status: 'For-Decision').where("bid_type != ?", self.bid_type)
     peer_bids.update_all(status: "Dropped", ordered: nil, order_id: nil, delivered: nil, paid: nil, declined: nil)
@@ -70,6 +81,19 @@ class Bid < ActiveRecord::Base
     status == 'Submitted' || status == 'New' ||status == 'Updated' 
   end
   
+  def orig?
+    bid_type == 'original'
+  end
+  
+  def rep?
+    bid_type == 'replacement'
+  end
+  
+  def surp?
+    bid_type == 'surplus'
+  end
+  
+  
   def status_color
     color = case status
     when 'For-Decision' then 'highlight'
@@ -82,5 +106,4 @@ class Bid < ActiveRecord::Base
     "label #{color}" unless online?
   end
   
-
 end

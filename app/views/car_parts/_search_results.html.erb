@@ -1,12 +1,27 @@
+<%= content_tag :div, class: 'span12' do %>
 <% if @car_parts.count > 0 %>
-	<% @car_parts.in_groups_of(8, false).each do |car_part_array| %> 
-	<ul>
-		<% car_part_array.each do |car_part| %>
-			<%= content_tag :li, car_part.name %> 
+	<% if params[:q] %>
+		<%= content_tag :h3, "#{content_tag :b, (pluralize @car_parts.count, 'part')} were found using your search keyword: #{content_tag :em, params[:q][:name_cont], class: 'highlight'}".html_safe %>
+		<%= content_tag :p, 'Click on the part to put it in your parts list.' %>
+	<% end %>
+
+	<ul class="unstyled">
+	<% @car_parts.in_groups_of(24, false).each do |car_part_array| %> 
+		<%= content_tag :div, class: 'row' do %>
+			<% car_part_array.in_groups_of(8, false).each do |parts| %>
+				<%= content_tag :div, class: 'span4' do %>
+					<% parts.each do |p| %>
+						<%= content_tag :li, select_link(p, @entry) %> 
+					<% end %>
+				<% end %>
+			<% end %>
 		<% end %>
-	</ul>
+		<hr>
 	<% end %> 
+	</ul>
+
 <% else %>
-	<%= content_tag :h3, "Sorry, #{content_tag :strong, params[:name]} could not be found.".html_safe, :class => 'instruction' %>
+	<%= content_tag :h3, "Sorry, #{content_tag :em, params[:q][:name_cont], class: 'highlight'} could not be found.".html_safe, :class => 'instruction' %>
 	<%= content_tag :h3, "Please check your spelling OR try another keyword.", :class => 'instruction' %>
+<% end %>
 <% end %>

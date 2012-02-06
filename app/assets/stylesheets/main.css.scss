@@ -38,11 +38,13 @@ form {
 }
 
 dt, dd { float: left; }
-dt { clear: both; width: 30%; }
+dt { clear: both; font-size: 0.8em; text-transform: uppercase; width: 30%; }
 dd { width: 67%; }
-dl .label { font-size: 16px; }
+//dl .label { font-size: 16px; }
 
 .sidebar {
 	dt, dd { float: none; }
-	dd { margin-left: 0; width: 100%; }
+	dt { font-size: 0.9em; }
+	dd { margin-bottom: 5px; margin-left: 0; width: 100%; }
+	dd.important { background-color: white; font-size: 1.1em; padding: 4px 2px; }
 }

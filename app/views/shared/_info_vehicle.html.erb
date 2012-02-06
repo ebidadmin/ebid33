@@ -4,10 +4,9 @@
 	<% if @order %>
 		<%= dl_helper 'Insured', @order.ref_name %>
 	<% end %>
-	<%= dl_helper 'Serial No.', @entry.serial_no %>
-	<%= dl_helper 'Motor No.',  @entry.motor_no %>
+	<%= dl_helper 'Serial No.', @entry.serial_no, 'important' %>
+	<%= dl_helper 'Motor No.',  @entry.motor_no, 'important' %>
 	<%= dl_helper 'Date of Loss', @entry.date_of_loss.to_s(:long) if @entry.date_of_loss %>
-	<%= dl_helper 'Deliver To', @entry.city.name if @entry.city %>
-	<%= dl_helper 'Credit Term', @entry.term.term_name if @entry.term %>
+	<%= dl_helper 'Terms', "#{@entry.term.term_name} / #{@entry.city.name}", 'important'  %>
 	<%= dl_helper 'Created By', @entry.user.username if @entry.user  %>
 <% end %>

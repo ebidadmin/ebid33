@@ -41,8 +41,9 @@
 				<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
 				<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>
 				<%= dl_helper 'Paid', regular_date(@order.paid) if @order.paid %>
+				<%= dl_helper 'Cancelled', regular_date(@order.cancelled) if @order.cancelled %>
 			</dl>
-			<%= overdue_tag(@order) %>
+			<%= payment_tag(@order) %>
 	<% end %>
 <% end %>
 
@@ -68,11 +69,27 @@
 	<% end %>
 <% end %>
 
+<%= form_tag cancel_order_path(@order), :method => :get do  %>
+	<%= render 'orders/items_table', bids: @order.bids %>
 
-<%= render 'orders/items_table', bids: @order.bids %>
+	<%= content_tag :div, class: 'well' do %>
+	  <%= link_to "Edit", edit_order_path(@order), class: 'btn' %> 
+	  <%= link_to "Delete", @order, :confirm => 'Are you sure?', :method => :delete, class: 'btn' %> 
+	  <%= link_to "Previous Page", :back, class: 'btn' %>
+		<%= link_to "Accept Order", accept_order_path(@order), class: 'btn success floatright' unless @order.seller_confirmation? %>
+	  <%= link_to "Review Entry & Photos", @entry, class: 'btn info floatright' %>
+		
+		<% if @order.can_be_cancelled(current_user, params[:action]) %>
+		<%= content_tag :p, id: 'order-cancel-box', class: 'floatright' do %>
+			<%= content_tag :span, 'Cancellations? Check some items or check all' %> 
+			<%= submit_tag 'Cancel', class: 'btn' %>
+		<% end %>
+		<% end %>
+	<% end %>
+<% end %>
 
-<%= content_tag :div, class: 'well' do %>
-  <%= link_to "Edit", edit_order_path(@order) %> |
-  <%= link_to "Destroy", @order, :confirm => 'Are you sure?', :method => :delete %> |
-  <%= link_to "Previous Page", :back %>
+<hr>
+<%= content_tag :div, class: 'order messages' do %>
+	<%= content_tag :div, '', class: 'msg-form' %>
+	<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' %>
 <% end %>

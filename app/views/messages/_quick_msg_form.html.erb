@@ -1,0 +1,14 @@
+<%#= render 'messages/snippet', :message => @message.parent if @message.parent  %>
+
+<%= simple_form_for @message, remote: true do |f| %>
+	<%= hidden_field_tag 'msg_for', @msg_for %>
+	<%= hidden_field_tag 'entry', @entry %>
+	<%= hidden_field_tag 'order', @order if @order %>
+	<%= hidden_field_tag 'open_tag', params[:open_tag] %>
+	<%= f.hidden_field :parent_id if @message.parent %>
+
+	<%= message_label_and_field(f, @msg_for, params[:open_tag]) %>
+	<%= f.button :submit, class: 'btn success floatright' %>
+	<%= link_to "Cancel", cancel_messages_path(entry: @entry, order: @order), remote: true, class: 'btn floatright' %>
+<% end %>
+<hr>

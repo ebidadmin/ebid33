@@ -1,49 +1,60 @@
 <% title "Bids" %>
 
-<table>
-  <tr>
-    <th>User</th>
-    <th>Entry</th>
-    <th>Line Item</th>
-    <th>Car Brand</th>
-    <th>Amount</th>
-    <th>Quantity</th>
-    <th>Total</th>
-    <th>Bid Type</th>
-    <th>Bid Speed</th>
-    <th>Lot</th>
-    <th>Status</th>
-    <th>Ordered</th>
-    <th>Order</th>
-    <th>Delivered</th>
-    <th>Paid</th>
-    <th>Declined</th>
-    <th>Expired</th>
-  </tr>
-  <% for bid in @bids %>
-    <tr>
-      <td><%= bid.user_id %></td>
-      <td><%= bid.entry_id %></td>
-      <td><%= bid.line_item_id %></td>
-      <td><%= bid.car_brand_id %></td>
-      <td><%= bid.amount %></td>
-      <td><%= bid.quantity %></td>
-      <td><%= bid.total %></td>
-      <td><%= bid.bid_type %></td>
-      <td><%= bid.bid_speed %></td>
-      <td><%= bid.lot %></td>
-      <td><%= bid.status %></td>
-      <td><%= bid.ordered %></td>
-      <td><%= bid.order_id %></td>
-      <td><%= bid.delivered %></td>
-      <td><%= bid.paid %></td>
-      <td><%= bid.declined %></td>
-      <td><%= bid.expired %></td>
-      <td><%= link_to "Show", bid %></td>
-      <td><%= link_to "Edit", edit_bid_path(bid) %></td>
-      <td><%= link_to "Destroy", bid, :confirm => 'Are you sure?', :method => :delete %></td>
-    </tr>
-  <% end %>
-</table>
+<%= content_tag :div, class: 'row' do %>
+	<%= content_tag :div, class: 'span12' do %>
+		<%= content_tag :table, class: 'condensed-table' do %>
 
+			<%= content_tag :thead do %>
+				<%= content_tag :tr do %>
+					<%= content_tag :th, 'Vehicle', class: 'span4' %>
+					<%= content_tag :th, 'Parts', class: 'span5' %>
+					<%= content_tag :th, 'Orig', class: 'span2 center' %>
+					<%= content_tag :th, 'Rep', class: 'span2 center' %>
+					<%= content_tag :th, 'Surp', class: 'span2 center' %>
+				<% end %>
+			<% end %>
+
+			<%= content_tag :tbody do %>
+				<% @line_items.group_by(&:entry).each do |entry, items| %>
+
+					<%= content_tag :tr do %>
+						<%= content_tag :td, class: 'span4', rowspan: items.count + 1  do %>
+				      <%= content_tag :p, link_to(entry.model_name, entry)  %>
+							<%= content_tag :p, entry.plate_no %>
+							<%= content_tag :em, "created by #{entry.user.username}" %>
+							<%= content_tag :p, long_date(entry.online), class: 'small' %>
+						<% end %>
+					<% end %>
+					
+					<% items.each do |item| %>
+						<%= content_tag :tr do %>
+
+							<%= content_tag :td, "#{item.name} #{item.id}", class: 'span5' %>						
+							<%= content_tag :td, class: 'span2 center' do %>
+								<% item.bids.orig.each do |bid| %>
+									<%= render bid if bid.present? %>
+								<% end %>
+							<% end %>
+							<%= content_tag :td, class: 'span2 center' do %>
+								<% item.bids.rep.each do |bid| %>
+									<%= render bid if bid.present? %>
+								<% end %>
+							<% end %>
+							<%= content_tag :td, class: 'span2 center' do %>
+								<% item.bids.surp.each do |bid| %>
+									<%= render bid if bid.present? %>
+								<% end %>
+							<% end %>
+							
+						<% end %>
+					<% end %>
+
+				<% end %>
+			<% end %>
+			
+		<% end %>
+	<% end %>
+<% end %>
+
+<%= will_paginate @line_items, inner_window: 2 %>
 <p><%= link_to "New Bid", new_bid_path %></p>

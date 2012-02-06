@@ -2,10 +2,7 @@
 	<%= content_tag :legend, 'Vehicle' %>
 	<div class="clearfix row">
 		<%= f.input :ref_no, label: 'Claim No.', hint: 'What will you use to track your entry?', wrapper_class: 'span6' %>
-		<%= f.input :date_of_loss, wrapper_class: 'span6' do %>
-		  <%= f.text_field :date_of_loss, id: 'datepicker', size: 25, placeholder: 'Click to select date' %>
-			<%= f.hint 'Format: YYYY-MM-DD'  %>
-		<% end %>
+		<%= f.input :date_of_loss, as: :string, input_html: {id: 'datepicker'}, wrapper_class: 'span6', placeholder: 'Click to select date', hint: 'Format: YYYY-MM-DD' %>
 	</div>
 	<%= f.input :vehicle, required: true do  %>
 		<%= f.input :year_model, collection: Entry::YEAR_MODELS, label: false, wrapper_html: { id: 'veh-year' }, prompt: 'Select Year' %>
@@ -49,18 +46,19 @@
 	</div>
 <% end %>
 
-<%= content_tag :fieldset do %>
-	<%= content_tag :div, class: 'well' do %>
-		<%= content_tag :legend, 'Others' %>
-		<%= f.input :status, collection: Entry::STATUS_TAGS, include_blank: true %>
-		<%= f.input :online, include_blank: true %>
-		<%= f.input :bid_until, include_blank: true %>
-		<%= f.input :decided, include_blank: true %>
-		<%= f.input :expired, include_blank: true %>
-		<%= f.input :orders_count, include_blank: true %>
+<% if current_user && current_user.role?(:admin) %>
+	<%= content_tag :fieldset do %>
+		<%= content_tag :div, class: 'well' do %>
+			<%= content_tag :legend, 'Others' %>
+			<%= f.input :status, collection: Entry::STATUS_TAGS, include_blank: true %>
+			<%= f.input :online, include_blank: true %>
+			<%= f.input :bid_until, include_blank: true %>
+			<%= f.input :decided, include_blank: true %>
+			<%= f.input :expired, include_blank: true %>
+			<%= f.input :orders_count, include_blank: true %>
+		<% end %>
 	<% end %>
 <% end %>
-
 
 <div class="well">
   <%= f.button :submit, class: 'btn large primary'  %>
@@ -69,6 +67,7 @@
 
 <% content_for :javascripts do %>
 	<% stylesheet 'blitzer/jquery-ui-1.8.6.custom' %>
+	<% stylesheet 'colorbox' %>
 	<script type="text/javascript" charset="utf-8">
 	$(function() {
 		$('#datepicker').datepicker({ 
@@ -83,5 +82,6 @@
 	});
 	</script>
 	<%= javascript_include_tag 'jquery_nested_form' %>
+	<% javascript 'colorbox' %>
 <% end %>
 

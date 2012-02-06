@@ -11,7 +11,7 @@
 
 <% @car_brands.each do |car_brand| %>
   <tr>
-    <td><%= car_brand.car_origin.name %></td>
+    <td><%= car_brand.car_origin.name if car_brand.car_origin %></td>
     <td><%= car_brand.name %></td>
     <td><%= link_to 'Show', car_brand %></td>
     <td><%= link_to 'Edit', edit_car_brand_path(car_brand) %></td>
@@ -20,6 +20,5 @@
 <% end %>
 </table>
 
-<br />
-
+<%#= will_paginate @car_brands %>
 <%= link_to 'New Car brand', new_car_brand_path %>
