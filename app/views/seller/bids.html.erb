@@ -1,0 +1,81 @@
+<% title "#{current_user.nickname}'s Bids" %>
+
+<%= content_tag :p, page_entries_info(@bids) %>
+
+<%= content_tag :table, class: 'table table-condensed' do %>
+
+	<%= content_tag :thead do %>
+		<%= content_tag :tr do %>
+			<%= content_tag :th, 'Vehicle', class: 'span4' %>
+			<%= content_tag :th, 'Parts', class: 'span5' %>
+			<%= content_tag :th, 'Orig', class: 'span2 center' %>
+			<%= content_tag :th, 'Rep', class: 'span2 center' %>
+			<%= content_tag :th, 'Surp', class: 'span2 center' %>
+		<% end %>
+	<% end %>
+
+	<% @bids.group_by{ |b| b.created_at.beginning_of_day }.each do |date, grouped_bids| %>
+		<%= content_tag :tr do %>
+			<%= content_tag :td, colspan: 5, class: 'well' do %>
+				<%= content_tag :h5, regular_date(date) %>
+			<% end %>
+		<% end %>
+		
+		<% grouped_bids.group_by(&:entry).each do |entry, bids| %>
+
+			<%= content_tag :tr do %>
+				<%= content_tag :td, class: 'span4', rowspan: bids.collect(&:line_item).uniq.count + 1  do %>
+	      <%= content_tag :p, link_to(entry.model_name, seller_show_path(entry))  %>
+					<%= content_tag :p, entry.plate_no %>
+					<%= content_tag :em, "created by #{entry.user.username}" if entry.user && entry.has_order %>
+					<%= content_tag :span, entry.show_status, class: "label #{entry.status_color}" %>
+					<%#= content_tag :p, long_date(entry.online), class: 'small' %>
+					<%= content_tag :p, supplier_bid_rate(entry, bids), class: 'small' %>
+				<% end %>
+			<% end %>
+		
+			<% bids.group_by(&:line_item).each do |item, bts| %>
+				<%= content_tag :tr do %>
+					<%= content_tag :td, class: 'span5' do %>
+						<%#= content_tag :span, item.succ , class: 'label index'  %>
+						<%= content_tag :span, item.part_name %>
+					<% end %>
+					<%= content_tag :td, class: 'span2 center bids' do %>
+						<% bts.map {|b| b if b.orig? }.each do |bid| %>
+							<%= render bid if bid %>
+						<% end %>
+					<% end %>
+					<%= content_tag :td, class: 'span2 center bids' do %>
+						<% bts.map {|b| b if b.rep? }.each do |bid| %>
+							<%= render bid if bid %>
+						<% end %>
+					<% end %>
+					<%= content_tag :td, class: 'span2 center bids' do %>
+						<% bts.map {|b| b if b.surp? }.each do |bid| %>
+							<%= render bid if bid %>
+						<% end %>
+					<% end %>
+				
+				<% end %> <!-- tr -->
+			<% end %> 
+			
+		<% end %> <!-- grouped_bids -->
+
+	<% end %> <!-- @bids -->
+	
+<% end %> <!-- table -->
+
+<%= will_paginate @bids, inner_window: 2 %>
+
+<% content_for :sidebar do %>
+	<%= content_tag :h3, 'Search Bids' %>
+	<%= search_form_for @q, :url => seller_bids_path, class: 'search' do |f| %>
+	  <%= f.label 'Plate No.' %>
+	  <%= f.text_field :entry_plate_no_cont, class: 'span2' %>
+	  <%= f.label 'Car Brand' %>
+	  <%= f.grouped_collection_select :car_brand_id_eq, CarOrigin.all, :car_brands, :name, :id, :name, {include_blank: true} %>
+	  <%= f.label 'Status' %>
+	  <%= f.select :status_eq, Bid::STATUS_TAGS, {include_blank: true} %>
+	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	<% end %>
+<% end %>

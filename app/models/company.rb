@@ -6,7 +6,10 @@ class Company < ActiveRecord::Base
   
   has_many :profiles
   has_many :users, through: :profiles
-  has_many :branches, through: :profiles
+  has_many :branches#, through: :profiles
+  has_many :entries
+  has_many :orders
+  has_many :seller_companies, through: :orders
   has_many :messages
   has_many :user_companies, through: :messages
   has_many :receiver_companies, through: :messages

@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   include ActionView::Helpers::TagHelper
+  # load_and_authorize_resource
   
   def index
     @orders = Order.find_status(params[:s]).includes(:entry => [:car_brand, :car_model, :user]).paginate(page: params[:page], per_page: 10)
@@ -17,11 +18,14 @@ class OrdersController < ApplicationController
     render layout: 'layout2'
   end
 
+  # print sheet
+  
   def new
     @order = Order.new
   end
 
   def create
+    # raise params.to_yaml
     @orders = Array.new
     @entry = Entry.find(params[:entry_id])
     winning_bids = params[:bids]
@@ -29,8 +33,8 @@ class OrdersController < ApplicationController
 
     # Create a unique PO per seller
     @bids.group_by(&:user).each do |bidder, bids|
-      @order = current_user.orders.build(params[:order])
-      @order.populate(current_user, request.remote_ip, bidder.id, bids)
+      @order = @entry.orders.build(params[:order])
+      @order.populate(current_user, request.remote_ip, bidder, bids)
       if @entry.orders << @order
         bids.each { |bid| bid.process_order(@order, winning_bids.fetch(bid.id.to_s)[0].to_i) }
       end
@@ -48,9 +52,10 @@ class OrdersController < ApplicationController
           Your supplier is #{content_tag :strong, @order.seller.company.name}. Thanks!").html_safe
       end
     else
+      # TODO
       flash[:error] = "Failed to generate PO. #{content_tag :strong, 'Please make sure you input the required information'}.".html_safe
     end
-    redirect_to @entry 
+    redirect_to buyer_show_path(@entry) #session['referer'], session['referer'] = nil
   end
 
   def edit
@@ -91,7 +96,7 @@ class OrdersController < ApplicationController
     
     if @order.update_attributes(status: "For-Delivery", confirmed: Time.now, seller_confirmation: true)
       @order.update_associated_status("For-Delivery")
-      flash[:notice] = ("You buyer is #{content_tag :strong, @entry.user.nickname}.<br> Please deliver ASAP. Thanks!").html_safe
+      flash[:notice] = ("PO has been confirmed! You buyer is #{content_tag :strong, @entry.user.nickname}.<br> Please deliver ASAP. Thanks!").html_safe
     else
       flash[:error] = "Something went wrong with your request ... please try again later."
     end
@@ -112,6 +117,7 @@ class OrdersController < ApplicationController
       @bids = Bid.find(params[:bid_ids])
       @message = current_user.messages.build
       @msg_sender = current_user.roles.first.name
+      flash[:info] = "Please indicate your reason for cancelling the order."
       render layout: 'layout2'
     else
       flash[:warning] = "Please select an item you want to cancel. Use the checkboxes."
@@ -120,18 +126,18 @@ class OrdersController < ApplicationController
   end
   
   def confirm_cancel
-    # raise params.to_yaml
+    @order = Order.find(params[:id])
+    @bids = Bid.find(params[:bid_ids])
     if params[:order][:message].present?
-      @order = Order.find(params[:id])
-      @bids = Bid.find(params[:bid_ids])
       @bids.each { |bid| bid.process_cancellation }
-      @message = Message.for_cancelled_order(current_user, params[:msg_sender], @order, @bids, params[:order][:message])
+      @message = Message.for_cancelled_order(current_user, params[:msg_sender], @order, @bids, params[:order][:message].capitalize)
       flash[:info] = "Order cancelled. Sayang ..."
       # MessageMailer.delay.cancelled_order_message(@order, @message)
+      redirect_to @order
     else
-      flash[:warning] = "Please indicate your reason for cancelling the order."
+      flash[:error] = "Please indicate your reason for cancelling the order."
+      redirect_to :back 
     end
-    redirect_to @order and return
   end
   
   
@@ -142,6 +148,5 @@ class OrdersController < ApplicationController
     flash[:notice] = ("Successfully updated the status of the order to <strong>Paid</strong>.<br>
     Please rate your buyer to close the order.").html_safe
   end
-  
   
 end

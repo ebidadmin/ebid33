@@ -1,0 +1,34 @@
+<% title @entry.model_name %>
+<% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
+
+<% content_for :sidebar do %>
+	<%= render 'shared/info_vehicle' %>
+	<%= render 'shared/sidebar_dates' %>
+<% end %>
+
+<%#= render 'shared/photo_set' %>
+
+<div id="parts-list">
+	<% if @entry.line_items.present? %>
+
+		<%= render 'buyer/parts_table' %>
+		<hr>
+		<%= content_tag :div, class: 'entry messages' do %>
+			<%= content_tag :div, '', class: 'msg-form' %>
+			<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' %>
+			<%= render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public' %>
+		<% end %>
+
+	<% else %>
+	
+	<%= content_tag :div, '', id: 'search-results', class: 'row' %>
+	<%= render 'cart/search_form' %>
+	<%= render 'cart/cart_rules' %>
+
+
+	<% end %>
+</div>
+
+
+
+

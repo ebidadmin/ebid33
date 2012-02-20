@@ -1,4 +1,9 @@
 <% title "Create PO" %>
+
+<% if @entry.stock_warning? && @order.new_record? %>
+	<%= render 'orders/stock_warning' %>
+<% end %>
+
 <%= render 'orders/order_form' %>
 
 

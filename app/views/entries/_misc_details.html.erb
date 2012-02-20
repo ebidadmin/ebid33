@@ -1,0 +1,13 @@
+<% if current_user && current_user.role?(:admin) %>
+	<%= content_tag :fieldset do %>
+		<%= content_tag :div, class: 'well' do %>
+			<%= content_tag :legend, 'Others' %>
+			<%= f.input :status, collection: Entry::STATUS_TAGS, include_blank: true %>
+			<%= f.input :online, include_blank: true %>
+			<%= f.input :bid_until, include_blank: true %>
+			<%= f.input :decided, include_blank: true %>
+			<%= f.input :expired, include_blank: true %>
+			<%= f.input :orders_count, include_blank: true %>
+		<% end %>
+	<% end %>
+<% end %>

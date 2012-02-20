@@ -1,7 +1,7 @@
 module BidsHelper
   def bid_box_helper(item_id, category)
     content_tag :div, class: "cat #{category} center" do
-      text_field_tag("bids[#{item_id}][#{category}]", nil, class: 'span3')
+      text_field_tag("bids[#{item_id}][#{category}]", nil)
     end   
   end
 
@@ -12,8 +12,8 @@ module BidsHelper
         (content_tag :span, currency(bid.amount), class: 'bid-amount') + 
         (content_tag :em, bid.user.username, class: 'small')).html_safe
       else
-        # ((content_tag :span, currency(bid.amount), class: 'bid-amount') + 
-        ((content_tag :span, link_to(currency(bid.amount), edit_bid_path(bid)), class: 'bid-amount') + 
+        ((content_tag :span, currency(bid.amount), class: 'bid-amount') + 
+        # ((content_tag :span, link_to(currency(bid.amount), edit_bid_path(bid)), class: 'bid-amount') + 
         (content_tag :em, bid.user.username, class: 'small')).html_safe
       end
     end 
@@ -42,7 +42,7 @@ module BidsHelper
     if action == 'cancel' || action == 'edit'
       "For Cancellation (#{pluralize bids.count, 'part'})"
     else
-      "Total (#{pluralize bids.not_cancelled.count, 'part'})"
+      "Total (#{pluralize bids.count, 'part'})"
     end
   end
   
@@ -50,17 +50,24 @@ module BidsHelper
     if action == 'cancel' || action == 'edit'
       ph_currency(bids.collect(&:total).sum)
     else
-      ph_currency(bids.not_cancelled.collect(&:total).sum)
+      ph_currency(bids.collect(&:total).sum)
     end
   end
   
-  def display_bid_helper(bid, type)
-    if bid.bid_type == type
-      render bid 
-    else
-      ''
+  def display_bid_helper(bids, type)
+		content_tag :td, class: 'span2 center bids' do
+		 bids.map {|b| b if b.bid_type == type }.each do |bid|
+		   "#{render bid if bid}"
+		 end
     end
-    # link_to("PO# #{bid.order_id}", bid.order) if bid && bid.order
+  end
+  
+  def supplier_bid_rate(entry, bids)
+    if bids.present?
+  	  "#{bids.collect(&:line_item_id).uniq.count} out of #{pluralize entry.line_items.size, 'item'}"
+	  else
+	    content_tag :span, "You have no bids", class: 'highlight'
+    end
   end
   
 end

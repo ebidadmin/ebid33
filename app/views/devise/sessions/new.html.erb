@@ -1,21 +1,26 @@
-<h2>Sign in</h2>
+<div class="jumbotron masthead">
+	<%= content_tag :h1, 'Welcome to E-Bid!', id: 'welcome-title' %>
+</div>
+	<div id="login" class="row">
+		<%= content_tag :div, class: 'span6 offset1' do %>
+			<%= image_tag '/assets/under_construction.gif' %>
+		<% end %>
 
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-	<%= content_tag :div, class: 'clearfix' do %>
-		<%= f.label :username %>
-	  <%= f.text_field :username %>
-	<% end %>
+		<%= content_tag :div, class: 'span4' do %>
+			<fieldset>
+				<legend>Registered Users</legend>
+				<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+						<%= f.label :username %>
+					  <%= f.text_field :username %>
 
-	<%= content_tag :div, class: 'clearfix' do %>
-		<%= f.label :password %>
-	  <%= f.password_field :password %>
-	<% end %>
+						<%= f.label :password %>
+					  <%= f.password_field :password %>
 
-  <%#= render :partial => 'remember' %>
+				  <%#= render :partial => 'remember' %>
 
-	<%= content_tag :div, class: 'actions' do %>
-  <%= f.submit "Sign in", class: 'btn primary' %> or
-	<%= render :partial => "devise/shared/links" %>
-	<% end %>
-<% end %>
-
+				  <%= f.submit "Sign in", class: 'btn btn-primary floatright' %>
+					<%#= render :partial => "devise/shared/links" %>
+				<% end %>
+			</fieldset>
+		<% end %>
+	</div>

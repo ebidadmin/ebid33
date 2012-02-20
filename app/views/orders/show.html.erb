@@ -2,7 +2,7 @@
 <% subtitle "ID# #{@order.id}" %>
 
 <%= content_tag :div, class: 'order row' do %>
-	<%= content_tag :div, class: 'buyer-company span4' do %>
+	<%= content_tag :div, class: 'buyer-company span3' do %>
 		<%= content_tag :p, 'Buyer', class: 'label'  %>
 		<%= content_tag :h5, @order.company.name %>
 		<%= content_tag :p, @order.branch.address1  %>
@@ -18,7 +18,7 @@
 		<%= content_tag :p, @order.user.email %>
 	<% end %>
 
-	<%= content_tag :div, class: 'seller-company span4' do %>
+	<%= content_tag :div, class: 'seller-company span3' do %>
 		<%= content_tag :p, 'Seller', class: 'label'  %>
 		<%= content_tag :h5, @order.seller.company.name %>
 		<%= content_tag :p, @order.seller.address1  %>
@@ -29,31 +29,33 @@
 		<%= content_tag :p, @order.seller.email %>
 	<% end %>
 
-	<%= content_tag :div, class: 'status-box span6 offset2' do %>
-			<%= content_tag :h3, "Buyer's PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
-			<dl>
-				<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
-				<% if @order.confirmed %>
-					<%= dl_helper 'PO Confirmed', long_date(@order.confirmed) %>
-				<% else %>
-					<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...') %>
-				<% end %>
-				<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
-				<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>
-				<%= dl_helper 'Paid', regular_date(@order.paid) if @order.paid %>
-				<%= dl_helper 'Cancelled', regular_date(@order.cancelled) if @order.cancelled %>
-			</dl>
-			<%= payment_tag(@order) %>
+	<%= content_tag :div, class: 'status-box span5 offset1' do %>
+		<%= content_tag :h3, "Buyer's PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
+		<dl>
+			<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
+			<% if @order.confirmed %>
+				<%= dl_helper 'PO Confirmed', long_date(@order.confirmed) %>
+			<% else %>
+				<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...') %>
+			<% end %>
+			<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
+			<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>
+			<%= dl_helper 'Tagged as Paid', (regular_date(@order.paid_temp) + '<br>' + confirm_payment_link(@order, current_user)).html_safe if @order.paid_temp && @order.paid.nil? %>
+			<%= dl_helper 'Paid', regular_date(@order.paid) if @order.paid %>
+			<%= dl_helper 'Cancelled', regular_date(@order.cancelled) if @order.cancelled %>
+		</dl>
+		<%= change_status_link(@order) %>
+		<%= payment_tag(@order) %>
 	<% end %>
 <% end %>
 
 <%= content_tag :h2, 'Order Details', id: 'order-caption'  %>
 <%= content_tag :div, class: 'order row' do %>
-	<%= content_tag :div, class: 'span8' do %>
+	<%= content_tag :div, class: 'span6' do %>
 		<%= render 'shared/info_vehicle' %>
 	<% end %>
 	
-	<%= content_tag :div, class: 'delivery span6 offset1 well' do %>
+	<%= content_tag :div, class: 'delivery span5 well floatright' do %>
 		<%= content_tag :h5, 'DELIVER TO'  %>
 		<%= content_tag :h4, @order.deliver_to %>
 		<%= content_tag :p do %>
@@ -73,14 +75,15 @@
 	<%= render 'orders/items_table', bids: @order.bids %>
 
 	<%= content_tag :div, class: 'well' do %>
-	  <%= link_to "Edit", edit_order_path(@order), class: 'btn' %> 
-	  <%= link_to "Delete", @order, :confirm => 'Are you sure?', :method => :delete, class: 'btn' %> 
+	  <%= link_to "Edit", edit_order_path(@order), class: 'btn' if can? :update, :order %> 
+	  <%= link_to "Delete", @order, :confirm => 'Are you sure?', :method => :delete, class: 'btn' if can? :access, :all %> 
 	  <%= link_to "Previous Page", :back, class: 'btn' %>
-		<%= link_to "Accept Order", accept_order_path(@order), class: 'btn success floatright' unless @order.seller_confirmation? %>
-	  <%= link_to "Review Entry & Photos", @entry, class: 'btn info floatright' %>
-		
+		<% if can? :accept, :orders %>
+			<%= link_to "Accept Order", accept_order_path(@order), class: 'btn btn-success floatright' unless @order.seller_confirmation? %>
+		<% end %>
+		<%= link_to_entry_helper(@entry) %>
 		<% if @order.can_be_cancelled(current_user, params[:action]) %>
-		<%= content_tag :p, id: 'order-cancel-box', class: 'floatright' do %>
+		<%= content_tag :div, id: 'order-cancel-box', class: 'floatright' do %>
 			<%= content_tag :span, 'Cancellations? Check some items or check all' %> 
 			<%= submit_tag 'Cancel', class: 'btn' %>
 		<% end %>

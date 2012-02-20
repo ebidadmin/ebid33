@@ -12,16 +12,16 @@
     <%= yield(:head) %>
   </head>
   <body class="<%= params[:controller] %>">
-    <header>
+    <!-- <header> -->
         <%= render 'shared/navigation' %>
-    </header>
+    <!-- </header> -->
     <div class="container">
       <section id="main" role="main">
 	     <% flash.each do |name, msg| %>
-	       <%= content_tag :div, msg, class: "alert-message #{name}" if msg.is_a?(String) %>
+	       <%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
 	     <% end %>
 				<div class="row">
-					<div class="span16">
+					<div class="span12">
 						<div class="page-header">
 							<%= content_tag :h1, yield(:title) + ' '  + yield(:subtitle) %>
 						</div>

@@ -7,6 +7,7 @@ class CartController < ApplicationController
     # @line_items = @entry.line_items.includes(:car_part)
     @item = @cart.add(params[:part])
     @index = @cart.cart_items.count - 1
+    @q = CarPart.search(params[:q])
  
     if request.xhr?
       flash.now[:cart_notice] = "Added #{content_tag :strong, @item.car_part.name}".html_safe
@@ -38,6 +39,7 @@ class CartController < ApplicationController
     @entry = Entry.find(params[:id])
     @line_items = @entry.line_items
     @cart.cart_items.destroy_all
+    @q = CarPart.search(params[:q])
     if request.xhr?
       flash.now[:cart_notice] = "Removed all temporary parts."
     elsif request.post?

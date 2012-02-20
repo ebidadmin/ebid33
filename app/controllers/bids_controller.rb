@@ -3,7 +3,8 @@ class BidsController < ApplicationController
   
   def index
     # @bids = Bid.unscoped.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], :user).order('created_at DESC').paginate(page: params[:page], per_page: 30)
-    @line_items = LineItem.with_bids.includes([:entry => [:car_brand, :car_model, :user]]).order('bids.created_at DESC').paginate(page: params[:page], per_page: 30)
+    @q = LineItem.with_bids.search(params[:q])
+    @line_items = @q.result.includes([:entry => [:car_brand, :car_model, :user]]).order('bids.created_at DESC').paginate(page: params[:page], per_page: 30)
   end
 
   def show
@@ -77,11 +78,14 @@ class BidsController < ApplicationController
   def destroy
     @bid = Bid.find(params[:id])
     @bid.destroy
-    redirect_to bids_url, :notice => "Successfully destroyed bid."
+    respond_to do |format|
+      format.html { redirect_to :back, :notice => "Successfully deleted bid." }
+      format.js
+    end
   end
   
   def accept
-    # raise params.to_yaml
+    session['referer'] = request.env["HTTP_REFERER"]
     unless params[:bids].blank?
       @entry = Entry.find(params[:entry_id])
       @bids = Bid.find(params[:bids].collect { |item, id| id.values }, include: [:line_item => :car_part])

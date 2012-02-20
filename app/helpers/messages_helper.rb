@@ -8,37 +8,40 @@ module MessagesHelper
   def message_label_and_field(f, msg_for, open_tag)
     case open_tag
     when 'false'
-      f.input :message, label: "Private Message for #{msg_for.to_s.upcase}", input_html: { rows: 2, class: 'span12' }
+      f.input :message, label: "Private Message for #{msg_for.to_s.upcase}", input_html: { rows: 2, class: 'span9' }
     when 'edit'
-      f.input :message, label: "Edit Message", input_html: { rows: 2, class: 'span12' }
+      f.input :message, label: "Edit Message", input_html: { rows: 2, class: 'span9' }
     else
-      f.input :message, label: "PUBLIC MESSAGE (note: this will be seen by everyone)", input_html: { rows: 2, class: 'span12' }
+      f.input :message, label: "PUBLIC MESSAGE (note: this will be seen by everyone)", input_html: { rows: 2, class: 'span9' }
+    end
+  end
+  
+  def msg_class(nested=nil)
+    if nested
+      'span6'
+    else
+      'span7'
     end
   end
   
   def user_signature(message, current_user)
-    # if message.user == current_user
-    #   content_tag :span, 'YOU said', class: 'label notice'
-    # else
-    #   "#{message.user_type.titleize} ##{message.user_id} said:"
-    # end
     sender = case message.user
-    when current_user then content_tag :span, 'YOU said', class: 'label notice'
+    when current_user then content_tag :span, 'YOU said', class: 'label label-info'
     else "#{message.user_type.titleize} ##{message.user_id} said"
     end
     
-    reciever = case message.reciever
+    receiver = case message.receiver
     when nil then nil
     when current_user then content_tag :span, 'to YOU', class: 'label'
-    else "<br> to #{message.reciever.roles.first.name}"
+    else "to #{message.receiver.roles.first.name}"
     end
     
-    "#{sender} #{reciever if reciever.present?}".html_safe
+    "#{sender} #{receiver if receiver.present?}".html_safe
   end
   
   def message_buttons(msg_type, entry, order)
     if msg_type == 'Private'
-      btns = button_for('Admin', entry, order) + button_for('Buyer', entry, order) + (button_for('Seller', entry, order) if order.present?)
+      btns = button_for('Admin', entry, order) + button_for('Buyer', entry, order) + (button_for('Seller', entry, order) if order.present? && order.seller != current_user)
       btns.html_safe + (content_tag :b, 'Send Private Message for ...', class: 'small')
     else
     	link_to('Send Public Message', show_fields_messages_path(msg_for: "public", open_tag: true, entry: entry, order: order), class: 'btn small', remote: true) 

@@ -50,15 +50,15 @@ class Bid < ActiveRecord::Base
     self.update_attributes(
       status: "New PO", quantity: qty, total: self.amount * qty, 
       ordered: Date.today, order_id: order.id, declined: nil, expired: nil)
-    # if line_item.declined_or_expired? # if Order is due to reactivation, reverse the decline fee and update the bid
-    #   if line_item.fee.present?
-    #     orig_fee ||= line_item.fee
-    #     orig_fee.reverse
-    #     orig_fee.bid.update_attribute(:status, 'Dropped') unless orig_fee.bid == self
-    #   end
-    # else 
-      # self.update_peer_bids(line_item)  
-    # end
+    if line_item.declined_or_expired # if Order is due to reactivation, reverse the decline fee and update the bid
+      if line_item.fees.present?
+        orig_fee ||= line_item.fees.last
+        orig_fee.reverse
+        orig_fee.bid.update_attribute(:status, 'Dropped') unless orig_fee.bid == self
+      end
+    else 
+      self.update_peer_bids(line_item)  
+    end
     line_item.update_attributes(status: "New PO", order_id: order.id)
   end
   
@@ -66,7 +66,6 @@ class Bid < ActiveRecord::Base
     update_attribute(:status, "Cancelled")
     line_item.update_attribute(:status, "Cancelled")
   end
-  
   
   def update_peer_bids(line_item)
     peer_bids = Bid.where(line_item_id: line_item, status: 'For-Decision').where("bid_type != ?", self.bid_type)
@@ -79,6 +78,10 @@ class Bid < ActiveRecord::Base
 
   def online? # used in Seller#Show to allow deletion of bids
     status == 'Submitted' || status == 'New' ||status == 'Updated' 
+  end
+  
+  def expired?
+    status == 'Expired' || status == 'Declined'
   end
   
   def orig?
@@ -96,14 +99,24 @@ class Bid < ActiveRecord::Base
   
   def status_color
     color = case status
-    when 'For-Decision' then 'highlight'
-    when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Paid', 'Closed' then 'success'
-    when 'Expired', 'Declined' then 'warning'
-    when 'Dropped' then 'highlight cancelled'
+    when 'For-Decision' then 'label-highlight'
+    when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Just Paid', 'Paid', 'Closed' then 'label-success'
+    when 'Expired', 'Declined' then 'label-warning'
+    when 'Dropped' then 'label-highlight cancelled'
     else nil
     end
-    color = 'black' if self.cancelled?
+    color = 'label-black' if self.cancelled?
     "label #{color}" unless online?
+  end
+  
+  def status_color_for_buyer
+    if self.cancelled?
+      "label label-black"
+    elsif self.expired?
+      "label label-warning"
+    elsif order
+      "label label-success"
+    end
   end
   
 end

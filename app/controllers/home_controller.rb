@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   
   def index
-    @users = User.all
+    redirect_to new_user_session_path
+    # render layout: 'layout2'
   end
 end

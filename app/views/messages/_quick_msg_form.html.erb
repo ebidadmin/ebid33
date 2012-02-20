@@ -6,9 +6,13 @@
 	<%= hidden_field_tag 'order', @order if @order %>
 	<%= hidden_field_tag 'open_tag', params[:open_tag] %>
 	<%= f.hidden_field :parent_id if @message.parent %>
+	<% if @msg_for == 'seller' %>
+		<%= hidden_field_tag 'receiver', @message.parent.user.id %>
+		<%= hidden_field_tag 'receiver_company', @message.parent.user.company.id %>
+	<% end %>
 
 	<%= message_label_and_field(f, @msg_for, params[:open_tag]) %>
-	<%= f.button :submit, class: 'btn success floatright' %>
+	<%= f.button :submit, class: 'btn btn-success floatright' %>
 	<%= link_to "Cancel", cancel_messages_path(entry: @entry, order: @order), remote: true, class: 'btn floatright' %>
 <% end %>
 <hr>

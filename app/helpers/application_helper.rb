@@ -1,6 +1,6 @@
 module ApplicationHelper
   def dl_helper(tag, item, klass=nil)
-    (content_tag :dt, tag, class: "span2 #{klass}") + (content_tag :dd, item.html_safe, class: "#{klass}")
+    (content_tag :dt, tag, class: "#{klass}") + (content_tag :dd, item.html_safe, class: "#{klass}")
   end
   
   def time_in_words(time)
@@ -18,7 +18,7 @@ module ApplicationHelper
   end
   
   def short_date(date)
-    date.strftime('%d %b %y, %R')
+    date.strftime("%d %b '%y, %R")
   end
   
   def regular_date(date, requirement=nil)
@@ -65,21 +65,12 @@ module ApplicationHelper
     end
   end
   
-  # def controller?(*controller)
-  #   controller.include?(params[:controller])
-  # end
-  # 
-  # def action?(*action)
-  #   action.include?(params[:action])
-  # end
-  # 
-  # def params?(params)
-  #   params.include?(params)
-  # end
-  # 
-  # def active?(criteria)
-  #   'active' if criteria = true
-  # end
+  # for Orders and Fees
+  def display_seller_company
+    content_tag :span, @seller_company.nickname, class: 'label label-info' if @seller_company
+  end
   
-
+  def display_buyer_company
+    content_tag :span, @buyer_company.nickname, class: 'label label-info' if @buyer_company
+  end
 end

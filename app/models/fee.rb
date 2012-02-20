@@ -13,6 +13,36 @@ class Fee < ActiveRecord::Base
   scope :for_order, where(fee_type: 'Ordered')
   scope :for_decline, where(fee_type: ['Declined', 'Expired', 'Expired-Rvsd', 'Reversed'])
   
+  VAT_RATE = 0.12
+  
+  def self.find_type(type)
+    case type
+    when 'sf' then for_order
+    when 'bf' then for_decline
+    else scoped
+    end
+  end
+  
+  def self.by_this_seller(company)
+     where(seller_company_id: company.id)
+  end
+  
+  def self.by_this_buyer(user)
+    if user.role?(:powerbuyer)
+      where(:buyer_company_id => user.company)
+    else     
+      where(:buyer_id => user)
+    end
+   end
+  
+  def self.filter_period(search_query=nil)
+    if search_query.present?
+     scoped
+    else
+      where(created_at: Date.today.beginning_of_month..Date.today)
+    end
+  end
+  
   def self.compute(bid, status, order=nil)
     f = Fee.new
     f.buyer_company_id = bid.entry.user.company.id
@@ -89,5 +119,39 @@ class Fee < ActiveRecord::Base
     end
   end
 
+  def reverse
+    update_attribute(:fee_type, fee_type + '-Rvsd') unless self.was_reversed
+    f = Fee.new(self.attributes)
+    f.bid_type = f.bid_speed = f.perf_ratio = f.fee_rate = nil
+    f.bid_total = 0
+    f.fee = 0 - self.fee
+    f.fee_type = 'Reversed'
+    f.created_at = Time.now.to_date
+    f.split_amount = 0 - self.split_amount
+    f.save!
+  end  
   
+  def was_reversed
+    fee_type == 'Expired-Rvsd'
+  end
+  
+  def reversal?
+    fee_type == 'Reversed'
+  end
+  
+  def self.base_fee
+    self.sum(:fee)
+  end
+  
+  def self.vat
+    self.base_fee * VAT_RATE
+  end
+  
+  def self.total_fee
+    self.base_fee + self.vat
+  end
+  
+  def self.supplier_share
+    self.sum(:split_amount)
+  end
 end

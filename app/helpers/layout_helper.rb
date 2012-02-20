@@ -9,7 +9,7 @@ module LayoutHelper
   end
   
   def subtitle(subtitle)
-    content_for(:subtitle) { (content_tag :small, ' ' + subtitle.to_s).html_safe }
+    content_for(:subtitle) { (content_tag :small, subtitle).html_safe }
   end
 
   def show_title?
@@ -23,4 +23,21 @@ module LayoutHelper
   def javascript(*args)
     content_for(:head) { javascript_include_tag(*args) }
   end
+  
+  def nav_link(text, page, *args) 
+    content_tag :li, (link_to text, page, *args), class: current?(page)
+  end 
+
+  def current?(page_name)
+    "active" if current_page? page_name
+  end
+  
+  def drop_link(text)
+    link_to("#{text} #{content_tag :b, '', class: 'caret'}".html_safe, '#', class: "dropdown-toggle", "data-toggle" => "dropdown")
+  end
+
+  def drop_active?(action)
+    "active" if params[:action] == action
+  end
+  
 end

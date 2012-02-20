@@ -9,11 +9,13 @@ class EntriesController < ApplicationController
 
   def index
     # @entries = current_user.entries.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 12).order('created_at DESC')
-    @entries = Entry.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 10).order('created_at DESC')
+    @q = Entry.search(params[:q])
+    @entries = @q.result.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 10).order('created_at DESC')
+    # @branches = Company.where(primary_role: 2).map { |c| c.branches }#Branch.includes(:users => :profile)
   end
 
   def show
-    @entry = Entry.find(params[:id], include: [:messages => [[:user => :roles], [:reciever => :roles]]])
+    @entry = Entry.find(params[:id], include: [:messages => [[:user => :roles], [:receiver => :roles]]])
     @q = CarPart.search(params[:q])
 
     if current_user.role?(:admin)
@@ -24,6 +26,8 @@ class EntriesController < ApplicationController
     @pub_messages = @entry.messages.pub
   end
 
+  # print sheet
+  
   def new
     @entry = current_user.entries.build
     @car_models = @car_variants = @cities = []
@@ -34,7 +38,12 @@ class EntriesController < ApplicationController
   def create
     @entry = current_user.entries.build(params[:entry])
     if current_user.company.entries << @entry
-      redirect_to @entry, :notice => "Successfully created entry."
+      flash[:notice] = "Successfully created entry."
+      if current_user.role?(:buyer)
+        redirect_to buyer_show_path(@entry)
+      else
+        redirect_to @entry
+      end
     else
       flash[:error] = "Looks like you forgot to complete the required vehicle info.  Try again!"
       render 'new'
@@ -42,18 +51,20 @@ class EntriesController < ApplicationController
   end
 
   def edit
+    session['referer'] = request.env["HTTP_REFERER"]
     @entry = Entry.find(params[:id])
     @car_models = CarModel.where(car_brand_id: @entry.car_brand_id)
     @car_variants = CarVariant.where(car_model_id: @entry.car_model_id)
     @entry.region = @entry.city.region_id
     @cities = City.where(region_id: @entry.region)
-    @entry.photos.build
+    @entry.photos.build if @entry.photos.nil?
   end
 
   def update
+    # raise params.to_yaml
     @entry = Entry.find(params[:id])
     if @entry.update_attributes(params[:entry])
-      redirect_to @entry, :notice  => "Successfully updated entry."
+      redirect_to session['referer'], :notice  => "Successfully updated entry."
     else
       render :action => 'edit'
     end
@@ -111,7 +122,7 @@ class EntriesController < ApplicationController
         @entry.update_attributes(status: 'Additional', bid_until: 1.week.from_now, relisted: Time.now, relist_count: @entry.relist_count += 1, chargeable_expiry: nil, expired: nil)
         flash[:notice] = "New parts are now online and available for bidding.".html_safe
       end
-      redirect_to @entry
+      redirect_to buyer_show_path(@entry)#@entry
     else
       flash[:error] = "Sorry, there are no items to relist."
       redirect_to :back

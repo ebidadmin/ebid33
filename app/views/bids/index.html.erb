@@ -57,4 +57,14 @@
 <% end %>
 
 <%= will_paginate @line_items, inner_window: 2 %>
+<%= content_tag :p, page_entries_info(@line_items) %>
 <p><%= link_to "New Bid", new_bid_path %></p>
+
+<% content_for :sidebar do %>
+	<%= content_tag :h3, 'Search Entries' %>
+	<%= search_form_for @q, :url => bids_path, class: 'search' do |f| %>
+	  <%= f.label 'Plate No.' %>
+	  <%= f.text_field :entry_plate_no_cont, class: 'span3' %>
+	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	<% end %>
+<% end %>

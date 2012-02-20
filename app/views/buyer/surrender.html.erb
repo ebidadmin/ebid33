@@ -1,0 +1,23 @@
+<% title 'Generate Parts Surrender Letter' %>
+
+<%= content_tag :h2 do %>
+	<%= @entry.model_name %>
+	<%= content_tag :small, "#{@entry.variant} (#{@entry.plate_no})" %>
+<% end %>
+
+<%= content_tag :div, class: 'parts-surrender row' do %>
+<%= form_tag buyer_surrender_letter_path(@entry), method: :post do %>
+	<ol class="span4" >
+		<% for item in @entry.line_items %>
+			<%= content_tag :li, class: 'span4' do %>
+				<%= item.name %>
+				<%= check_box_tag 'items[]', item.id, true, class: 'floatright' %>
+			<% end %>
+		<% end %>
+	</ol>
+	<%= content_tag :p, class: 'span4 offset1' do %>
+		<%= content_tag :em, 'Select the parts you want to include.' %>
+		<%= submit_tag 'Generate Letter', class: 'btn btn-success btn-large' %>
+	<% end %>
+<% end %>
+<% end %>

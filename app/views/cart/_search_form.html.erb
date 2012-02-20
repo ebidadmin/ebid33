@@ -1,12 +1,9 @@
-<%= content_tag :div, '', id: 'search-results', class: 'row' %>
+<%= search_form_for @q, url: search_car_parts_path(:id => params[:id]), html: { class: 'form-search well' }, method: :get, remote: true do |f| %>
+	<%= content_tag :h3, class: 'span4' do %>
+		Search Car Parts
+		<%= content_tag :small, 'Type keywords here'  %>
+	<% end %>
 
-<% content_for :search_form do %>
-	<div id="cart-search" class="well">
-		<%= search_form_for @q, url: search_car_parts_path(:id => params[:id]), class: '', method: :get, remote: true do |f| %>
-				<%= f.label 'Keywords' %><br>
-			  <%= f.text_field :name_cont, class: 'span3' %>
-			  <%= f.submit 'Search', class: 'btn primary' %>
-				<%= content_tag :span, 'Try different combinations of keywords. Avoid abbreviations', class: 'help-block' %>
-		<% end %>
-	</div>
+  <%= f.text_field :name_cont, class: 'search-query span3' %>
+  <%= f.submit 'Search', class: 'btn primary' %>
 <% end %>

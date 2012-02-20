@@ -5,7 +5,7 @@ class LineItem < ActiveRecord::Base
   has_many :bids, dependent: :destroy
   has_many :fees
   
-  default_scope includes(:car_part, :bids)
+  # default_scope includes(:car_part, :bids)
 
   scope :fresh, where(status: ['New', 'Edited'])
   scope :online, where(status: ['Online', 'Relisted', 'Additional'])
@@ -13,6 +13,7 @@ class LineItem < ActiveRecord::Base
   scope :relistable, where(:status => 'No Bids')
   scope :with_bids, where('line_items.bids_count > 0')
   scope :without_bids, where('line_items.bids_count < 1')
+  scope :not_cancelled, where('line_items.status NOT LIKE ?', "%Cancelled%") 
 
   STATUS_TAGS = %w(Online Additional Relisted For-Decision New PO PO Released For-Delivery Delivered Paid Closed Expired) 
   
@@ -62,21 +63,29 @@ class LineItem < ActiveRecord::Base
 	  end 
 	end
 
+  def is_deleteable
+    bids_count < 1
+  end
+  
 	def is_online
 	  status == 'Online' || status == 'Relisted' || status == 'Additional'
 	end
 	
 	def can_be_ordered
-    status == "For-Decision"
+    status == "For-Decision" || status == "Expired"
   end
   
+  def declined_or_expired 
+    status == "Declined" || status == "Expired"
+  end
+
   def status_color
     case status
-    when 'Online', 'Additional', 'Relisted' then 'cool'
+    when 'Online', 'Additional', 'Relisted' then 'label-cool'
     when 'For-Decision' then 'highlight'
-    when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Paid', 'Closed' then 'success'
-    when 'Expired', 'Declined' then 'warning'
-    when 'Cancelled by admin', 'Cancelled by buyer', 'Cancelled by seller', 'Cancelled' then 'black'
+    when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Just Paid', 'Paid', 'Closed' then 'label-success'
+    when 'Expired', 'Declined' then 'label-warning'
+    when 'Cancelled by admin', 'Cancelled by buyer', 'Cancelled by seller', 'Cancelled' then 'label-black'
     else nil
     end
     # 'black' if status.include?('Cancelled')

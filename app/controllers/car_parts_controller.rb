@@ -44,7 +44,7 @@ class CarPartsController < ApplicationController
     # @search = CarPart.name_like_all(params[:query].to_s.split).order(:name)
     # @car_parts = @search.paginate(page: params[:page], per_page: 12)
     @q = CarPart.search(params[:q])
-    @car_parts = @q.result(:distinct => true)#.paginate(page: params[:page], per_page: 12)
+    @car_parts = @q.result.paginate(page: params[:page], per_page: 24)
     respond_to do |format|
       format.html { redirect_to :back }
       format.js

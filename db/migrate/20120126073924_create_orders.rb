@@ -19,6 +19,7 @@ class CreateOrders < ActiveRecord::Migration
       t.decimal :order_total,     precision: 10, scale: 2, null: false, default: 0.0
       t.datetime :created_at
       t.integer :seller_id
+      t.integer :seller_company_id
       t.boolean :seller_confirmation, null:false, default: 0
       t.datetime :confirmed
       t.date :delivered
@@ -32,5 +33,6 @@ class CreateOrders < ActiveRecord::Migration
     add_index :orders, :company_id
     add_index :orders, :entry_id
     add_index :orders, :seller_id
+    add_index :orders, :seller_company_id
   end
 end

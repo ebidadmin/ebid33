@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      <%= content_for?(:title) ? "Print | " + yield(:title) : "E-Bid Inc. - The Philippines' Vehicle Parts Auction Hub" %>
+    </title>
+		<%= stylesheet_link_tag 'print', :media => 'all' %>
+    <%= csrf_meta_tag %>
+		<link rel="shortcut icon" href="/images/base/favicon.ico" />
+		<%= yield(:head) %>
+  </head>
+
+  <body>
+		<div id="print-header">
+			<%= link_to (content_tag :h1, "E-Bid Auto Parts Auction System"), root_path %>
+		  <ul id="print-nav">
+	    	<%= nav_link "Home", root_path -%>
+	     	<%= nav_link "Back", :back -%>
+				<%= content_tag :li, (link_to 'Print', '#', :id => 'print-icon'), :onclick => "window.print(); return false" %>
+		  </ul>
+		</div>
+ 		<div class="container">
+      <%= content_tag :h1, yield(:title), :class => 'main-title' if show_title? %>
+      <%= yield %>
+			<p><strong>Copyright &copy; 2006-<%= Time.now.year -%> E-Bid, Inc.</strong>   All rights reserved.</p>
+
+     </div>
+  </body>
+</html>

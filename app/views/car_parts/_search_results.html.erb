@@ -1,22 +1,25 @@
-<%= content_tag :div, class: 'span12' do %>
+<%= content_tag :div, class: 'span9' do %>
+<%= content_tag :h2, 'Search Results' %>
 <% if @car_parts.count > 0 %>
 	<% if params[:q] %>
 		<%= content_tag :h3, "#{content_tag :b, (pluralize @car_parts.count, 'part')} were found using your search keyword: #{content_tag :em, params[:q][:name_cont], class: 'highlight'}".html_safe %>
 		<%= content_tag :p, 'Click on the part to put it in your parts list.' %>
 	<% end %>
 
-	<ul class="unstyled">
+	<%= will_paginate @car_parts, id: 'parts-pagination' %>
+
+	<ul class="unstyled parts">
 	<% @car_parts.in_groups_of(24, false).each do |car_part_array| %> 
 		<%= content_tag :div, class: 'row' do %>
 			<% car_part_array.in_groups_of(8, false).each do |parts| %>
-				<%= content_tag :div, class: 'span4' do %>
+				<%= content_tag :div, class: 'span3' do %>
 					<% parts.each do |p| %>
 						<%= content_tag :li, select_link(p, @entry) %> 
 					<% end %>
 				<% end %>
 			<% end %>
 		<% end %>
-		<hr>
+		<!-- <hr> -->
 	<% end %> 
 	</ul>
 

@@ -1,0 +1,13 @@
+<%= content_tag :thead do %>
+	<%= content_tag :tr do %>
+		<%= content_tag :th, 'Vehicle', class: 'span4' %>
+		<% if current_user.role?(:buyer) %>
+			<%= content_tag :th, 'Seller', class: 'span2' %>
+		<% elsif current_user.role?(:seller) %>
+			<%= content_tag :th, 'Buyer', class: 'span2' %>
+		<% end %>
+		<%= content_tag :th, 'Details', class: 'span4 center' %>
+		<%= content_tag :th, 'Status', class: 'span3 center' %>
+	<% end %>
+<% end %>
+

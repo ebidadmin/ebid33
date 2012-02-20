@@ -1,13 +1,11 @@
 Ebid33::Application.routes.draw do
 
-  resources :users
-
-  resources :ratings
-
-  devise_for :users, path: :account
+  devise_for :users, path: :account, controllers: {sessions: "sessions"}
+  
   
   # match 'users/:user_id/entries(/:page)' => 'entries#index', :as => :user_entries, :via => :get
   resources :users do
+    resources :entries, :shallow => true
   end
 
   resources :entries, :shallow => true do
@@ -20,19 +18,22 @@ Ebid33::Application.routes.draw do
     end
   end
 
+  resources :line_items do
+    collection do
+      get :add
+      get :cancel
+    end
+  end
+
   get 'cart/add'
   get 'cart/remove'
   get 'cart/clear'
 
-  
-  resources :fees
-
-  resources :messages do
-    get :show_fields, :on => :collection
-    get :cancel, :on => :collection
+  resources :bids do
+    collection do
+      post :accept
+    end
   end
-
-  resources :line_items
 
   resources :orders do
     member do
@@ -48,35 +49,56 @@ Ebid33::Application.routes.draw do
     end
     resources :ratings
   end
-
-  resources :bids do
-    collection do
-      post :accept
-    end
+  
+  resources :messages do
+    get :show_fields, on: :collection
+    get :cancel, on: :collection
   end
-
-  resources :searches
-
-  resources :branches
-
-  resources :companies
 
   resources :car_models do
-    get :selected, :on => :member
+    get :selected, on: :member
   end
   resources :car_brands do
-    get :selected, :on => :member
+    get :selected, on: :member
   end
   resources :car_variants
+
   resources :car_parts do
-    get :search, :on => :collection
-    get :add_more, :on => :collection
+    get :search, on: :collection
+    get :add_more, on: :collection
   end
 
   resources :regions do
-    get :selected, :on => :member
+    get :selected, on: :member
   end
-  #get \"users\/show\"
+  
+  resources :companies do
+    get :selected, on: :member
+  end
+  
+  scope 'seller' do
+    get 'entries(/:s)' => 'seller#entries', as: :seller_entries
+    get 'bids' => 'seller#bids', as: :seller_bids
+    get 'worksheet' => 'seller#worksheet', as: :seller_worksheet
+    get 'show/:id' => 'seller#show', as: :seller_show
+    get 'orders(/:s(/:id))' => 'seller#orders', as: :seller_orders
+    get 'fees(/:t)' => 'seller#fees', as: :seller_fees
+  end
+  
+  scope 'buyer' do
+    get 'entries(/:s)' => 'buyer#entries', as: :buyer_entries
+    get 'show/:id' => 'buyer#show', as: :buyer_show
+    get 'surrender/:id' => 'buyer#surrender', as: :buyer_surrender
+    post 'surrender_letter/:id' => 'buyer#surrender_letter', as: :buyer_surrender_letter
+    get 'reactivate/:id' => 'buyer#reactivate', as: :buyer_reactivate
+    get 'orders(/:s(/:id))' => 'buyer#orders', as: :buyer_orders
+    get 'fees(/:t)' => 'buyer#fees', as: :buyer_fees
+  end
+
+  resources :fees
+  resources :ratings
+  resources :searches
+  resources :branches
 
   root :to => "home#index"
 
@@ -117,7 +139,7 @@ Ebid33::Application.routes.draw do
   #   resources :products do
   #     resources :comments
   #     resources :sales do
-  #       get 'recent', :on => :collection
+  #       get 'recent', on: :collection
   #     end
   #   end
 

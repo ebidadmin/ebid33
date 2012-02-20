@@ -11,21 +11,12 @@
 <%= content_tag :div, class: 'row' do %>
 	<%= content_tag :div, class: 'span12' do %>
 		<%= content_tag :table, class: 'condensed-table' do %>
-			<%= content_tag :thead do %>
-				<%= content_tag :tr do %>
-					<%= content_tag :th, 'ID', class: 'span1 center' %>
-					<%= content_tag :th, 'Vehicle', class: 'span4' %>
-					<%= content_tag :th, 'Terms', class: 'span3' %>
-					<%= content_tag :th, 'Photos', class: 'span2 center' %>
-					<%= content_tag :th, 'Bidding', class: 'span3' %>
-					<%= content_tag :th, 'Status', class: 'span3 center' %>
-				<% end %>
-			<% end %>
+			<%= render 'entries/thead_index' %>
 		
 			<%= content_tag :tbody do %>
 				<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
 					<%= content_tag :tr do %>
-						<%= content_tag :td, colspan: 6 do %>
+						<%= content_tag :td, colspan: 6, class: 'well' do %>
 							<%= content_tag :h5, regular_date(date) %>
 						<% end %>
 					<% end %>
@@ -41,17 +32,18 @@
 							<%= content_tag :td, class: 'span3' do %>
 					      <%= content_tag :span, entry.city  %> /
 								<%= content_tag :span, entry.term_name %>
-								<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), entry) %>
+								<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), seller_show_path(entry)) %>
 							<% end %>
 							<%= content_tag :td, entry.photos.size, class: 'span2 center' %>
 							<%= content_tag :td, class: 'span3' do %>
 					      <%= content_tag :p, number_of_bidders(entry)   %>
 								<%= content_tag :p, fastest_bid(entry) if entry.bids.present? %>
+					      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small' if entry.bid_until  %>
 							<% end %>
 							<%= content_tag :td, class: 'span3 center' do %>
-								<%= content_tag :p, entry.status, class: "label center #{entry.status_color}" %>
+								<%= entry_status_helper(entry) %>
 								<%= content_tag :span, "as of #{regular_date(entry.status_date)}", class: 'small' %>
-								<%= content_tag :span, entry.messages.count, class: "label center" if entry.messages.present? %>
+								<%= content_tag :span, entry.messages.size, class: "label center" if entry.messages.present? %>
 							<% end %>
 						<% end %>
 					<% end %>
@@ -64,8 +56,21 @@
 
 
 <%= will_paginate @entries, inner_window: 2 %>
+<%= content_tag :p, page_entries_info(@entries) %>
 
+<% if can? :create, :entry %>
 <div class="well">
-	<%= link_to "New Entry", new_entry_path, class: 'btn large primary floatright' %>
+	<%= link_to "New Entry", new_entry_path, class: 'btn large primary'  %>
 </div>
+<% end %>
 
+<% content_for :sidebar do %>
+	<%= content_tag :h3, 'Search Entries' %>
+	<%= search_form_for @q, :url => buyer_entries_path, class: 'search' do |f| %>
+	  <%= f.label 'Plate No.' %>
+	  <%= f.text_field :plate_no_cont, class: 'span3' %>
+	  <%= f.label 'User' %>
+	  <%#= f.grouped_collection_select :user_id_eq, @branches, :users, :name, :id, :shortname, {include_blank: true} %>
+	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	<% end %>
+<% end %>

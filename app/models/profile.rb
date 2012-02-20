@@ -9,9 +9,17 @@ class Profile < ActiveRecord::Base
   belongs_to :branch
   belongs_to :rank
   
+  default_scope includes(:company)
+  
+  validates_presence_of :company, :branch_id, :first_name, :last_name, :phone, :birthdate
+  
   def to_s
     [first_name, last_name].join(" ") 
   end  
+  
+  def shortname
+    [first_name[0], last_name].join(" ")
+  end
   
   private
   def strip_blanks

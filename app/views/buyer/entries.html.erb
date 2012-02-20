@@ -1,0 +1,72 @@
+<% title "#{current_user.nickname}'s Entries #{': ' + params[:s].titleize if params[:s]}" %>
+
+<%= content_tag :p, page_entries_info(@entries) %>
+
+<%= content_tag :table, class: 'table table-condensed' do %>
+	<%= render 'entries/thead_index' %>
+	<%= content_tag :tbody do %>
+
+		<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
+
+			<%= content_tag :tr do %>
+				<%= content_tag :td, colspan: 6, class: 'well' do %>
+					<%= content_tag :h5, regular_date(date) %>
+				<% end %>
+			<% end %>
+
+			<% entries.each do |entry| %>
+				<%= content_tag :tr do %>
+					<%= content_tag :td, class: 'span2' do %>
+						<%= content_tag :p, entry.id, class: 'muted small' %>
+						<span>
+							<%= content_tag :i, '', class: 'icon-camera' %>
+							<%= entry.photos.size %>
+						</span>
+						<% if entry.messages.present? %>
+						<span class='highlight'>
+							<%= content_tag :i, '', class: 'icon-comment' %>
+							<%= entry.messages.size %>
+						</span>
+						<% end %><br>
+						<%= content_tag :em, entry.user.username, class: 'small'  %>
+					<% end %>
+					<%= content_tag :td, class: 'span4' do %>
+						<%= content_tag :p, entry.ref_no, class: 'small' %>
+			      <%= content_tag :p, link_to(entry.model_name, buyer_show_path(entry))  %>
+						<%= content_tag :span, entry.plate_no %>
+					<% end %>
+					<%= content_tag :td, class: 'span2' do %>
+						<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), buyer_show_path(entry)) %>
+					<% end %>
+					<%= content_tag :td, class: 'span3' do %>
+			      <%= content_tag :p, number_of_bidders(entry)   %>
+						<%#= content_tag :p, fastest_bid(entry) if entry.bids.present? %>
+			      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small' if entry.bid_until && entry.is_online %>
+					<% end %>
+					<%= content_tag :td, class: 'span3 center' do %>
+						<%= entry_status_helper(entry) %>
+						<%= content_tag :span, "as of #{regular_date(entry.status_date)}", class: 'small' %>
+						<%= content_tag :p, link_to('Reactivate for PO', buyer_reactivate_path(entry), class: 'btn small') if entry.can_reactivate %>
+					<% end %>
+				<% end %>
+			<% end %>
+
+		<% end %>
+
+	<% end %>
+<% end %>
+
+<%= will_paginate @entries, inner_window: 2 %>
+
+<% content_for :sidebar do %>
+	<%= content_tag :h3, 'Search Entries' %>
+	<%= search_form_for @q, url: buyer_entries_path, class: 'search' do |f| %>
+	  <%= f.label 'Plate No.' %>
+	  <%= f.text_field :plate_no_cont, class: 'span2' %>
+	  <%= f.label 'Claim No.' %>
+	  <%= f.text_field :ref_no_cont, class: 'span2' %>
+	  <%= f.label 'User' %>
+	  <%= f.grouped_collection_select :user_id_eq, @branches, :users, :name, :id, :shortname, {include_blank: true} %>
+	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	<% end %>
+<% end %>

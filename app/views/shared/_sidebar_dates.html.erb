@@ -1,0 +1,12 @@
+<%= entry_status_helper(@entry, 'sidebar-status') %>
+
+<%= content_tag :dl do %>
+	<%= dl_helper 'Created', long_date(@entry.created_at) %>
+	<% Entry::TAGS_FOR_SIDEBAR.each do |tag| %>
+		<% if tag == 'bid_until' %>
+			<%= bidding_session_time_helper(@entry, 'important') if @entry.bid_until %>
+		<% else %>
+			<%= dl_helper tag.titleize, long_date(@entry.get_date_for_sidebar(tag)) if @entry.get_date_for_sidebar(tag) %>
+		<% end %>
+	<% end %>
+<% end %>

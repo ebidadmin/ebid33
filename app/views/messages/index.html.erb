@@ -9,7 +9,7 @@
 		<%= content_tag :thead do %>
 			<%= content_tag :th, 'ID', class: 'span1 center' %>
 			<%= content_tag :th, 'Sender', class: 'span2' %>
-			<%= content_tag :th, 'reciever', class: 'span2' %>
+			<%= content_tag :th, 'receiver', class: 'span2' %>
 			<%= content_tag :th, 'Message', class: 'span11' %>
 			<%= content_tag :th, 'Order #', class: 'span2 center' %>
 		<% end %>
@@ -29,8 +29,8 @@
 							<%= content_tag :em, m.user_company.nickname, class: 'small' %>
 						<% end %>
 						<%= content_tag :td, class: 'span2' do %>
-							<%= content_tag :p, link_to(m.reciever.username, m.reciever), class: '' if m. reciever %>
-							<%= content_tag :em, m.reciever_company.nickname, class: 'small' if m. reciever %>
+							<%= content_tag :p, link_to(m.receiver.username, m.receiver), class: '' if m.receiver %>
+							<%= content_tag :em, m.receiver_company.nickname, class: 'small' if m. receiver %>
 						<% end %>
 						<%= content_tag :td, class: 'span11' do %>
 							<%= content_tag :p, m.message, class: '' %>

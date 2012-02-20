@@ -3,33 +3,13 @@
 
 <% content_for :sidebar do %>
 	<%= render 'shared/info_vehicle' %>
-	<%= content_tag :p, @entry.status, class: "label #{@entry.status_color} sidebar-status" %>
-		<%= content_tag :dl do %>
-			<%= dl_helper 'Created', long_date(@entry.created_at) %>
-			<% Entry::TAGS_FOR_SIDEBAR.each do |tag| %>
-				<% if tag == 'bid_until' %>
-					<%= bidding_session_time_helper(@entry) if @entry.bid_until %>
-				<% else %>
-					<%= dl_helper tag.titleize, long_date(@entry.get_date_for_sidebar(tag)) if @entry.get_date_for_sidebar(tag) %>
-				<% end %>
-			<% end %>
-		<% end %>
+	<%= render 'shared/sidebar_dates' %>
 <% end %>
 
-<%# content_for :sidebar2 do %>
-	<%= content_tag :div, class: '' do %>
-		<%= render 'photo_set' %>
-	<% end %>
-<%# end %>
-
-<%#= content_tag :h3, 'Parts Requested' %>
+<%#= render 'shared/photo_set' %>
 
 <% if @entry.line_items.present? %>
-	<% if current_user.role?(:admin) %>
-		<%= render 'seller' %>
-	<% else %>
-		<%= render 'buyer' %>
-	<% end %>
+	<%= render 'buyer/parts_table' %>
 <% else %>
 	
 	<%= content_tag :div, id: 'cart', class: '' do %>

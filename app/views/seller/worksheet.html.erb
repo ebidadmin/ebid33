@@ -1,0 +1,28 @@
+<table class="table table-bordered">
+	<thead>
+    <%= content_tag :th, 'Vehicle', class: 'span4' %>
+    <%= content_tag :th, 'Parts', class: 'span4' %>
+    <%= content_tag :th, 'Orig', class: 'span3 center' %>
+    <%= content_tag :th, 'Rep', class: 'span3 center' %>
+    <%= content_tag :th, 'Surp', class: 'span3 center' %>
+	</thead>
+	<% for entry in @entries %>
+		<tr>
+			<td class="vehicle" rowspan=<%= entry.line_items.size + 1%>>
+				<%= content_tag :p, "#{content_tag :b, entry.model_name}".html_safe %>
+				<%= content_tag :em, entry.variant, class: 'small' %>
+				<%= content_tag :p, "Plate: #{entry.plate_no}" %>
+				<%= content_tag :p, "Serial: #{entry.serial_no}" %>
+				<%= content_tag :p, "Motor: #{entry.motor_no}" %>
+			</td>
+		</tr>
+		<% for item in entry.line_items %>
+		<tr>
+	    <%= content_tag :td, item.part_name %>
+	    <%= content_tag :td %>
+	    <%= content_tag :td %>
+	    <%= content_tag :td %>
+		</tr>
+		<% end %>
+	<% end %>
+</table>

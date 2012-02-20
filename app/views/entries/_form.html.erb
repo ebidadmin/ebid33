@@ -1,73 +1,62 @@
 <%= content_tag :fieldset do %>
 	<%= content_tag :legend, 'Vehicle' %>
 	<div class="clearfix row">
-		<%= f.input :ref_no, label: 'Claim No.', hint: 'What will you use to track your entry?', wrapper_class: 'span6' %>
-		<%= f.input :date_of_loss, as: :string, input_html: {id: 'datepicker'}, wrapper_class: 'span6', placeholder: 'Click to select date', hint: 'Format: YYYY-MM-DD' %>
+		<%= f.input :ref_no, label: 'Claim No.', hint: 'What will you use to track your entry?', wrapper_class: 'span4' %>
+		<%= f.input :date_of_loss, as: :string, input_html: {id: 'datepicker'}, wrapper_class: 'span4', placeholder: 'Click to select date', hint: 'Format: YYYY-MM-DD' %>
 	</div>
 	<%= f.input :vehicle, required: true do  %>
 		<%= f.input :year_model, collection: Entry::YEAR_MODELS, label: false, wrapper_html: { id: 'veh-year' }, prompt: 'Select Year' %>
 		<%= f.input :car_brand, label: false, wrapper_html: { id: 'veh-brand' } do %>
 		  <%= f.grouped_collection_select :car_brand_id,  @car_origins, :car_brands, :name, :id, :name, :include_blank => 'Select Brand' %>
+			<%= f.hint 'example: Toyota' %>
 		<% end %>
-		<%= f.input :car_model_id, collection:  @car_models, label: false, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type' %>
-		<%= f.input :car_variant_id, collection:  @car_variants, label: false, wrapper_html: { id: 'veh-variant' }, :include_blank => 'Select Variant' %>
+		<%= f.input :car_model_id, collection:  @car_models, label: false, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type', hint: 'example: Fortuner' %>
+		<%= f.input :car_variant_id, collection:  @car_variants, label: false, wrapper_html: { id: 'veh-variant' }, :include_blank => 'Select Variant', hint: 'example: 2.5 G AT' %>
 	<% end %>
 	<div class="clearfix row">
-		<%= f.input :plate_no, label: 'Plate Number', hint: "#{content_tag :strong, 'Proper format: XYZ-123'} (except diplomatic plates or conduction stickers)".html_safe, wrapper_class: 'span4' %>
-		<%= f.input :serial_no, label: 'Serial Number', hint: 'Make sure you put 17 digits here (international standard).', wrapper_class: 'span4' %>
-		<%= f.input :motor_no, label: 'Motor Number', wrapper_class: 'span4' %>
+		<%= f.input :plate_no, label: 'Plate Number', hint: "#{content_tag :strong, 'Proper format: XYZ-123'} (except diplomatic plates or conduction stickers)".html_safe, wrapper_class: 'span3' %>
+		<%= f.input :serial_no, label: 'Serial Number', hint: 'Make sure you put 17 digits here (international standard).', wrapper_class: 'span3' %>
+		<%= f.input :motor_no, label: 'Motor Number', wrapper_class: 'span3' %>
 	</div>
 	<div class="clearfix row">
 		<%= f.input :deliver_to, required: true, wrapper_class: 'span6' do %>
 			<%= f.input :region, collection: @regions, label: false, wrapper_html: { id: 'regions' }, prompt: 'Select Region' %>
 			<%= f.input :city_id, collection: @cities, label: false, wrapper_html: { id: 'cities' }, prompt: 'Select Location' %>
 		<% end %>
-		<%= f.association :term, label: 'Credit Term Request', collection:  Term.all.map{ |t| [t.term_name, t.id]}, prompt: 'Select Term', wrapper_class: 'span6'  %>
+		<%= f.association :term, label: 'Credit Term Request', collection:  Term.all.map{ |t| [t.term_name, t.id]}, prompt: 'Select Term', wrapper_class: 'span3'  %>
 	</div>
 <% end %>
 
 <%#= render 'entries/attach_photos', f: f %>
-<%= content_tag :fieldset do %>
+<%= content_tag :fieldset, class: 'photouploads' do %>
 	<%= content_tag :legend, 'Photos' %>
-	<div class="clearfix row">
 		<%= f.fields_for :photos do |photo|  %>
 			<% unless photo.object.new_record?  %>
 				<% if photo.object.processing == false %>
-				<%= image_tag photo.object.photo.url(:tiny), class: "thumbnail" %>
+				<%= image_tag photo.object.photo.url(:tiny), class: "span1" %>
 				<% else %>
-				<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				<% end %>
+				<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				
+				<% end %>
 			<% end %>
 		
 			<%= photo.input :photo, :as => :file %>
-			<%= photo.link_to_remove "remove" %>
+			<%= photo.link_to_remove "x", class: 'close' %>
 		<% end %>
-	
-		<%= f.link_to_add "add another photo", :photos, class: 'span4' %>
-	</div>
+		<%= f.link_to_add "#{content_tag :i, '', class: 'icon-picture icon-white' } Add Another Photo".html_safe, :photos, class: 'btn btn-primary' %>
 <% end %>
 
-<% if current_user && current_user.role?(:admin) %>
-	<%= content_tag :fieldset do %>
-		<%= content_tag :div, class: 'well' do %>
-			<%= content_tag :legend, 'Others' %>
-			<%= f.input :status, collection: Entry::STATUS_TAGS, include_blank: true %>
-			<%= f.input :online, include_blank: true %>
-			<%= f.input :bid_until, include_blank: true %>
-			<%= f.input :decided, include_blank: true %>
-			<%= f.input :expired, include_blank: true %>
-			<%= f.input :orders_count, include_blank: true %>
-		<% end %>
-	<% end %>
-<% end %>
+<%= render 'misc_details' %>
+<%#= render 'edit_parts_list', f: f %>
 
 <div class="well">
-  <%= f.button :submit, class: 'btn large primary'  %>
-	<%= link_to "Cancel", entries_path, class: 'btn', type: 'reset' %>
+  <%= f.button :submit, class: 'btn btn-primary floatright'  %>
+	<%= link_to "Cancel", :back, class: 'btn', type: 'reset' %>
 </div>
 
 <% content_for :javascripts do %>
 	<% stylesheet 'blitzer/jquery-ui-1.8.6.custom' %>
-	<% stylesheet 'colorbox' %>
+	<%= javascript_include_tag 'jquery_nested_form' %>
+	<%#= javascript_include_tag 'jquery.fileupload', 'jquery.fileupload-ui', 'jquery.fileupload-ip' %>
 	<script type="text/javascript" charset="utf-8">
 	$(function() {
 		$('#datepicker').datepicker({ 
@@ -81,7 +70,4 @@
 		});
 	});
 	</script>
-	<%= javascript_include_tag 'jquery_nested_form' %>
-	<% javascript 'colorbox' %>
 <% end %>
-

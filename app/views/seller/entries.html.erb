@@ -1,0 +1,76 @@
+<% title "Entries" %>
+
+<%= content_tag :ul, class: 'nav nav-pills' do %>
+	<%= nav_link('All', seller_entries_path(s: 'all')) %>
+	<%= nav_link('Online', seller_entries_path(s: 'online')) %>
+<% end %>
+
+<%= content_tag :p, page_entries_info(@entries) %>
+
+<%= form_tag seller_worksheet_path, method: :get do %>
+
+<%= content_tag :table, class: 'table table-condensed' do %>
+	<%= render 'entries/thead_index' %>
+
+	<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
+		<%= content_tag :tr do %>
+			<%= content_tag :td, colspan: 6, class: 'well' do %>
+				<%= content_tag :h5, regular_date(date) %>
+			<% end %>
+		<% end %>
+
+		<% entries.each do |entry| %>
+			<%= content_tag :tr do %>
+				<%= content_tag :td, class: 'span2' do %>
+					<%= content_tag :p, entry.id, class: 'muted small' %>
+					<span>
+						<%= content_tag :i, '', class: 'icon-camera' %>
+						<%= entry.photos.size %>
+					</span>
+					<% if entry.messages.present? %>
+					<span class='highlight'>
+						<%= content_tag :i, '', class: 'icon-comment' %>
+						<%= entry.messages.size %>
+					</span>
+					<% end %><br>
+					<%= content_tag :em, "created by #{entry.user.username}" if entry.user && entry.has_order %>
+				<% end %>
+				<%= content_tag :td, class: 'span4' do %>
+		      <%= content_tag :p, link_to(entry.model_name, seller_show_path(entry))  %>
+					<%= content_tag :p, entry.plate_no %>
+				<% end %>
+				<%= content_tag :td, class: 'span2' do %>
+					<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), seller_show_path(entry)) %>
+				<% end %>
+				<%= content_tag :td, class: 'span3' do %>
+					<%= content_tag :p, supplier_bid_rate(entry, entry.bids.by_user(current_user)) %>
+		      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small muted' if entry.bid_until && entry.is_online %>
+				<% end %>
+				<%= content_tag :td, class: 'span3 center' do %>
+					<%= entry_status_helper(entry) %>
+					<%= content_tag :span, "as of #{regular_date(entry.status_date)}", class: 'small' %>
+					<%= check_box_tag 'entries[]', entry.id %>
+				<% end %>
+			<% end %>
+		<% end %>
+	<% end %>
+	
+<% end %>
+
+<div class="well">
+	<%= content_tag :em, 'You can print a bidding worksheet. Use the checkboxes to select the items you want to print.', class: 'small' %>
+	<%= submit_tag 'Print Bidding Worksheet', class: 'btn floatright' %>
+</div>
+<% end %>
+<%= will_paginate @entries, inner_window: 2 %>
+
+<% content_for :sidebar do %>
+	<%= content_tag :h3, 'Search Entries' %>
+	<%= search_form_for @q, :url => seller_entries_path, class: 'search' do |f| %>
+	  <%= f.label 'Plate No.' %>
+	  <%= f.text_field :plate_no_cont, class: 'span2' %>
+	  <%= f.label 'Car Brand' %>
+	  <%= f.grouped_collection_select :car_brand_id_eq, CarOrigin.includes(:car_brands), :car_brands, :name, :id, :name, {include_blank: true} %>
+	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	<% end %>
+<% end %>

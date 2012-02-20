@@ -6,17 +6,27 @@
 #   b = Branch.create(company_id: c.id, name: 'Main', address1: comp.address1, address2: comp.address2,
 #     zip_code: comp.zip_code, city_id: comp.city_id, created_at: comp.created_at, updated_at: comp.updated_at)
 # end
-
-# profiles = Profile.all
-# # profiles.each { |p| p.update_attribute(:branch_id, p.company_id) } 
-# profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name) } 
-
 # messages = Message.all
 # messages.each do |m|
 #   
 # end
 
-bwo = Bid.with_orders
-bwo.each do |b|
-  b.line_item.update_attribute(:order_id, b.order_id)
-end
+# profiles = Profile.all
+# profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name, branch_id: p.company_id) } 
+# 
+# 
+# bwo = Bid.with_orders
+# bwo.each do |b|
+#   b.line_item.update_attribute(:order_id, b.order_id)
+# end
+# 
+# rel = Entry.where(status: ['Additional', 'Relisted'], relisted: nil)
+# rel.each do |r|
+#   r.update_attribute(:relisted, r.online)
+# end
+# 
+# orders = Order.all
+# orders.each { |o| o.update_attribute(:seller_company_id, o.seller.company.id) }
+
+entries = Entry.all
+entries.each { |e| e.update_status }

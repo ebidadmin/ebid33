@@ -1,12 +1,12 @@
 <%= content_tag :h4, "#{@entry.model_name} #{content_tag :em, @entry.variant.upcase, class: 'small' if @entry.car_variant.present?}".html_safe if @order %>
 <%= content_tag :dl, id: 'vehicle-info' do %>
-	<%= dl_helper 'Claim No.', @entry.ref_no %>
+	<%= dl_helper 'Claim No.', @entry.ref_no if current_user.role?(:buyer) || @order %>
 	<% if @order %>
 		<%= dl_helper 'Insured', @order.ref_name %>
 	<% end %>
 	<%= dl_helper 'Serial No.', @entry.serial_no, 'important' %>
 	<%= dl_helper 'Motor No.',  @entry.motor_no, 'important' %>
-	<%= dl_helper 'Date of Loss', @entry.date_of_loss.to_s(:long) if @entry.date_of_loss %>
+	<%#= dl_helper 'Date of Loss', @entry.date_of_loss.to_s(:long) if @entry.date_of_loss && @order %>
 	<%= dl_helper 'Terms', "#{@entry.term.term_name} / #{@entry.city.name}", 'important'  %>
-	<%= dl_helper 'Created By', @entry.user.username if @entry.user  %>
+	<%#= dl_helper 'Created By', @entry.user.username if  @order %>
 <% end %>

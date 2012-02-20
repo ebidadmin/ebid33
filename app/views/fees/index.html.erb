@@ -61,6 +61,21 @@
 	<% end %>
 <% end %>
 
-
 <%= will_paginate @fees %>
 <p><%= link_to "New Fee", new_fee_path %></p>
+
+<% content_for :sidebar do %>
+	<%= content_tag :h3, 'Search Fees' %>
+	<%= search_form_for @q, :url => fees_path do |f| %>
+	  <%= f.label 'Plate No.' %>
+	  <%= f.text_field :entry_plate_no_cont, class: 'span3' %>
+	  <%= f.label 'Buyer' %>
+	  <%= content_tag :p, (f.collection_select :buyer_company_id_matches, Company.where(primary_role: 2), :id, :nickname, include_blank: true) %>
+	  <%= f.label 'Period Covered' %>
+		<%= content_tag :p do %>
+		<%= f.text_field :created_at_gteq, id: 'start', class: 'span1 small' %> -
+		<%= f.text_field :created_at_lteq, id: 'end', class: 'span1 small' %>
+		<% end %>
+	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	<% end %>
+<% end %>

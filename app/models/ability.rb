@@ -5,6 +5,9 @@ class Ability
     user ||= User.new 
     if user.role?(:admin)
       can :access, :all
+    elsif user.role?(:powerbuyer)
+      can :access, :all
+      # can :read, :orders
     elsif user.role?(:buyer)
       can :access, :home, :cart
       can :access, :users#, id: user.id
@@ -15,9 +18,14 @@ class Ability
     elsif user.role?(:seller)
       can :access, :home, :bids
       can :access, :users, id: user.id
-      can :read, :entries, :orders
+      can :read, [:entries]
+      can :create, :messages
+      can :accept, :orders
+      can :confirm_payment, :orders
     else
       can :access, :home
+      can :create, [:users, :profiles, :companies, :branches]
+      can :read, [:users, :profiles, :companies, :branches]
     end
     
     # The first argument to `can` is the action the user can perform. The second argument

@@ -1,0 +1,16 @@
+<ul class="nav">
+	<%= content_tag :li, link_to('Entries', entries_path) %>
+	<%= content_tag :li, link_to('Orders', orders_path) %>
+	<%= content_tag :li, link_to('Bids', bids_path) %>
+	<%= content_tag :li, link_to('Fees', fees_path) %>
+	<%= content_tag :li, link_to('Messages', messages_path) %>
+	<%= content_tag :li, link_to('Users', users_path) %>
+	<%= content_tag :li, class: 'dropdown' do %>
+		<%= link_to 'Vehicles', '#', class: 'dropdown-toggle' %>
+		<ul class="dropdown-menu">
+			<%= content_tag :li, link_to('Brands', car_brands_path) %>
+			<%= content_tag :li, link_to('Models', car_models_path) %>
+			<%= content_tag :li, link_to('Variants', car_variants_path) %>
+		</ul>
+	<% end %>
+</ul>

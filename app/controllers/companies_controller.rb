@@ -38,4 +38,10 @@ class CompaniesController < ApplicationController
     @company.destroy
     redirect_to companies_url, :notice => "Successfully destroyed company."
   end
+  
+  def selected
+    @branches = Branch.where(company_id: params[:id]).order(:name)
+    render :partial => 'companies/selected'
+  end
+  
 end

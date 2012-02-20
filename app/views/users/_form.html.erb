@@ -6,35 +6,35 @@
 	<fieldset>
 		<legend>Login Credentials</legend>
 		<div class="row">
-			<div class="span6">
-				<%= f.input :username, hint: 'Note: give a login name, NOT your full name' %>
+			<div class="span4">
+				<%= f.input :username, hint: 'Please give a login name, NOT your full name' %>
 				<%= current_page?(new_user_path) ? (f.input :password, hint: 'Use at least 4 characters.', required: true) : (f.input :password, label: 'Change Password', hint: 'Use at least 4 characters.', required: true) %>
 				<%= f.input :password_confirmation, label: 'Type Password again', required: true %>
 			</div>
-			<div class="span6">
+			<div class="span4 offset1">
 				<% if @user.new_record? || current_user.role?('admin') %>
-					<%=  profile.input :company, hint: 'Call us at 892-5835 if your company is not in this list.' do %>
-					  <%= profile.grouped_collection_select :company_id,  @company_type, :companies, :name, :id, :name, {include_blank: true} %>
+					<%=  profile.input :company, wrapper_html: { id: 'companies' }, hint: 'Call us at 892-5835 if your company is not in this list.' do %>
+					  <%= profile.grouped_collection_select :company_id,  @company_type, :companies, :name, :id, :name, {include_blank: 'Select Company'} %>
 					<% end %>
 				<% else %>
 					<%=  profile.input :company do %>
 						<%= profile.grouped_collection_select :company_id,  @company_type, :companies, :name, :id, :name, {include_blank: true}, disabled: true %>
 					<% end %>
 				<% end %>
-				<%= profile.association :branch %>
+				<%= profile.association :branch, collection: @branches, wrapper_html: { id: 'branches' }, include_blank: 'Select Branch' %>
 			</div>
 		</div>
 	</fieldset>
 	<fieldset>
 		<legend>Profile</legend>
 		<div class="row">
-			<div class="span6">
+			<div class="span4">
 		 		<%= profile.input :first_name  %>
 		 		<%= profile.input :last_name %>
 		 		<%= profile.association :rank, label: 'Position', collection: Rank.order(:name) %>
 		 		<%= profile.input :birthdate, as: :string, input_html: {id: 'datepicker'}, placeholder: 'Click to select date', hint: 'We want to remember you on your birthday. (Format: YYYY-MM-DD)' %>
 			</div>
-			<div class="span6">
+			<div class="span4 offset1">
 		 		<%= profile.input :phone %>
 		 		<%= profile.input :fax %>
 				<%= f.input :email, hint: "#{content_tag :span, 'Important: Put a valid email', class: 'label important'} We need this to send you notifications and messages.".html_safe %>
@@ -42,6 +42,7 @@
 			</div>
 		</div>
 	</fieldset>
+	<hr>
 	
 	<div class="well">
 		<% if current_user && current_user.role?('admin') %>

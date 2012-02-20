@@ -1,13 +1,4 @@
-<%= content_tag :thead do %>
-	<%= content_tag :tr do %>
-		<%= content_tag :th, 'Vehicle', class: 'span4' %>
-		<%= content_tag :th, 'Customer', class: 'span3' %>
-		<%= content_tag :th, 'Supplier', class: 'span3' %>
-		<%= content_tag :th, 'Order ID', class: 'span1 center' %>
-		<%= content_tag :th, 'PO Total', class: 'span2 center' %>
-		<%= content_tag :th, 'Status', class: 'span3 center' %>
-	<% end %>
-<% end %>
+<%= render 'orders/thead_index_basic' %>
 
 <%= content_tag :tbody do %>
 	<% @orders.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_orders| %>
@@ -23,7 +14,7 @@
 			<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
 	      <%= content_tag :p, link_to(entry.model_name, entry)  %>
 				<%= content_tag :p, entry.plate_no %>
-				<%= content_tag :em, "created by #{entry.user.username}" %>
+				<%= content_tag :em, "created by #{entry.user.username}", class: 'small' %>
 			<% end %>
 		<% end %>
 
@@ -34,7 +25,7 @@
 				<%= content_tag :td, link_to(order.id, order), class: 'span1 center' %>
 				<%= content_tag :td, currency(order.order_total), class: 'span2 center' %>
 				<%= content_tag :td, class: 'span3 center' do %>
-					<%= content_tag :p, order.status, class: "label center #{order.status_color}" %>
+					<%= order_status_helper(order) %>
 					<%= content_tag :span, "as of #{regular_date(order.status_date, 2)}", class: 'small' %>
 					<%= content_tag :span, order.messages.count, class: "label center" if order.messages.present? %>
 					<%= change_status_link(order) %>

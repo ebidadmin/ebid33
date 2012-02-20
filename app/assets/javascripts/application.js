@@ -48,8 +48,35 @@ $(function() {
 			complete: function() { $('span.loading').remove(); }
 		});
 	});
-	$('div.fields').addClass('span4');
-	$('div#cart-notice').hide();
+	$('div#companies select').change(function() { 
+		var company_id = $(this).val();
+		$('div#branches select').after(loading)
+		$.ajax({
+			type: 'get',
+			url: '/companies/' + parseInt(company_id) + '/selected',
+			success: function(html) {
+				$('div#branches select').html(html);
+			},
+			complete: function() { $('span.loading').remove(); }
+		});
+	});
+	$('div.fields').addClass('well');
+	$('div.fields div').addClass('span5');
+	$("#parts-pagination a").live("click", function() {
+    $(".pagination").html("Page is loading...");
+		$.getScript(this.href);
+		return false;
+	});
+	
+	// $('div#cart-search').hide();
+	$('.photo-set a').fancybox({
+		'transitionIn'		: 'none',
+		'transitionOut'		: 'none',
+		'titlePosition' 	: 'over',
+		'titleFormat'		: function(title, currentArray, currentIndex, currentOpts) {
+			return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
+		}
+	});
 	// function autosaveForm() {
 	//   $('form[data-remote]').submit();
 	// }

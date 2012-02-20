@@ -1,0 +1,27 @@
+<% title @entry.model_name %>
+<% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
+
+<% content_for :sidebar do %>
+	<%= render 'shared/info_vehicle' %>
+	<%= render 'shared/sidebar_dates' %>
+<% end %>
+
+<%= render 'shared/photo_set' %>
+
+<% if @entry.line_items.present? %>
+		<%= render 'seller/parts_table' %>
+<% else %>
+		<%= content_tag :h2, 'Sorry, parts list is empty.' %>
+<% end %>
+
+<hr>
+<%= content_tag :div, class: 'entry messages' do %>
+	<%= content_tag :div, '', class: 'msg-form' %>
+	<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' %><hr>
+	<%= render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public' %>
+<% end %>
+
+
+
+
+

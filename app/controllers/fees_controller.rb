@@ -1,6 +1,7 @@
 class FeesController < ApplicationController
   def index
-    @fees = Fee.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], [:seller_company]).paginate(page: params[:page], per_page: 20)
+    @q = Fee.search(params[:q])
+    @fees = @q.result.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], [:seller_company]).paginate(page: params[:page], per_page: 20)
   end
 
   def show

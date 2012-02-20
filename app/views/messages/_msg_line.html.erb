@@ -1,14 +1,14 @@
-<%= content_tag :dt, user_signature(m, current_user), class: "span2 #{k}" %>
+<%= content_tag :dt, user_signature(m, current_user), class: "span2 #{k} line_#{m.id}" %>
 
-<%= content_tag :dd, class: "#{k}" do  %>
+<%= content_tag :dd, class: "#{msg_class(k)} #{k} line_#{m.id}" do  %>
 	<%= m.message %><br>
 	<%= content_tag :span, short_date(m.created_at), class: 'small' %>
-	<% if m.user %>
-		<%= content_tag :span, link_to('reply', show_fields_messages_path(msg_for: m.user_type, entry: @entry, order: @order, open_tag: m.open_tag, parent_id: m), remote: true), class: 'small' %> | 
+	<% if m.user != current_user %>
+		<%= content_tag :span, link_to('reply', show_fields_messages_path(msg_for: m.user_type, entry: @entry, order: @order, open_tag: m.open_tag, parent_id: m), remote: true), class: 'small' %> 
 	<% end %>
 	<% if m.can_be_edited(current_user) %>
 		<%= content_tag :span, link_to('edit', edit_message_path(m, entry: @entry, order: @order, open_tag: 'edit'), remote: true), class: 'small' %>
-		| <%= content_tag :span, link_to('delete', m, confirm: 'Are you sure you want to delete this message?', method: :delete), class: 'small' %>
+		<%= content_tag :span, link_to('delete', m, confirm: 'Are you sure you want to delete this message?', method: :delete, remote: true), class: 'small' %>
 	<% end %>
 	<%= content_tag :span, "(private msg #{link_to 'attached to PO', m.order})".html_safe, class: 'small' if m.order_id.present? && current_page?(@entry) %>
 <% end %>

@@ -1,0 +1,37 @@
+<hr>
+<%= content_tag :h3, 'Please read these Rules!' %>
+
+<%= content_tag :ol, id: 'parts-rules' do %>
+	<%= content_tag :li do %>
+		Try different combinations of keywords. 
+		<%= content_tag :code, "Don't be lazy to make the proper search." %>
+		Avoid adding unnecessary part names/descriptions ... it will only make your future searches harder.
+		Most of the parts you need are already in our database.
+	<% end %>
+	<%= content_tag :li do %>
+		Avoid abbreviations and unnecessary	descriptions.
+		<%= cart_rules_helper('Panel Set Lh Rr Outside Ct09 10', 'LH Rear Panel', '1 Set - Outside (Ct09 10)') %>
+	<% end %>
+	<%= content_tag :li do %>
+		<%= "Put any details you want in #{content_tag :code, 'SPECS'}.".html_safe %>
+		<%= cart_rules_helper('Tire Yokohama A-300 205/65 R15', 'Tire', 'Yokohama A-300 (Size: 205/65 R15)') %>
+		<%= cart_rules_helper('Radiator Comp (Denso) Ac08 09', 'Radiator Comp', 'Denso (Ac08 09)') %>
+		<%= cart_rules_helper('SPARE TIRE COVER "HONDA" STICKER', 'Sticker', "'HONDA' - for Spare Tire Cover") %>
+		<%= cart_rules_helper('Front Emblem (Mitsubishi Logo)', 'Emblem', "'MITSUBISHI' Logo - Front") %>
+	<% end %>
+	<%= content_tag :li do %>
+		<%= "The #{content_tag :code, 'location'} of the part should be placed first. Capitalized.".html_safe %>
+		<%= cart_rules_helper('Roof Rail Lh (3 Legs)', 'LH Roof Rail', '3 Legs') %>
+		<%= cart_rules_helper('Air Duct Lh Dashboard', 'LH Dashboard Air Duct') %>
+		<%= cart_rules_helper('Stiff, FR Bumper RH', 'RH Front Bumper Stiff') %>
+	<% end %>
+	<%= content_tag :li do %>
+		<%= "#{content_tag :code, 'RH'} and #{content_tag :code, 'LH'} must be 2 separate items.  Never on the same description.".html_safe %>
+		<%= cart_rules_helper('Lh And Rht Headlight') %>
+		<%= content_tag :p, class: 'good-p' do %>
+      <%= content_tag(:span, "Good", class: 'label success') %>
+      <%= content_tag(:code, 'LH Headlight', class: 'good-code') %> and <%= content_tag(:code, 'RH Headlight') %>
+      <%= content_tag(:em, "Separate items.", class: 'specs highlight')  %>
+    <% end %>
+	<% end %>
+<% end %>

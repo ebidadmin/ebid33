@@ -1,0 +1,18 @@
+<%= content_tag :thead do %>
+	<%= content_tag :tr do %>
+		<%= content_tag :th, 'Part Description', class: 'span4', rowspan: 2 %>
+		<%= content_tag :th, 'Bids (unit price)', class: 'span9 center' %>
+		<%= content_tag :th, 'Status', class: 'span3 center', rowspan: 2 %>
+	<% end %>
+	<%= content_tag :tr do %>
+		<%= content_tag :th, class: 'center' do %>
+			<div class="bids-array">
+				<% %w(original replacement surplus).each do |type| %>
+					<div class="cat <%= type %>">
+						<%= content_tag :span, type.titleize, class: 'label label-important' %>
+					</div>
+	 			<% end %>
+			</div>
+		<% end %>
+	<% end %>
+<% end %>

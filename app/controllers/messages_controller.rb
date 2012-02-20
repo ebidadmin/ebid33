@@ -2,7 +2,7 @@ class MessagesController < ApplicationController
   load_and_authorize_resource
   
   def index
-    @messages = Message.includes(:entry, :user, :user_company, :reciever, :reciever_company).order('created_at DESC').paginate(page: params[:page], per_page: 25)
+    @messages = Message.includes(:entry, :user, :user_company, :receiver, :receiver_company).order('created_at DESC').paginate(page: params[:page], per_page: 25)
   end
 
   def show
@@ -17,7 +17,7 @@ class MessagesController < ApplicationController
     @message = current_user.messages.build(params[:message])
     @entry = Entry.find(params[:entry]) unless params[:entry].blank?
     @order = Order.find(params[:order]) unless params[:order].blank?
-    @message.create_message(current_user, params[:msg_for], params[:open], @entry, @order)
+    @message.create_message(current_user, params[:msg_for], params[:open_tag], @entry, @order, params[:receiver], params[:receiver_company])
     
     unless request.env["HTTP_REFERER"] == new_message_url
       respond_to do |format|
@@ -76,8 +76,12 @@ class MessagesController < ApplicationController
   def destroy
     @message = Message.find(params[:id])
     @message.destroy
-    redirect_to :back
-    # redirect_to messages_url, :notice => "Successfully destroyed message."
+    respond_to do |format|
+      format.html { redirect_to :back, notice: "Deleted the message." }
+      format.js { flash.now[:notice] = "Deleted the message." }
+    end
+    
+    # redirect_to messages_url, 
   end
   
   def show_fields

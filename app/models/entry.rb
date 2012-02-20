@@ -21,13 +21,23 @@ class Entry < ActiveRecord::Base
   accepts_nested_attributes_for :photos, :allow_destroy => true, :reject_if => proc { |a| a['photo'].blank? }
   
   has_many :line_items, dependent: :destroy
+  accepts_nested_attributes_for :line_items, allow_destroy: true, reject_if: proc { |obj| obj.blank? }
   has_many :car_parts, through: :line_items
   has_many :bids, dependent: :destroy
   has_many :orders
   has_many :messages, dependent: :destroy
   has_many :fees
   
-  scope :declined, where('entries.status LIKE ?', "%Declined%")
+  default_scope order('created_at DESC')
+  scope :active, where('entries.bid_until >= ?', Date.today)
+  scope :unexpired, where(:expired => nil)
+  scope :expired, where('expired IS NOT NULL')
+
+  scope :online, where(status: ['Online', 'Relisted', 'Additional']).order('bid_until DESC')
+  scope :for_decision, where(status: ['For-Decision', 'Ordered-IP', 'Declined-IP'])
+  scope :with_orders, where('entries.status LIKE ?', "%Ordered%") 
+  scope :declined, where(status: ['Declined-IP', 'Declined-All'])
+  scope :for_seller, where{(status.not_like '%New%') & (status.not_like '%Edited%') & (status.not_like '%Removed%')} #where('entries.status NOT LIKE ?', ['New', 'Edited', 'Removed'])
   
   validates_presence_of :year_model, :car_brand, :car_brand_id, :car_model_id, 
   :plate_no, :serial_no, :motor_no, :date_of_loss, :city_id, :term_id
@@ -36,7 +46,7 @@ class Entry < ActiveRecord::Base
   
   YEAR_MODELS = (30.years.ago.year .. Date.today.year).to_a.reverse
   STATUS_TAGS = %w(New Online Additional Relisted For-Decision Ordered-IP Ordered-All Ordered-Declined Declined-IP Declined-All) 
-  TAGS_FOR_INDEX = %w(New Online Decision Closed)
+  TAGS_FOR_INDEX = %w(New Online For-Decision Closed)
   TAGS_FOR_SIDEBAR = %w(online relisted bid_until decided expired)
   MIN_BIDDING_TIME = 5.minutes
   
@@ -49,22 +59,42 @@ class Entry < ActiveRecord::Base
   end
   
   def self.find_status(status)
-    finder = case status
-    when 'Online', 'Additional', 'Relisted' then ['Online', 'Additional', 'Relisted']
-    when 'Decision' then ['For-Decision', 'Ordered-IP', 'Declined-IP']
-    when 'Closed' then ['Ordered-Declined', 'Declined-All', 'Ordered-All']
-    else status
+    case status
+    when 'new' then where(status: ['New', 'Edited'])
+    when 'online' then online.active
+    when 'for-decision' then for_decision.unexpired
+    when 'ordered' then with_orders
+    when 'declined' then declined
+    when 'all' then for_seller
+    else scoped
     end
-    status.present? ? where(status: [finder]) : scoped
   end
     
-	def add_line_items_from_cart(cart, specs)
+  def self.by_this_buyer(user, search_query=nil)
+    if search_query.present?
+      scoped
+    else
+      if user.role?(:powerbuyer)
+        where(company_id: user.company)
+      else
+        where(user_id: user)
+      end
+    end
+  end
+  
+	def add_line_items_from_cart(cart, specs, hash_items=nil)
 		cart.cart_items.each do |item|
 			li = LineItem.from_cart_item(item, specs.fetch(item.id.to_s)[0].to_s)
 			line_items << li 
 		end
     cart.cart_items.destroy_all
-    # session[:cart_id] = nil 
+    if hash_items.present?
+      # hash_items.reject! proc { |obj| obj.blank? }
+      existing_items = LineItem.unscoped.find(hash_items.map { |k,v| k.to_i })
+      existing_items.each do |ei|
+        ei.update_attribute(:specs, hash_items.fetch(ei.id.to_s)[0])
+      end
+    end
 	end 
 
   def update_associated_status(status)
@@ -116,8 +146,12 @@ class Entry < ActiveRecord::Base
     status == 'New' || status == 'Edited'
   end
   
+  def can_be_edited
+    created_at > 3.weeks.ago
+  end
+  
   def can_online
-    line_items.present? && photos.present? && bid_until.blank?
+    line_items.present? && photos.present? && bid_until.blank? 
   end
   
 	def is_online
@@ -144,10 +178,27 @@ class Entry < ActiveRecord::Base
     end
     allowed && line_items.collect(&:status).include?('No Bids')
 	end
+	
+	def has_additionals
+	  line_items.fresh.present? && bid_until
+	end
 
   def can_be_ordered
-    status_ok = status == "For-Decision" || status == "Ordered-IP" || status == "Declined-IP"
-    status_ok && (line_items.present? && line_items.collect(&:status).uniq.include?("For-Decision"))
+    # status_ok = status == "For-Decision" || status == "Ordered-IP" || status == "Declined-IP"
+    # status_ok && (line_items.present? && line_items.collect(&:status).uniq.include?("For-Decision"))
+    line_items.present? && line_items.collect(&:status).uniq.include?("For-Decision")
+  end
+  
+  def can_reactivate
+    expired && updated_at > 1.month.ago && line_items.collect(&:status).uniq.include?("Expired")
+  end
+  
+  def has_order
+    orders_count > 0
+  end
+  
+  def stock_warning?
+    online <= 3.days.ago
   end
   
   def unique_bidders
@@ -156,6 +207,14 @@ class Entry < ActiveRecord::Base
   
   def items_bidded
     bids.collect(&:line_item_id).uniq.count
+  end
+  
+  def show_status
+    if expired.nil?
+      "#{status}"
+    else
+      "#{status}<br> (Expired)".html_safe
+    end
   end
   
   def status_date
@@ -170,10 +229,10 @@ class Entry < ActiveRecord::Base
   
 	def status_color
     case status
-    when 'Online', 'Additional', 'Relisted' then 'cool'
-    when 'For-Decision' then 'highlight'
-    when 'Ordered-Declined', 'Ordered-IP', 'Ordered-All' then 'success'
-    when 'Declined-IP', 'Declined-All' then 'warning'
+    when 'Online', 'Additional', 'Relisted' then 'label-cool'
+    when 'For-Decision' then 'label-highlight'
+    when 'Ordered-Declined', 'Ordered-IP', 'Ordered-All' then 'label-success'
+    when 'Declined-IP', 'Declined-All' then 'label-warning'
     else nil
     end
   end
@@ -181,7 +240,7 @@ class Entry < ActiveRecord::Base
 	def get_date_for_sidebar(tag)
 	  self.send(tag.downcase)
 	end
-	
+		
 	private
 	
 	def convert_numbers

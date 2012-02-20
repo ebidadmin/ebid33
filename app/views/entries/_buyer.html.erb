@@ -4,7 +4,7 @@
 	<div id="" class="span12">
 		
 		<%= content_tag :table, class: 'zebra-striped' do %>
-			<%= render 'table_titles' %>
+			<%= render 'entries/thead_show' %>
 
 			<%= content_tag :tbody do %>
 				<% @entry.line_items.order('status DESC').each_with_index do |item, index| %>

@@ -1,0 +1,4 @@
+<%= content_tag :option, 'Select Branch', :value => nil  %>
+<% for branch in @branches %>
+	<%= content_tag :option, branch.name, :value => branch.id  %>
+<% end %>

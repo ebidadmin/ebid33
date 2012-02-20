@@ -1,8 +1,8 @@
 	
-<%= content_tag :div, class: 'span16', id: 'order-items' do %>
+<%#= content_tag :div, class: 'span12', id: 'order-items' do %>
 	<%= content_tag :div, class: 'well' do %>
 
-	<%= content_tag :table do %>
+	<%= content_tag :table, class: 'table' do %>
 		<%= content_tag :thead do %>
 			<%=  content_tag :th %>
 			<%=  content_tag :th, 'Part Description', class: 'span7' %>
@@ -12,7 +12,6 @@
 			<%=  content_tag :th, 'Cost', class: 'span3 right' %>
 			<%=  content_tag :th, '', class: 'span1' %>
 		<% end %>
-		<%= content_tag :tbody do %>
 			<% bids.each_with_index do |bid, index| %>
 				<%= content_tag :tr, class: "#{'cancelled' if bid.cancelled?}" do %>
 					<%=  content_tag :td, "#{content_tag :b, index + 1, class: 'label'}".html_safe, class: 'span1' %>
@@ -37,7 +36,6 @@
 				<%=  content_tag :th, '', class: '' %>
 			<% end %>
 		<% end %>
-	<% end %>
 
 	<% end %>
-<% end %>
+<%# end %>

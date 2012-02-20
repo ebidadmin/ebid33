@@ -1,0 +1,11 @@
+<div class="alert alert-block alert-error">
+	<%= content_tag :h4, "IMPORTANT NOTE:", class: 'alert-heading' %>
+	<% if @entry.expired? %>
+		<%= content_tag :p, "Bidding was done #{content_tag :code, time_ago_in_words(@entry.online) + ' ago'} and your Entry has #{content_tag :code, 'EXPIRED'}.".html_safe %>
+		<%= content_tag :p, "Prices may have changed or parts may be out of stock.  If you are rushing, call us before you place the order." %>
+	<% else %>
+		<%= content_tag :p, "Bidding was done #{content_tag :code, time_ago_in_words(@entry.online) + ' ago'}.".html_safe %>
+		<%= content_tag :p, "If you are rushing, check if the parts you are ordering are still on stock before you place the order." %>
+	<% end %>
+	<%= content_tag :p, "Please call E-Bid at (02) 892-5835 or (0917) 405-6077." %>
+</div>
