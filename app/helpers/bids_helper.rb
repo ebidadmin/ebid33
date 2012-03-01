@@ -1,8 +1,8 @@
 module BidsHelper
   def bid_box_helper(item_id, category)
-    content_tag :div, class: "cat #{category} center" do
+    # content_tag :div, class: "cat #{category[0]} center" do
       text_field_tag("bids[#{item_id}][#{category}]", nil)
-    end   
+    # end   
   end
 
   def bid_amount_helper(bid, f=nil)
@@ -23,7 +23,7 @@ module BidsHelper
     if action == 'show' || action == 'cancel'
       bid.quantity
     else
-      text_field_tag "bids[#{bid.id}][]", bid.quantity, class: 'span1 center'
+      text_field_tag "bids[#{bid.id}][]", bid.quantity, class: 'span1 txtcenter'
     end
   end
   

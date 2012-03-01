@@ -8,7 +8,7 @@ class BuyerController < ApplicationController
   end
   
   def show
-    @entry = Entry.find(params[:id], include: [[:line_items => :order]])
+    @entry = Entry.find(params[:id], include: :line_items)
     @q = CarPart.search(params[:q])
     
     if current_user.role?(:admin)
@@ -19,14 +19,9 @@ class BuyerController < ApplicationController
     @pub_messages = @entry.messages.pub
   end
   
-  def surrender
-    @entry = Entry.find(params[:id], include: :line_items)
-    render layout: 'layout2'
-  end
-  
-  def surrender_letter
-    @entry = Entry.find(params[:id], include: :line_items)
-    render layout: 'layout2'
+  def print_entry
+    show
+    render :layout => 'print'
   end
   
   def reactivate
@@ -36,8 +31,8 @@ class BuyerController < ApplicationController
   end
   
   def orders
-    @q = Order.find_status(params[:s]).by_this_buyer(current_user).search(params[:q])
-    @all_orders ||= @q.result
+    @q = Order.search(params[:q])
+    @all_orders ||= @q.result.find_status(params[:s]).by_this_buyer(current_user)
     @orders = @all_orders.includes([:entry => [:car_brand, :car_model, :user]], :seller_company, :messages).paginate :page => params[:page], :per_page => 10
 
     seller_present?
@@ -50,6 +45,17 @@ class BuyerController < ApplicationController
     
     seller_present?
   end
+  
+  def surrender
+    @entry = Entry.find(params[:id], include: :line_items)
+    render layout: 'layout2'
+  end
+  
+  def surrender_letter
+    @entry = Entry.find(params[:id], include: :line_items)
+    render layout: 'layout2'
+  end
+  
   
   private
   

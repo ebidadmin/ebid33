@@ -22,7 +22,7 @@ class Order < ActiveRecord::Base
   
   validates_presence_of :deliver_to#, :address1, :phone
 
-  TAGS_FOR_INDEX = %w(New For-Delivery Delivered Overdue Paid Closed Cancelled)
+  # TAGS_FOR_INDEX = %w(new for-delivery delivered overdue paid closed cancelled)
   
   # default_scope includes(:user, :seller, :bids => [:line_item => :car_part]).order('created_at DESC')
   default_scope order('orders.created_at DESC')
@@ -30,13 +30,17 @@ class Order < ActiveRecord::Base
   scope :recent, where(status: ['PO Released', 'New PO', 'For-Delivery'])
   scope :delivered, where(status: 'Delivered')
   scope :payment_valid, where('orders.paid IS NOT NULL')
-  scope :payment_pending, where('orders.paid IS NULL')
+  scope :payment_pending, where(paid: nil)#where('orders.paid IS NULL')
   scope :paid, where(status: 'Paid').payment_valid
   
   scope :cancelled, where('orders.status LIKE ?', "%Cancelled%")
   scope :not_cancelled, where('orders.status NOT LIKE ?', "%Cancelled%") # used in Orders#Show
   
-  scope :overdue, delivered.where('orders.due_date < ?', Date.today)
+  scope :overdue, delivered.where('orders.due_date < ?', Date.today).payment_pending
+  scope :due_now, delivered.where(due_date: Date.today .. 1.week.from_now.to_date).payment_pending
+  
+  DAYS_B4_PAYMNT_TAG = Date.today #1.day.ago.to_date
+  scope :payment_taggable, where('paid_temp <= ?', DAYS_B4_PAYMNT_TAG)
   
   def self.find_status(status)
    if status == 'new'
@@ -44,7 +48,7 @@ class Order < ActiveRecord::Base
     elsif status == 'for-delivery'
       unscoped.where(status: 'For-Delivery').order(:confirmed)
     elsif status == 'delivered'
-      unscoped.delivered.where('orders.due_date >= ?', Date.today).order(:delivered)
+      unscoped.delivered.where('orders.due_date >= ?', Date.today).order(:due_date)
     elsif status == 'overdue'
       unscoped.overdue.order(:delivered)
     elsif status == 'cancelled'
@@ -104,6 +108,7 @@ class Order < ActiveRecord::Base
       Please send your invoice to buyer asap so we can help you <strong>track the payment</strong>.".html_safe
     when 'Paid!'
       self.update_attributes(status: 'Paid', paid_temp: Date.today)
+      Notify.payment_tagged(self, self.entry).deliver
       flash = "Updated the status of the order to <strong>Paid</strong>.<br>
       We will notify the seller to confirm your payment.".html_safe
     when 'Paid', 'Confirm Payment'
@@ -112,6 +117,12 @@ class Order < ActiveRecord::Base
       Please rate your buyer to close the order.".html_safe
 	  end
 	end
+
+  def tag_payment
+    self.update_attribute(:paid, self.paid_temp)
+    bids.not_cancelled.each { |bid| bid.tag_payment(self) }
+    entry.update_status
+  end
   
   def status_date
     case status
@@ -149,7 +160,7 @@ class Order < ActiveRecord::Base
     if user.id == 1 || action == 'cancel'
       true
     else
-      status == 'New PO' ||status == 'PO Released' || status == 'For-Delivery'
+      status == 'New PO' || status == 'PO Released' || status == 'For-Delivery'
     end
   end
   
@@ -177,6 +188,7 @@ class Order < ActiveRecord::Base
   private
 
   def clean_up_details
+    self.deliver_to = self.deliver_to.titleize
     self.contact_person = self.contact_person.titleize
     self.address1 = self.address1.titleize
     self.address2 = self.address2.titleize

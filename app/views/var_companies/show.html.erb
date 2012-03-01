@@ -1,0 +1,16 @@
+<% title "Var Company" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @var_company.name %>
+</p>
+<p>
+  <strong>Creator:</strong>
+  <%= @var_company.creator_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_var_company_path(@var_company) %> |
+  <%= link_to "Destroy", @var_company, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", var_companies_path %>
+</p>

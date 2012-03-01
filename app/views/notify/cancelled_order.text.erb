@@ -1,0 +1,11 @@
+Vehicle:   <%= @order.entry.model_name %>
+Plate No.: <%= @order.entry.plate_no %>
+
+******** ******** ******** ********
+
+<%= @message.message.html_safe %>
+
+
+Use this link to view PO:  <%= order_url(@order.id) %>
+
+******** ******** ******** ********

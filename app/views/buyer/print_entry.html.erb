@@ -1,0 +1,78 @@
+<% title @entry.model_name %>
+<% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
+
+<div class="row">
+	<div id="" class="span5">
+		<%= render 'shared/info_vehicle' %>
+	</div>
+</div>
+
+<%= content_tag :section, class: 'entry messages' do %>
+	<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' if @pvt_messages.present? %>
+	<%= render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public' if @pub_messages.present? %>
+<% end %>
+
+<section>
+	<%= content_tag :table, class: 'table table-bordered table-condensed' do %>
+		<%= content_tag :thead do %>
+			<%= content_tag :tr do %>
+				<%= content_tag :th, 'Part Description', class: 'span4' %>
+				<%= content_tag :th, 'Orig', class: 'bids center' %>
+				<%= content_tag :th, 'Rep', class: 'bids center' %>
+				<%= content_tag :th, 'Surp', class: 'bids center' %>
+			<% end %>
+		<% end %>
+
+		<% @entry.line_items.order('status DESC').each_with_index do |item, index| %>
+			<%= content_tag :tr do %>
+
+				<%= content_tag :td, class: 'span4' do %>
+					<%= content_tag :span, index + 1, class: 'index' if @entry.line_items.size > 1 %>
+					<div class="part-desc">
+						<%= content_tag :b, item.name %>
+						<%= "<br> #{content_tag :code, 'Specs: ' + item.specs, class: 'small'}".html_safe if item.specs.present? %>
+						<%= content_tag :div, class: 'stats small' do %>
+							<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %>
+							<%= content_tag :span, "| Fastest: #{time_in_words(item.bids.minimum(:bid_speed))}" if item.bids.present? %>
+			 			<% end %>
+					</div>
+				<% end %>
+
+				<% if item.is_online %>
+					<%= content_tag :td, class: 'center', colspan: 3 do %>
+						<%= content_tag :em, 'Bidding session is ongoing.', class: 'small' %>
+					<% end %>
+				<% else %>
+					<% %w(original replacement surplus).each do |t| %>
+						<td class="<%= t %> bids span2">
+
+							<% item.bids.group_by(&:bid_type).each do |type, bids| %>
+								<% if t == type %>
+									<% hi_bid = bids[0] %>
+									<% lo_bid = bids[-1] %>
+
+									<%= content_tag :p, class: 'small' do %>
+										<%= content_tag :span, currency(hi_bid.amount), class: 'bid-amount' %>
+										<%= content_tag :span, 'H' %>
+									<% end %>
+
+									<%= content_tag :p do %>
+										<%= content_tag :b, currency(lo_bid.amount), class: 'bid-amount' %>
+										<%= content_tag :span, 'L', class: 'small' %>
+									<% end %>
+								<% end %> 
+							<% end %>
+
+						</td>
+					<% end %>
+
+				<% end %>
+
+
+			<% end %>
+		<% end %>
+
+
+	<% end %>
+</section>
+

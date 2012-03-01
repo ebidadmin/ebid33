@@ -8,9 +8,9 @@
 		<%= content_tag :tr do %>
 			<%= content_tag :th, 'Vehicle', class: 'span4' %>
 			<%= content_tag :th, 'Parts', class: 'span5' %>
-			<%= content_tag :th, 'Orig', class: 'span2 center' %>
-			<%= content_tag :th, 'Rep', class: 'span2 center' %>
-			<%= content_tag :th, 'Surp', class: 'span2 center' %>
+			<%= content_tag :th, 'Orig', class: 'span2 txtcenter' %>
+			<%= content_tag :th, 'Rep', class: 'span2 txtcenter' %>
+			<%= content_tag :th, 'Surp', class: 'span2 txtcenter' %>
 		<% end %>
 	<% end %>
 
@@ -37,20 +37,19 @@
 			<% bids.group_by(&:line_item).each do |item, bts| %>
 				<%= content_tag :tr do %>
 					<%= content_tag :td, class: 'span5' do %>
-						<%#= content_tag :span, item.succ , class: 'label index'  %>
 						<%= content_tag :span, item.part_name %>
 					<% end %>
-					<%= content_tag :td, class: 'span2 center bids' do %>
+					<%= content_tag :td, class: 'span2 txtcenter bids' do %>
 						<% bts.map {|b| b if b.orig? }.each do |bid| %>
 							<%= render bid if bid %>
 						<% end %>
 					<% end %>
-					<%= content_tag :td, class: 'span2 center bids' do %>
+					<%= content_tag :td, class: 'span2 txtcenter bids' do %>
 						<% bts.map {|b| b if b.rep? }.each do |bid| %>
 							<%= render bid if bid %>
 						<% end %>
 					<% end %>
-					<%= content_tag :td, class: 'span2 center bids' do %>
+					<%= content_tag :td, class: 'span2 txtcenter bids' do %>
 						<% bts.map {|b| b if b.surp? }.each do |bid| %>
 							<%= render bid if bid %>
 						<% end %>

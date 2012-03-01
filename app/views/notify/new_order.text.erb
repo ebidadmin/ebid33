@@ -1,0 +1,20 @@
+Hello <%= @order.seller.first_name %>!
+
+A Purchase Order was just released for
+
+	Vehicle:   <%= @order.entry.model_name %>
+	Plate No.: <%= @order.entry.plate_no %>
+
+	Parts Ordered: 
+	
+		<% @order.bids.each do |li| %>
+		[ <%= li.quantity %> ]  <%= li.line_item.part_name.html_safe %>
+		<% end %>
+
+	Total Order: <%= ph_currency(@order.order_total) %>
+	
+	LINK: <%= order_url(@order.id) %>
+		
+Please login to your account to confirm the PO and deliver the parts as soon as possible.
+
+Thank you!

@@ -44,6 +44,7 @@ group :development do
 	gem "guard-cucumber", ">= 0.6.1"
 	gem "rails-footnotes", ">= 3.7"
 	gem "nifty-generators"
+	gem "letter_opener"
 end
 
 gem "devise", ">= 1.5.0"
@@ -61,4 +62,5 @@ gem "squeel"
 gem "ransack"#, :git => "git://github.com/ernie/ransack.git"
 gem "has_scope"
 gem "ancestry"
+gem "client_side_validations"
 

@@ -1,14 +1,31 @@
-<% unless @new_bids.blank? && @new_bids.all?(&:valid?) && @existing_bid.blank? %>
+<% unless @new_bids.blank? && @existing_bids.blank? %>
+
 	<% @new_bids.group_by(&:line_item).each do |line_item, bids| %>
 		<% bids.each do |bid| %>
-		$("div#line_item_<%= line_item.id %> div.<%= bid.bid_type %>").html("<%= escape_javascript(content_tag :p, "#{currency(bid.amount)} #{content_tag :em, bid.user.username, class: 'small' if bid.user.present?}".html_safe) %>").effect("highlight", {}, 3000);
+			<% if bid.valid? %>
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %> .invalid").remove();
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %>").append("<%= escape_javascript(render bid) %>").effect("highlight", {}, 5000);
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %> input").val('');    
+			<% else %>
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %>").append("<%= escape_javascript(render 'seller/invalid_bid_msg') %>");
+			<% end %>
 		<% end %>
 	<% end %>
+
 	<% @existing_bids.group_by(&:line_item).each do |line_item, bids| %>
 		<% bids.each do |bid| %>
-		$("div#line_item_<%= line_item.id %> div.<%= bid.bid_type %>").html("<%= escape_javascript(content_tag :p, "#{currency(bid.amount)} #{content_tag :em, bid.user.username, class: 'small' if bid.user.present?}".html_safe) %>").effect("highlight", {}, 3000);
+			<% if bid.valid? %>
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %> .invalid").remove();
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %> #bid_<%= bid.id %>").html("<%= escape_javascript(render bid) %>").effect("highlight", {}, 5000);
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %> input").val('');    
+			<% else %>
+				$("#<%= line_item.id %> .<%= bid.bid_type[0..3] %>").append("<%= escape_javascript(render 'seller/invalid_bid_msg') %>");
+			<% end %>
 		<% end %>
 	<% end %>
+	
 <% else %>
-	$("#bidding-message, h3.highlight").removeClass('green').addClass('orange').text("You may have entered a blank or invalid bid format. Please try again.").effect("highlight", {}, 3000);
+
+	$("#bidding-message").html("<%= escape_javascript(render 'seller/invalid_bid_msg') %>").effect("highlight", {}, 5000);
+
 <% end %>

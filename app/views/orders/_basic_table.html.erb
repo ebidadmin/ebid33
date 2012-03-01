@@ -1,4 +1,13 @@
-<%= render 'orders/thead_index_basic' %>
+<%= content_tag :thead do %>
+	<%= content_tag :tr do %>
+		<%= content_tag :th, 'Vehicle', class: 'span4' %>
+		<%= content_tag :th, 'Buyer', class: 'span2' %>
+		<%= content_tag :th, 'Seller', class: 'span2' %>
+		<%= content_tag :th, 'Details', class: 'span4 txtcenter' %>
+		<%= content_tag :th, 'Status', class: 'span3 txtcenter' %>
+	<% end %>
+<% end %>
+
 
 <%= content_tag :tbody do %>
 	<% @orders.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_orders| %>
@@ -12,23 +21,33 @@
 
 		<%= content_tag :tr do %>
 			<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
+				<%= content_tag :p, entry.ref_no, class: 'small' %>
 	      <%= content_tag :p, link_to(entry.model_name, entry)  %>
-				<%= content_tag :p, entry.plate_no %>
-				<%= content_tag :em, "created by #{entry.user.username}", class: 'small' %>
+				<%= content_tag :span, entry.plate_no %>
+				<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
 			<% end %>
 		<% end %>
 
 		<% for order in orders %>
 			<%= content_tag :tr do %>
-				<%= content_tag :td, order.company.nickname, class: 'span3' %>
-				<%= content_tag :td, order.seller.nickname, class: 'span3' %>
-				<%= content_tag :td, link_to(order.id, order), class: 'span1 center' %>
-				<%= content_tag :td, currency(order.order_total), class: 'span2 center' %>
-				<%= content_tag :td, class: 'span3 center' do %>
+				<%= content_tag :td, order.company.nickname, class: 'span2' %>
+				<%= content_tag :td, order.seller.nickname, class: 'span2' %>
+				<%= content_tag :td, class: 'span3 txtcenter' do %>
+					<%= content_tag :b, currency(order.order_total) %>
+					<%= content_tag :span, pluralize(order.items_count, 'part'), class: 'small' %>
+					<%= content_tag :p, link_to("PO##{order.id}", order) %>
+					<% if order.messages.present? %>
+					<span class='highlight'>
+						<%= content_tag :i, '', class: 'icon-comment' %>
+						<%= order.messages.size %>
+					</span>
+					<% end %>
+				<% end %>
+				<%= content_tag :td, class: 'span3 txtcenter' do %>
 					<%= order_status_helper(order) %>
-					<%= content_tag :span, "as of #{regular_date(order.status_date, 2)}", class: 'small' %>
-					<%= content_tag :span, order.messages.count, class: "label center" if order.messages.present? %>
+					<%= content_tag :p, "as of #{regular_date(order.status_date)}", class: 'small' %>
 					<%= change_status_link(order) %>
+					<%= confirm_payment_link(order, current_user) %>
 					<%= payment_tag(order) %>
 				<% end %>
 			<% end %>

@@ -1,0 +1,28 @@
+*** THIS IS A SYSTEM-GENERATED EMAIL. DO NOT REPLY (for comments, email to: cymarquez@ebid.com.ph) ***
+
+Hello <%= @entry.user.profile.first_name %>!
+
+Bids were posted for
+
+	Claim No.:  <%= @entry.ref_no if @entry.ref_no %>
+	Vehicle:    <%= @entry.model_name %>
+	Plate No.:  <%= @entry.plate_no %>
+
+	Link:		<%= buyer_show_url(@entry) %>
+	
+PARTS BIDED (Note: bids are hidden while the bidding session is still ongoing)
+
+  <% @bids.group_by(&:line_item).each do |item, bids| %>         
+	<%= item.car_part.name.html_safe %> 
+	
+	<% for bid in bids %>
+	<% if bid.valid? %>
+	* <%= "Original" unless bid.bid_type != "original" %><%= "Replacement" unless bid.bid_type != "replacement" %><%= "Surplus" unless bid.bid_type != "surplus" %>
+	<% end %>
+	<% end %>
+		
+	<% end %>
+
+BIDDING SPEED (TAT): <%= distance_of_time_in_words(@bids.first.bid_speed) %>
+
+You may start deciding on the bids, or wait a while longer for other possible bidders.

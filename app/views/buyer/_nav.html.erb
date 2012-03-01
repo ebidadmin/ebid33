@@ -1,9 +1,11 @@
 <ul class="nav">
+	<%= content_tag :li, link_to('BUYER', '#'), class: 'active' %>
 	<%= content_tag :li, class: "dropdown #{drop_active?('entries')}" do %>
 		<%= drop_link 'Entries' %>
 		<ul class="dropdown-menu">
 			<%= nav_link('Create', new_user_entry_path(current_user)) %>
-			<%= nav_link('Drafts', buyer_entries_path(s: 'new')) %>
+			<%= nav_link('Saved Drafts', buyer_entries_path(s: 'new')) %>
+			<%= content_tag :li, '', class: 'divider' %>
 			<%= nav_link('Online', buyer_entries_path(s: 'online')) %>
 			<%= nav_link('For Decision', buyer_entries_path(s: 'for-decision')) %>
 			<%= content_tag :li, '', class: 'divider' %>
@@ -21,6 +23,7 @@
 			<%= content_tag :li, '', class: 'divider' %>
 			<%= nav_link('Delivered: Within Term', buyer_orders_path(s: 'delivered')) %>
 			<%= nav_link('Delivered: Overdue', buyer_orders_path(s: 'overdue')) %>
+			<%= content_tag :li, '', class: 'divider' %>
 			<%= nav_link('Recently Paid', buyer_orders_path(s: 'paid')) %>
 			<%= nav_link('Closed', buyer_orders_path(s: 'closed')) %>
 			<%= content_tag :li, '', class: 'divider' %>

@@ -3,7 +3,10 @@ class OrdersController < ApplicationController
   # load_and_authorize_resource
   
   def index
-    @orders = Order.find_status(params[:s]).includes(:entry => [:car_brand, :car_model, :user]).paginate(page: params[:page], per_page: 10)
+    @q = Order.search(params[:q])
+    @all_orders ||= @q.result.find_status(params[:s])
+    @orders = @all_orders.includes([:entry => [:car_brand, :car_model, :user]], :seller_company, :messages).paginate :page => params[:page], :per_page => 10
+
   end
 
   def show
@@ -18,7 +21,17 @@ class OrdersController < ApplicationController
     render layout: 'layout2'
   end
 
-  # print sheet
+  def print
+    @order = Order.find(params[:id])
+    @entry = @order.entry
+    
+    if current_user.role?(:admin)
+      @pvt_messages = @order.messages.pvt
+    else              
+      @pvt_messages = @order.messages.pvt.restricted(current_user.company)
+    end
+    render layout: 'print'
+  end
   
   def new
     @order = Order.new
@@ -33,8 +46,8 @@ class OrdersController < ApplicationController
 
     # Create a unique PO per seller
     @bids.group_by(&:user).each do |bidder, bids|
-      @order = @entry.orders.build(params[:order])
-      @order.populate(current_user, request.remote_ip, bidder, bids)
+      @order = current_user.orders.build(params[:order])
+      @order.populate(current_user, request.remote_ip, bidder, bids) ### check this, total does not match updated bids
       if @entry.orders << @order
         bids.each { |bid| bid.process_order(@order, winning_bids.fetch(bid.id.to_s)[0].to_i) }
       end
@@ -43,7 +56,7 @@ class OrdersController < ApplicationController
 
     if @orders.all?(&:valid?) 
       @entry.update_status unless @entry.is_online
-      # @orders.each { |order| OrderMailer.delay.order_alert(order) }
+      @orders.each { |o| Notify.new_order(o).deliver }
       unless @orders.count < 2
         flash[:success] = "Your POs have been released and will be processed right away.<br>
           Your suppliers are #{content_tag :strong, @orders.collect{ |o| o.seller.company.name }.to_sentence}. Thanks!".html_safe
@@ -131,8 +144,7 @@ class OrdersController < ApplicationController
     if params[:order][:message].present?
       @bids.each { |bid| bid.process_cancellation }
       @message = Message.for_cancelled_order(current_user, params[:msg_sender], @order, @bids, params[:order][:message].capitalize)
-      flash[:info] = "Order cancelled. Sayang ..."
-      # MessageMailer.delay.cancelled_order_message(@order, @message)
+      flash[:error] = "Order cancelled. Sayang ..."
       redirect_to @order
     else
       flash[:error] = "Please indicate your reason for cancelling the order."

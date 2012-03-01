@@ -1,0 +1,26 @@
+*** THIS IS A SYSTEM-GENERATED REMINDER. DO NOT REPLY (for comments, email to: cymarquez@ebid.com.ph) ***
+
+Hello <%= @company_name %> Poweruser!
+
+Please be reminded of the following payments DUE THIS WEEK worth <%= ph_currency(@orders.collect(&:order_total).sum) %> for the orders your company made through E-Bid
+
+<% @orders.each do |order| %>
+	Claim No:    	<%= order.entry.ref_no %>
+	Vehicle:     	<%= order.entry.model_name %>
+	Plate No.:   	<%= order.entry.plate_no %>
+		
+	Order Total:  <%= ph_currency(order.order_total) %>
+
+	Delivered:    <%= regular_date(order.delivered) %>
+	Due Date:     <%= regular_date(order.due_date) %>
+	
+	Use this link to view PO:  <%= order_url(order.id) %>
+	
+	********
+	
+<% end %>
+
+Hope you can pay on time ... it's what motivates the suppliers to give you the best parts prices 
+at the fastest response times.
+
+Thank you!

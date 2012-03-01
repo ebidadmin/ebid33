@@ -25,8 +25,11 @@
 #   r.update_attribute(:relisted, r.online)
 # end
 # 
-# orders = Order.all
+orders = Order.all
 # orders.each { |o| o.update_attribute(:seller_company_id, o.seller.company.id) }
+ids = orders.map(&:entry_id).uniq
+entries = Entry.find(ids)
+entries.each { |e| e.update_attribute(:orders_count, e.orders.count) }
 
-entries = Entry.all
-entries.each { |e| e.update_status }
+# entries = Entry.all
+# entries.each { |e| e.update_status }

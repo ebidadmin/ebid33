@@ -1,8 +1,6 @@
 <% title "Users" %>
-<%= content_tag :div, class: 'row' do %>
-	<%= content_tag :div, class: 'span12 ' do %>
 
-	<%= content_tag :table, class: 'condensed-table zebra-striped' do %>
+	<%= content_tag :table, class: 'table table-condensed table-striped' do %>
 		<%= content_tag :thead do %>
 			<%= content_tag :th, 'Active?', class: 'span1 center' %>
 			<%= content_tag :th, 'Last Activity', class: 'span3' %>
@@ -53,9 +51,6 @@
 			<% end %>
 		<% end %>
 	<% end %>
-
-	<% end %>
-<% end %>
 
 <%= will_paginate @users %>
 <div class="well">

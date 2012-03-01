@@ -7,44 +7,46 @@
 
 <%= content_tag :p, page_entries_info(@orders), class: 'muted' %>
 
-<%= content_tag :table, class: 'table table-condensed' do %>
-	<%= render 'orders/thead_index_basic' %>
-		<% @orders.group_by(&:entry).each do |entry, orders| %>
+<% if @orders.present? %>
+	<%= content_tag :table, class: 'table table-condensed' do %>
+		<%= render 'orders/thead_index_basic' %>
+			<% @orders.group_by(&:entry).each do |entry, orders| %>
 
-			<%= content_tag :tr do %>
-				<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
-					<%= content_tag :p, entry.ref_no, class: 'small' %>
-		      <%= content_tag :p, link_to(entry.model_name, buyer_show_path(entry))  %>
-					<%= content_tag :span, entry.plate_no %>
-					<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
-				<% end %>
-			<% end %>
-
-			<% for order in orders %>
 				<%= content_tag :tr do %>
-					<%= content_tag :td, order.seller_company.nickname, class: 'span2' %>
-					<%= content_tag :td, class: 'span4 center' do %>
-						<%= content_tag :b, currency(order.order_total) %>
-						<%= content_tag :span, pluralize(order.items_count, 'part'), class: 'small' %>
-						<%= content_tag :p, link_to("PO##{order.id}", order) %>
-						<% if order.messages.present? %>
-						<span class='highlight'>
-							<%= content_tag :i, '', class: 'icon-comment' %>
-							<%= order.messages.size %>
-						</span>
+					<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
+						<%= content_tag :p, entry.ref_no, class: 'small' %>
+			      <%= content_tag :p, link_to(entry.model_name, buyer_show_path(entry))  %>
+						<%= content_tag :span, entry.plate_no %>
+						<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
+					<% end %>
+				<% end %>
+
+				<% for order in orders %>
+					<%= content_tag :tr do %>
+						<%= content_tag :td, order.seller_company.nickname, class: 'span2' %>
+						<%= content_tag :td, class: 'span4 txtcenter' do %>
+							<%= content_tag :b, currency(order.order_total) %>
+							<%= content_tag :span, pluralize(order.items_count, 'part'), class: 'small' %>
+							<%= content_tag :p, link_to("PO##{order.id}", order) %>
+							<% if order.messages.present? %>
+							<span class='highlight'>
+								<%= content_tag :i, '', class: 'icon-comment' %>
+								<%= order.messages.size %>
+							</span>
+							<% end %>
+						<% end %>
+						<%= content_tag :td, class: 'span3 txtcenter' do %>
+							<%= order_status_helper(order) %>
+							<%= content_tag :p, "as of #{regular_date(order.status_date)}", class: 'small' %>
+							<%= change_status_link(order) %>
+							<%= confirm_payment_link(order, current_user) %>
+							<%= payment_tag(order) %>
 						<% end %>
 					<% end %>
-					<%= content_tag :td, class: 'span3 center' do %>
-						<%= order_status_helper(order) %>
-						<%= content_tag :p, "as of #{regular_date(order.status_date)}", class: 'small' %>
-						<%= change_status_link(order) %>
-						<%= confirm_payment_link(order, current_user) %>
-						<%= payment_tag(order) %>
-					<% end %>
 				<% end %>
-			<% end %>
 
-		<% end %>
+			<% end %>
+	<% end %>
 <% end %>
 
 <%= will_paginate @orders, inner_window: 2 %>

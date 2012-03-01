@@ -1,10 +1,10 @@
 <% title 'Decline Fees' %>
-<% subtitle "for unordered bids #{period_covered_helper(params[:q])}" %>
+<% subtitle "for parts not ordered #{period_covered_helper(params[:q])}" %>
 
 <%= content_tag :h2, class: 'row' do %>
 	<%= content_tag :span, ph_currency(@all_fees.total_fee), class: 'span2' %>
-	<%= content_tag :small, "Base: #{ph_currency(@all_fees.base_fee)}", class: 'span2' %>
-	<%= content_tag :small, "VAT: #{ph_currency(@all_fees.vat)}", class: 'span2' %>
+	<%= content_tag :small, "Base: #{currency(@all_fees.base_fee)}", class: 'span2' %>
+	<%= content_tag :small, "VAT: #{currency(@all_fees.vat)}", class: 'span2' %>
 	<%= display_seller_company %>
 <% end %>
 <%#= content_tag :p, page_entries_info(@fees), class: 'muted' %>
@@ -14,10 +14,10 @@
 			<%= content_tag :tr do %>
 				<%= content_tag :th, 'Vehicle', class: 'span4' %>
 				<%= content_tag :th, 'Parts', class: 'span4' %>
-				<%= content_tag :th, 'Lowest Bid', class: 'span2 right' %>
-				<%= content_tag :th, 'Factors', class: 'span1 center' %>
-				<%= content_tag :th, 'Fee', class: 'span2 right' %>
-				<%= content_tag :th, 'Supplier Share', class: 'span2 right' %>
+				<%= content_tag :th, 'Lowest Bid', class: 'span2 txtright' %>
+				<%= content_tag :th, 'Factors', class: 'span1 txtcenter' %>
+				<%= content_tag :th, 'Fee', class: 'span2 txtright' %>
+				<%= content_tag :th, 'Supplier Share', class: 'span2 txtright' %>
 			<% end %>
 		<% end %>
 		
@@ -41,7 +41,7 @@
 				<% for f in fees %>
 					<%= content_tag :tr do %>
 						<%= content_tag :td, f.line_item.name, class: 'span4' %>
-						<%= content_tag :td, class: 'span2 right' do %>
+						<%= content_tag :td, class: 'span2 txtright' do %>
 							<% if f.reversal? %>
 								<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
 							<% else %>
@@ -49,15 +49,15 @@
 								<%= content_tag :span, f.bid_type[0], class: 'label' %>
 							<% end %>
 						<% end %>
-						<%= content_tag :td, class: 'span2 center small' do %>
+						<%= content_tag :td, class: 'span2 txtcenter small' do %>
 							<%= content_tag :em, time_in_words(f.bid_speed) if f.bid_speed %><br>
 							<%= content_tag :em, 'PR: ' + f.perf_ratio.to_s if f.perf_ratio %>
 						<% end %>
-						<%= content_tag :td, class: 'span2 right' do %>
+						<%= content_tag :td, class: 'span2 txtright' do %>
 							<%= content_tag :b, currency(f.fee), class: "#{'negative' if f.fee < 0}" if f.fee != 0 %>
 							<%= content_tag :p, percentage3(f.fee_rate), class: 'small' if f.fee_rate %>
 						<% end %>
-						<%= content_tag :td, class: 'span2 right' do %>
+						<%= content_tag :td, class: 'span2 txtright' do %>
 							<%= content_tag :b, currency(f.split_amount), class: "#{'negative' if f.fee < 0}" if f.fee != 0  %>
 							<%#= content_tag :p, f.seller_company.nickname, class: 'small' if f.order_id.nil? && f.fee > 0  %>
 						<% end %>
@@ -86,31 +86,8 @@
 		<% end %>
 	  <%= content_tag :p, (f.submit 'Search', class: 'btn btn-primary') %>
 	<% end %>
+	<hr>
+	<%= link_with_icon('Preview', bprint_fees_path(q: params[:q]), 'print') %>
 <% end %>
 
-<% content_for :javascripts do %>
-	<% stylesheet 'blitzer/jquery-ui-1.8.6.custom' %>
-	<script type="text/javascript" charset="utf-8">
-	$(function() {
-		var dates = $( "#start, #end" ).datepicker({
-			dateFormat: "yy-mm-dd",
-			maxDate: 0,
-			numberOfMonths: 3,
-			showButtonPanel: true, 
-			showOn: "both",
-			buttonImage: '/assets/calendar.gif',
-			buttonImageOnly: true,
-			onSelect: function( selectedDate ) {
-				var option = this.id == "start" ? "minDate" : "maxDate",
-					instance = $( this ).data( "datepicker" ),
-					date = $.datepicker.parseDate(
-						instance.settings.dateFormat ||
-						$.datepicker._defaults.dateFormat,
-						selectedDate, instance.settings );
-				dates.not( this ).datepicker( "option", option, date );
-			}
-		});
-				
-	});
-	</script>
-<% end %>
+<%= render 'shared/datepicker2' %>

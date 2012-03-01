@@ -2,6 +2,7 @@
 <%= content_tag :dl, id: 'vehicle-info' do %>
 	<%= dl_helper 'Claim No.', @entry.ref_no if current_user.role?(:buyer) || @order %>
 	<% if @order %>
+		<%= dl_helper 'Plate No.',  @entry.plate_no %>
 		<%= dl_helper 'Insured', @order.ref_name %>
 	<% end %>
 	<%= dl_helper 'Serial No.', @entry.serial_no, 'important' %>

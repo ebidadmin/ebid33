@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120204142014) do
+ActiveRecord::Schema.define(:version => 20120224023216) do
 
   create_table "bids", :force => true do |t|
     t.integer  "user_id"
@@ -275,8 +275,8 @@ ActiveRecord::Schema.define(:version => 20120204142014) do
     t.string   "user_type"
     t.integer  "alias"
     t.integer  "user_company_id"
-    t.integer  "reciever_id"
-    t.integer  "reciever_company_id"
+    t.integer  "receiver_id"
+    t.integer  "receiver_company_id"
     t.integer  "entry_id"
     t.integer  "order_id"
     t.text     "message"
@@ -289,8 +289,8 @@ ActiveRecord::Schema.define(:version => 20120204142014) do
   add_index "messages", ["ancestry"], :name => "index_messages_on_ancestry"
   add_index "messages", ["entry_id"], :name => "index_messages_on_entry_id"
   add_index "messages", ["order_id"], :name => "index_messages_on_order_id"
-  add_index "messages", ["reciever_company_id"], :name => "index_messages_on_reciever_company_id"
-  add_index "messages", ["reciever_id"], :name => "index_messages_on_reciever_id"
+  add_index "messages", ["receiver_company_id"], :name => "index_messages_on_reciever_company_id"
+  add_index "messages", ["receiver_id"], :name => "index_messages_on_reciever_id"
   add_index "messages", ["user_company_id"], :name => "index_messages_on_user_company_id"
   add_index "messages", ["user_id"], :name => "index_messages_on_user_id"
 
@@ -313,6 +313,7 @@ ActiveRecord::Schema.define(:version => 20120204142014) do
     t.decimal  "order_total",         :precision => 10, :scale => 2, :default => 0.0,      :null => false
     t.datetime "created_at"
     t.integer  "seller_id"
+    t.integer  "seller_company_id",                                                        :null => false
     t.boolean  "seller_confirmation",                                :default => false,    :null => false
     t.datetime "confirmed"
     t.date     "delivered"
@@ -437,5 +438,41 @@ ActiveRecord::Schema.define(:version => 20120204142014) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["unlock_token"], :name => "index_users_on_unlock_token", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username"
+
+  create_table "var_companies", :force => true do |t|
+    t.string   "name"
+    t.integer  "creator_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "variances", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "company_id"
+    t.integer  "entry_id"
+    t.integer  "line_item_id"
+    t.integer  "qty",                                              :default => 1, :null => false
+    t.decimal  "var_base",          :precision => 10, :scale => 2
+    t.decimal  "discount",          :precision => 4,  :scale => 2
+    t.decimal  "var_amt",           :precision => 10, :scale => 2
+    t.decimal  "var_total",         :precision => 10, :scale => 2
+    t.string   "var_type"
+    t.integer  "var_company"
+    t.integer  "bid_id"
+    t.decimal  "amount",            :precision => 10, :scale => 2
+    t.decimal  "total",             :precision => 10, :scale => 2
+    t.string   "bid_type"
+    t.integer  "seller_company_id"
+    t.decimal  "variance",          :precision => 10, :scale => 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "variances", ["bid_id"], :name => "index_variances_on_bid_id"
+  add_index "variances", ["company_id"], :name => "index_variances_on_company_id"
+  add_index "variances", ["entry_id"], :name => "index_variances_on_entry_id"
+  add_index "variances", ["line_item_id"], :name => "index_variances_on_line_item_id"
+  add_index "variances", ["seller_company_id"], :name => "index_variances_on_seller_company_id"
+  add_index "variances", ["user_id"], :name => "index_variances_on_user_id"
 
 end

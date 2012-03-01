@@ -6,10 +6,10 @@
 		<%= content_tag :thead do %>
 			<%=  content_tag :th %>
 			<%=  content_tag :th, 'Part Description', class: 'span7' %>
-			<%=  content_tag :th, 'Type', class: 'span2 center' %>
-			<%=  content_tag :th, 'Qty', class: 'span2 center' %>
-			<%=  content_tag :th, 'Unit Price', class: 'span2 right' %>
-			<%=  content_tag :th, 'Cost', class: 'span3 right' %>
+			<%=  content_tag :th, 'Type', class: 'span2 txtcenter' %>
+			<%=  content_tag :th, 'Qty', class: 'span2 txtcenter' %>
+			<%=  content_tag :th, 'Unit Price', class: 'span2 txtright' %>
+			<%=  content_tag :th, 'Cost', class: 'span3 txtright' %>
 			<%=  content_tag :th, '', class: 'span1' %>
 		<% end %>
 			<% bids.each_with_index do |bid, index| %>
@@ -19,21 +19,21 @@
 						<%= bid.line_item.part_name %>
 						<%= content_tag :p, bid.line_item.specs, class: 'small' if bid.line_item.specs.present? %>
 					<% end %>
-					<%=  content_tag :td, (content_tag :span, bid.bid_type.upcase, class: 'label'), class: 'span2 center' %>
-					<%=  content_tag :td, bid_quantity_helper(bid, params[:action]), class: 'span2 center' %>
-					<%=  content_tag :td, currency(bid.amount), class: 'span2 right' %>
-					<%=  content_tag :td, class: 'span3 right' do %>
+					<%=  content_tag :td, (content_tag :span, bid.bid_type.upcase, class: 'label'), class: 'span2 txtcenter' %>
+					<%=  content_tag :td, bid_quantity_helper(bid, params[:action]), class: 'span2 txtcenter' %>
+					<%=  content_tag :td, currency(bid.amount), class: 'span2 txtright' %>
+					<%=  content_tag :td, class: 'span3 txtright' do %>
 						<%= currency(bid.total) %>
 					<% end %>
-					<%= content_tag :td, check_box_helper(bid, @order, current_user, params[:action]), class: 'span1 center' %>
+					<%= content_tag :td, check_box_helper(bid, @order, current_user, params[:action]), class: 'span1 txtcenter' %>
 				<% end %>
 
 			<% end %>
 
 			<%= content_tag :tr, class: 'total' do %>
-				<%= content_tag :th, total_label_helper(bids, params[:action]), colspan: 5, class: 'right' %>
-				<%= content_tag :th, total_amount_helper(bids, params[:action]), class: 'span3 right' %>
-				<%=  content_tag :th, '', class: '' %>
+				<%= content_tag :td, total_label_helper(bids, params[:action]), colspan: 5, class: 'txtright' %>
+				<%= content_tag :td, total_amount_helper(bids, params[:action]), class: 'span3 txtright' %>
+				<%=  content_tag :td, '', class: '' %>
 			<% end %>
 		<% end %>
 

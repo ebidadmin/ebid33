@@ -1,6 +1,4 @@
 class CarVariantsController < ApplicationController
-  # GET /car_variants
-  # GET /car_variants.json
   def index
     @car_variants = CarVariant.includes(:car_brand, :car_model).paginate(page: params[:page], per_page: 20)
 
@@ -10,8 +8,6 @@ class CarVariantsController < ApplicationController
     end
   end
 
-  # GET /car_variants/1
-  # GET /car_variants/1.json
   def show
     @car_variant = CarVariant.find(params[:id])
 
@@ -21,10 +17,9 @@ class CarVariantsController < ApplicationController
     end
   end
 
-  # GET /car_variants/new
-  # GET /car_variants/new.json
   def new
     @car_variant = CarVariant.new
+    @car_models = []
 
     respond_to do |format|
       format.html # new.html.erb

@@ -27,6 +27,7 @@ class Entry < ActiveRecord::Base
   has_many :orders
   has_many :messages, dependent: :destroy
   has_many :fees
+  has_many :variances, dependent: :destroy
   
   default_scope order('created_at DESC')
   scope :active, where('entries.bid_until >= ?', Date.today)
@@ -46,9 +47,10 @@ class Entry < ActiveRecord::Base
   
   YEAR_MODELS = (30.years.ago.year .. Date.today.year).to_a.reverse
   STATUS_TAGS = %w(New Online Additional Relisted For-Decision Ordered-IP Ordered-All Ordered-Declined Declined-IP Declined-All) 
-  TAGS_FOR_INDEX = %w(New Online For-Decision Closed)
+  # TAGS_FOR_INDEX = %w(new online for-decision ordered declined)
   TAGS_FOR_SIDEBAR = %w(online relisted bid_until decided expired)
   MIN_BIDDING_TIME = 5.minutes
+  DAYS_TO_EXPIRY = 3.days
   
   def model_name
     "#{year_model} #{car_brand.name if car_brand} #{car_model.name if car_model}".html_safe 
@@ -61,7 +63,7 @@ class Entry < ActiveRecord::Base
   def self.find_status(status)
     case status
     when 'new' then where(status: ['New', 'Edited'])
-    when 'online' then online.active
+    when 'online' then online#.active
     when 'for-decision' then for_decision.unexpired
     when 'ordered' then with_orders
     when 'declined' then declined
@@ -132,15 +134,52 @@ class Entry < ActiveRecord::Base
 	  end
 	end
 	
-  # def send_online_notification
-  #     for friend in @entry.user.company.friends
-  #       unless friend.users.nil?
-  #         for seller in friend.users
-  #           EntryMailer.delay.online_entry_alert(seller, @entry) if seller.opt_in == true
-  #         end
-  #       end
-  #     end
-  # end
+	def put_online
+	  if self.update_attributes(status: "Online", online: Time.now, bid_until: 1.week.from_now)
+      self.update_associated_status("Online")
+      self.send_online_mailer
+      flash = "Your entry is #{content_tag :strong, 'now online'}. Thanks!".html_safe
+    end
+	end
+	
+  def relist # also applicable for addtional parts
+    if line_items.relistable.present?
+      line_items.relistable.update_all(status: 'Relisted', relisted: Time.now)
+      self.update_attributes(status: 'Relisted', bid_until: 1.week.from_now, relisted: Time.now, relist_count: self.relist_count += 1, chargeable_expiry: nil, expired: nil)
+    end
+    if line_items.fresh.present?
+      line_items.fresh.update_all(status: 'Additional')
+      self.update_attributes(status: 'Additional', bid_until: 1.week.from_now, relisted: Time.now, relist_count: self.relist_count += 1, chargeable_expiry: nil, expired: nil)
+    end
+    self.send_online_mailer
+    flash = "Your entry is #{content_tag :strong, 'now online'}. Thanks!".html_safe
+  end
+  
+  def send_online_mailer
+    self.company.friends.includes(:users => :profile).each do |friend|
+      if friend.users.opt_in.present?
+        sellers = friend.users.opt_in.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }
+        Notify.online_entry(sellers, self).deliver 
+      end
+    end
+  end
+
+  def reveal
+    if self.update_attributes(status: "For-Decision", decided: Time.now, expired: nil)
+      line_items.includes(:bids, :order).each { |item| item.update_for_decision if item.order.blank? }
+      flash = "Bidding is now finished. Bids are revealed below. You can proceed to Create PO.".html_safe
+    end
+  end
+  
+	def expire
+    deadline = bid_until + DAYS_TO_EXPIRY 
+    if Time.now >= deadline && expired.blank?
+      line_items.each { |item| item.expire unless item.cannot_be_expired }
+      if update_attributes(:chargeable_expiry => true, :expired => Time.now)
+        update_status #unless orders.exists?
+      end
+    end
+	end
 	
 	def newly_created? 
     status == 'New' || status == 'Edited'

@@ -1,76 +1,83 @@
 <% title "Entries" %>
 
-<%= content_tag :ul, class: 'pills' do %>
-	<%= content_tag :li, link_to('All', entries_path), class: "" %>
-	<% Entry::TAGS_FOR_INDEX.each do |tag| %>
-		<%= content_tag :li, link_to(tag, entries_path(s: tag)), class: "" %>
-	<% end %>
-<% end %>
+<%= content_tag :p, page_entries_info(@entries) %>
 
-<%#= render 'index_grouped_orig' %>
-<%= content_tag :div, class: 'row' do %>
-	<%= content_tag :div, class: 'span12' do %>
-		<%= content_tag :table, class: 'condensed-table' do %>
-			<%= render 'entries/thead_index' %>
-		
-			<%= content_tag :tbody do %>
-				<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
-					<%= content_tag :tr do %>
-						<%= content_tag :td, colspan: 6, class: 'well' do %>
-							<%= content_tag :h5, regular_date(date) %>
+<%= content_tag :table, class: 'table table-condensed' do %>
+	<%= render 'entries/thead_index' %>
+
+	<%= content_tag :tbody do %>
+		<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
+			<%= content_tag :tr do %>
+				<%= content_tag :td, colspan: 6, class: 'well' do %>
+					<%= content_tag :h5, regular_date(date) %>
+				<% end %>
+			<% end %>
+
+			<% entries.each do |entry| %>
+				<%= content_tag :tr do %>
+					<%= content_tag :td, class: 'span2' do %>
+						<%= content_tag :p, entry.id, class: 'muted small' %>
+						<span>
+							<%= content_tag :i, '', class: 'icon-camera' %>
+							<%= entry.photos.size %>
+						</span>
+						<% if entry.messages.present? %>
+						<span class='highlight'>
+							<%= content_tag :i, '', class: 'icon-comment' %>
+							<%= entry.messages.size %>
+						</span>
 						<% end %>
+						<% if entry.orders.present? %>
+						<span class='highlight'>
+							<%= content_tag :i, '', class: 'icon-shopping-cart' %>
+							<%= entry.orders.size %>
+						</span>
+						<% end %><br>
+						<%= content_tag :em, entry.user.username, class: 'small'  %>
 					<% end %>
-
-					<% entries.each do |entry| %>
-						<%= content_tag :tr do %>
-							<%= content_tag :td, entry.id, class: 'span1 center' %>
-							<%= content_tag :td, class: 'span4' do %>
-					      <%= content_tag :p, link_to(entry.model_name, entry)  %>
-								<%= content_tag :p, entry.plate_no %>
-								<%= content_tag :em, "created by #{entry.user.username}" if entry.user %>
-							<% end %>
-							<%= content_tag :td, class: 'span3' do %>
-					      <%= content_tag :span, entry.city  %> /
-								<%= content_tag :span, entry.term_name %>
-								<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), seller_show_path(entry)) %>
-							<% end %>
-							<%= content_tag :td, entry.photos.size, class: 'span2 center' %>
-							<%= content_tag :td, class: 'span3' do %>
-					      <%= content_tag :p, number_of_bidders(entry)   %>
-								<%= content_tag :p, fastest_bid(entry) if entry.bids.present? %>
-					      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small' if entry.bid_until  %>
-							<% end %>
-							<%= content_tag :td, class: 'span3 center' do %>
-								<%= entry_status_helper(entry) %>
-								<%= content_tag :span, "as of #{regular_date(entry.status_date)}", class: 'small' %>
-								<%= content_tag :span, entry.messages.size, class: "label center" if entry.messages.present? %>
-							<% end %>
-						<% end %>
+					<%= content_tag :td, class: 'span4' do %>
+						<%= content_tag :p, entry.ref_no, class: 'small' %>
+			      <%= content_tag :p, link_to(entry.model_name, entry)  %>
+						<%= content_tag :span, entry.plate_no %>
+					<% end %>
+					<%= content_tag :td, class: 'span2' do %>
+			      <%= content_tag :p, entry.city  %>
+						<%= content_tag :p, entry.term_name %>
+						<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), entry) %>
+					<% end %>
+					<%= content_tag :td, class: 'span3' do %>
+			      <%= content_tag :p, number_of_bidders(entry)   %>
+						<%= content_tag :p, fastest_bid(entry) if entry.bids.present? %>
+			      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small' if entry.bid_until && entry.is_online %>
+					<% end %>
+					<%= content_tag :td, class: 'span3 txtcenter' do %>
+						<%= entry_status_helper(entry) %>
+						<%= content_tag :p, "as of #{regular_date(entry.status_date)}", class: 'small' %>
+						<%= content_tag :p, link_to('Reactivate for PO', buyer_reactivate_path(entry), class: 'btn small') if entry.can_reactivate %>
+						<%= order_now_helper(entry) %>
 					<% end %>
 				<% end %>
 			<% end %>
-			
 		<% end %>
 	<% end %>
+	
 <% end %>
-
 
 <%= will_paginate @entries, inner_window: 2 %>
-<%= content_tag :p, page_entries_info(@entries) %>
-
-<% if can? :create, :entry %>
-<div class="well">
-	<%= link_to "New Entry", new_entry_path, class: 'btn large primary'  %>
-</div>
-<% end %>
 
 <% content_for :sidebar do %>
 	<%= content_tag :h3, 'Search Entries' %>
-	<%= search_form_for @q, :url => buyer_entries_path, class: 'search' do |f| %>
+	<%= search_form_for @q, url: entries_path, class: 'search' do |f| %>
+	  <%= f.label 'ID' %>
+	  <%= f.text_field :id_eq, class: 'span2' %>
 	  <%= f.label 'Plate No.' %>
-	  <%= f.text_field :plate_no_cont, class: 'span3' %>
+	  <%= f.text_field :plate_no_cont, class: 'span2' %>
+	  <%= f.label 'Claim No.' %>
+	  <%= f.text_field :ref_no_cont, class: 'span2' %>
 	  <%= f.label 'User' %>
-	  <%#= f.grouped_collection_select :user_id_eq, @branches, :users, :name, :id, :shortname, {include_blank: true} %>
+	  <%= f.grouped_collection_select :user_id_eq, @branches, :users, :nickname, :id, :shortname, {include_blank: true} %>
+	  <%= f.label 'Car Brand' %>
+	  <%= f.grouped_collection_select :car_brand_id_eq, CarOrigin.includes(:car_brands), :car_brands, :name, :id, :name, {include_blank: true} %>
 	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
 	<% end %>
 <% end %>

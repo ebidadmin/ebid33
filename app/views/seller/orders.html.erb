@@ -5,57 +5,59 @@
 	<%= display_buyer_company %>
 <% end %>
 
-<%= content_tag :p, page_entries_info(@orders) %>
+<%= content_tag :p, page_entries_info(@orders), class: 'muted' %>
 
-<%= content_tag :table, class: 'table table-condensed' do %>
-	<%= render 'orders/thead_index_basic' %>
+<% if @orders.present? %>
+	<%= content_tag :table, class: 'table table-condensed' do %>
+		<%= render 'orders/thead_index_basic' %>
 
-	<% @orders.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_orders| %>
-		<%= content_tag :tr, class: 'well' do %>
-			<%= content_tag :td, colspan: 6 do %>
-				<%= content_tag :h5, regular_date(date) %>
-			<% end %>
-		<% end %>
-
-		<% grouped_orders.group_by(&:entry).each do |entry, orders| %>
-			<%= content_tag :tr do %>
-				<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
-		      <%= content_tag :p, link_to(entry.model_name, seller_show_path(entry))  %>
-					<%= content_tag :p, entry.plate_no %>
+		<% @orders.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_orders| %>
+			<%= content_tag :tr, class: 'well' do %>
+				<%= content_tag :td, colspan: 6 do %>
+					<%= content_tag :h5, regular_date(date) %>
 				<% end %>
 			<% end %>
 
-			<% for order in orders %>
+			<% grouped_orders.group_by(&:entry).each do |entry, orders| %>
 				<%= content_tag :tr do %>
-					<%= content_tag :td, order.company.nickname, class: 'span2' %>
-					
-					<%= content_tag :td, class: 'span4 center' do %>
-						<%= content_tag :b, currency(order.order_total) %>
-						<%= content_tag :span, pluralize(order.items_count, 'part'), class: 'small' %>
-						<%= content_tag :p, link_to("PO##{order.id}", order) %>
-						<% if order.messages.present? %>
-						<span class='highlight'>
-							<%= content_tag :i, '', class: 'icon-comment' %>
-							<%= order.messages.size %>
-						</span>
-						<% end %>
+					<%= content_tag :td, class: 'span4', rowspan: orders.count + 1 do %>
+			      <%= content_tag :p, link_to(entry.model_name, seller_show_path(entry))  %>
+						<%= content_tag :p, entry.plate_no %>
 					<% end %>
-					
-					<%= content_tag :td, class: 'span3 center' do %>
-						<%= order_status_helper(order) %>
-						<%= content_tag :p, "as of #{regular_date(order.status_date)}", class: 'small' %>
-						<%= change_status_link(order) %>
-						<%= confirm_payment_link(order, current_user) %>
-						<%= payment_tag(order) %>
-					<% end %> <!-- end td -->
-				<% end %> <!-- end tr -->
-			<% end %> <!-- order -->
-		<% end %> <!-- orders -->
-	<% end %> <!-- grouped_orders -->
+				<% end %>
 
-<% end %> <!-- table -->
+				<% for order in orders %>
+					<%= content_tag :tr do %>
+						<%= content_tag :td, order.company.nickname, class: 'span2' %>
 
-<%= will_paginate @orders, inner_window: 2 %>
+						<%= content_tag :td, class: 'span4 txtcenter' do %>
+							<%= content_tag :b, currency(order.order_total) %>
+							<%= content_tag :span, pluralize(order.items_count, 'part'), class: 'small' %>
+							<%= content_tag :p, link_to("PO##{order.id}", order) %>
+							<% if order.messages.present? %>
+							<span class='highlight'>
+								<%= content_tag :i, '', class: 'icon-comment' %>
+								<%= order.messages.size %>
+							</span>
+							<% end %>
+						<% end %>
+
+						<%= content_tag :td, class: 'span3 txtcenter' do %>
+							<%= order_status_helper(order) %>
+							<%= content_tag :p, "as of #{regular_date(order.status_date)}", class: 'small' %>
+							<%= change_status_link(order) %>
+							<%= confirm_payment_link(order, current_user) %>
+							<%= payment_tag(order) %>
+						<% end %> <!-- end td -->
+					<% end %> <!-- end tr -->
+				<% end %> <!-- order -->
+			<% end %> <!-- orders -->
+		<% end %> <!-- grouped_orders -->
+
+	<% end %> <!-- table -->
+
+	<%= will_paginate @orders, inner_window: 2 %>
+<% end %>
 
 <% content_for :sidebar do %>
 	<%= content_tag :h3, 'Search Orders' %>

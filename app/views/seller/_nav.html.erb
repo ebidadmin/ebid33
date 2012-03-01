@@ -1,4 +1,5 @@
 <ul class="nav">
+	<%= content_tag :li, link_to('SELLER', '#'), class: 'active' %>
 	<%= content_tag :li, class: "dropdown #{drop_active?('entries')}" do %>
 		<%= drop_link 'Entries' %>
 		<ul class="dropdown-menu">

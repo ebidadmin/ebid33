@@ -6,8 +6,8 @@
 		<% elsif current_user.role?(:seller) %>
 			<%= content_tag :th, 'Buyer', class: 'span2' %>
 		<% end %>
-		<%= content_tag :th, 'Details', class: 'span4 center' %>
-		<%= content_tag :th, 'Status', class: 'span3 center' %>
+		<%= content_tag :th, 'Details', class: 'span4 txtcenter' %>
+		<%= content_tag :th, 'Status', class: 'span3 txtcenter' %>
 	<% end %>
 <% end %>
 

@@ -1,0 +1,46 @@
+<% title "Variances" %>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Company</th>
+    <th>Seller Company</th>
+    <th>Entry</th>
+    <th>Line Item</th>
+    <th>Bid</th>
+    <th>Amount</th>
+    <th>Qty</th>
+    <th>Total</th>
+    <th>Bid Type</th>
+    <th>Var Amt</th>
+    <th>Var Total</th>
+    <th>Discount</th>
+    <th>Var Base</th>
+    <th>Variance</th>
+    <th>Var Company</th>
+  </tr>
+  <% for variance in @variances %>
+    <tr>
+      <td><%= variance.user_id %></td>
+      <td><%= variance.company_id %></td>
+      <td><%= variance.seller_company_id %></td>
+      <td><%= variance.entry_id %></td>
+      <td><%= variance.line_item_id %></td>
+      <td><%= variance.bid_id %></td>
+      <td><%= variance.amount %></td>
+      <td><%= variance.qty %></td>
+      <td><%= variance.total %></td>
+      <td><%= variance.bid_type %></td>
+      <td><%= variance.var_amt %></td>
+      <td><%= variance.var_total %></td>
+      <td><%= variance.discount %></td>
+      <td><%= variance.var_base %></td>
+      <td><%= variance.variance %></td>
+      <td><%= variance.var_company %></td>
+      <td><%= link_to "Show", variance %></td>
+      <td><%= link_to "Edit", edit_variance_path(variance) %></td>
+      <td><%= link_to "Destroy", variance, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+

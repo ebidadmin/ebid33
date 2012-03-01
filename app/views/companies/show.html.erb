@@ -1,17 +1,10 @@
-<% title "Company" %>
+<% title @company.name %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @company.name %>
-</p>
-<p>
-  <strong>Nickname:</strong>
-  <%= @company.nickname %>
-</p>
-<p>
-  <strong>Primary Role:</strong>
-  <%= @company.primary_role %>
-</p>
+<div class="first">
+<h2>Company Info</h2>
+<ul id="show-company-info">
+	<li><span>Primary Role:</span><%= @company.role.name.upcase unless @company.primary_role.nil? %></li>
+</ul>
 <p>
   <strong>Trial Start:</strong>
   <%= @company.trial_start %>
@@ -28,6 +21,27 @@
   <strong>Perf Ratio:</strong>
   <%= @company.perf_ratio %>
 </p>
+<%- if @company.users -%>
+	<h2>Registered Users: <%= pluralize @company.users.count, 'user' -%></h2>
+	<ol id="show-company-users">
+	<% for profile in @company.profiles -%>
+		<li>
+			Name: <%= profile.first_name -%> <%= profile.last_name -%><br />
+			Username: <%= profile.user.username -%><br />
+			<%= link_to 'See Profile', profile.user -%> 
+		</li><br />
+	<% end -%>
+	</ol>
+<% end -%>
+</div>
+<div class="second">
+<h2>Friends</h2>
+<ul>
+	<% for friend in @friends %>
+		<li class="friend"><%= friend.name %></li>
+	<% end %>
+</ul>	
+</div>
 
 <p>
   <%= link_to "Edit", edit_company_path(@company) %> |

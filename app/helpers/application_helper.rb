@@ -9,8 +9,8 @@ module ApplicationHelper
 
     difference_in_words = ''
 
-    difference_in_words << "#{distance_in_hours} hr " if distance_in_hours > 0
-    difference_in_words << "#{distance_in_minutes} min"
+    difference_in_words << "#{distance_in_hours}hr " if distance_in_hours > 0
+    difference_in_words << "#{distance_in_minutes}min"
   end
   
   def long_date(date)
@@ -58,8 +58,10 @@ module ApplicationHelper
   end
   
   def percentage3(target)
-    if target > 0
+    if target && target > 0
       number_to_percentage target, :precision => 3
+    elsif target.blank?
+      ''
     else
       'FREE'
     end

@@ -4,6 +4,7 @@ class LineItem < ActiveRecord::Base
   belongs_to :order
   has_many :bids, dependent: :destroy
   has_many :fees
+  has_one :variance, dependent: :destroy
   
   # default_scope includes(:car_part, :bids)
 
@@ -33,34 +34,21 @@ class LineItem < ActiveRecord::Base
 
 	def update_for_decision
 	  if bids.present?
-      update_attribute(:status, "For-Decision") unless order.present?
-      if bids.orig.present?
-        low_orig = bids.orig.not_cancelled.last
-        if low_orig
-        low_orig.update_attribute(:status, "For-Decision") unless order.present?
-        other_orig = bids.orig.not_cancelled.where("id != ?", low_orig)
-        other_orig.update_all(:status => "Lose") 
-        end
-      end
-      if bids.rep.present?
-        low_rep = bids.rep.not_cancelled.last
-        if low_rep
-        low_rep.update_attribute(:status, "For-Decision") unless order.present?
-        other_rep = bids.rep.not_cancelled.where("id != ?", low_rep)
-        other_rep.update_all(:status => "Lose") 
-        end
-      end
-      if bids.surp.present?
-        low_surp = bids.surp.not_cancelled.last
-        if low_surp
-        low_surp.update_attribute(:status, "For-Decision") unless order.present?
-        other_surp = bids.surp.not_cancelled.where("id != ?", low_surp)
-        other_surp.update_all(:status => "Lose") 
-        end
-      end
+      update_attribute(:status, "For-Decision")
+      bids.update_for_decision
 	  else
       update_attribute(:status, "No Bids") 
 	  end 
+	end
+	
+	def expire
+    if bids.present? #WITH BIDS
+      lowest_bid = bids.for_decision.not_cancelled.last
+      lowest_bid.expire
+      self.update_attribute(:status, "Expired")
+    else #WITHOUT BIDS
+      update_attribute(:status, "No Bids")
+    end
 	end
 
   def is_deleteable
@@ -75,15 +63,23 @@ class LineItem < ActiveRecord::Base
     status == "For-Decision" || status == "Expired"
   end
   
+  def cannot_be_expired
+    self.order_id.present? || self.declined_or_expired || self.cancelled
+  end
+  
   def declined_or_expired 
     status == "Declined" || status == "Expired"
+  end
+  
+  def cancelled
+    status.include?('Cancelled')
   end
 
   def status_color
     case status
     when 'Online', 'Additional', 'Relisted' then 'label-cool'
     when 'For-Decision' then 'highlight'
-    when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Just Paid', 'Paid', 'Closed' then 'label-success'
+    when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Paid!', 'Paid', 'Closed' then 'label-success'
     when 'Expired', 'Declined' then 'label-warning'
     when 'Cancelled by admin', 'Cancelled by buyer', 'Cancelled by seller', 'Cancelled' then 'label-black'
     else nil

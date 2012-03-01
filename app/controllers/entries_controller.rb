@@ -8,14 +8,13 @@ class EntriesController < ApplicationController
   
 
   def index
-    # @entries = current_user.entries.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 12).order('created_at DESC')
     @q = Entry.search(params[:q])
-    @entries = @q.result.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term).paginate(page: params[:page], per_page: 10).order('created_at DESC')
-    # @branches = Company.where(primary_role: 2).map { |c| c.branches }#Branch.includes(:users => :profile)
+    @entries = @q.result.find_status(params[:s]).includes(:user, :photos, :car_brand, :car_model, :bids, :city, :term, :messages, :orders).page(params[:page]).per_page(10)
+    @branches = Company.where(primary_role: 2).includes(:users => :profile)
   end
 
   def show
-    @entry = Entry.find(params[:id], include: [:messages => [[:user => :roles], [:receiver => :roles]]])
+    @entry = Entry.find(params[:id], include: [[:line_items => [:car_part, :bids, :order]], [:messages => [[:user => :roles], [:receiver => :roles]]]])
     @q = CarPart.search(params[:q])
 
     if current_user.role?(:admin)
@@ -45,6 +44,9 @@ class EntriesController < ApplicationController
         redirect_to @entry
       end
     else
+      @car_models = @car_variants = @cities = []
+      2.times { @entry.photos.build }
+      @entry.term_id = 4 # default credit term is 30 days
       flash[:error] = "Looks like you forgot to complete the required vehicle info.  Try again!"
       render 'new'
     end
@@ -77,63 +79,35 @@ class EntriesController < ApplicationController
   end
   
   def put_online
-    @entry = Entry.find(params[:id], include: [:line_items, :bids])
-    @line_items = @entry.line_items
-    
-    if @line_items.fresh.present? #&& @entry.photos.present?
-      if @entry.update_attributes(status: "Online", online: Time.now, bid_until: 1.week.from_now)
-        @entry.update_associated_status("Online")
-        flash[:notice] = "Your entry is #{content_tag :strong, 'now online'}. Thanks!".html_safe
-      end
+    @entry = Entry.find(params[:id], include: [:line_items => :car_part])
+    if @entry#.can_online
+      flash[:success] = @entry.put_online 
       redirect_to :back
-      # @entry.send_online_notification
     else
       flash[:error] = "Wait! Your entry is not yet complete. Please complete the photos and parts before you proceed."
       redirect_to :back
     end
   end
-  
-  def reveal 
-    @entry = Entry.find(params[:id], include: [:line_items => :bids])
-    unless @entry.bids.blank?
-      if @entry.update_attributes(status: "For-Decision", decided: Time.now)
-        for item in @entry.line_items.online#.includes(:bids, :order_item)
-          item.update_for_decision #unless item.order_item.present?
-        end
-        flash[:notice] = "Bidding is now finished. Bids are revealed below. You can proceed to Create PO.".html_safe
-      end
-    else
-      flash[:warning] = "Sorry, there no bids to reveal."
-    end 
-    redirect_to @entry
-  end
-  
+
   def relist
     @entry = Entry.find(params[:id])
-    @line_items = @entry.line_items
-    unless @line_items.without_bids.blank?
-      if @line_items.relistable.present?
-        @line_items.relistable.update_all(status: 'Relisted', relisted: Time.now)
-        @entry.update_attributes(status: 'Relisted', bid_until: 1.week.from_now, relisted: Time.now, relist_count: @entry.relist_count += 1, chargeable_expiry: nil, expired: nil)
-        flash[:notice] = "The items without bids have been re-listed and available again for bidding.".html_safe
-      end
-      if @line_items.fresh.present?
-        @line_items.fresh.update_all(status: 'Online')
-        @entry.update_attributes(status: 'Additional', bid_until: 1.week.from_now, relisted: Time.now, relist_count: @entry.relist_count += 1, chargeable_expiry: nil, expired: nil)
-        flash[:notice] = "New parts are now online and available for bidding.".html_safe
-      end
-      redirect_to buyer_show_path(@entry)#@entry
+    if @entry.can_relist || @entry.has_additionals
+      flash[:success] = @entry.relist
+      redirect_to :back
     else
       flash[:error] = "Sorry, there are no items to relist."
       redirect_to :back
     end
-    # for friend in @entry.user.company.friends
-    #   unless friend.users.nil?
-    #     for seller in friend.users
-    #       EntryMailer.delay.relisted_entry_alert(seller, @entry) if seller.opt_in == true
-    #     end
-    #   end
-    # end
+  end
+  
+  def reveal 
+    @entry = Entry.find(params[:id])
+    unless @entry.bids.blank?
+      flash[:success] = @entry.reveal
+    else
+      flash[:warning] = "Sorry, there no bids to reveal."
+    end 
+    redirect_to :back
   end
   
 end

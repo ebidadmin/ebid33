@@ -3,12 +3,12 @@
 
 <%= simple_form_for @order, url: confirm_cancel_order_path(@order), method: :put do |f|  %>
 	<%= render 'orders/items_table', bids: @bids %>
-	<div id="order-cancel-msg" class="span13">
+	<div id="order-cancel-msg">
 		<%= hidden_field_tag 'msg_sender', @msg_sender %>
-		<%= f.input :message, label: "Reason for cancellation", as: :text, input_html: { rows: 2, class: 'span12' } %>
+		<%= f.input :message, label: "Reason for cancellation", as: :text, required: true, input_html: { rows: 2, class: 'span9' } %>
 	</div>
 	<div id="order-cancel-btn" class="span3">
-		<%= submit_tag "Confirm Cancellation", confirm: 'Are you really sure you want CANCEL the order items?', class: 'btn danger floatright' %>
+		<%= submit_tag "Confirm Cancellation", confirm: 'Are you really sure you want CANCEL the order items?', class: 'btn btn-danger floatright' %>
 	</div>
 <% end %>
 

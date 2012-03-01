@@ -86,6 +86,7 @@ class Message < ActiveRecord::Base
       # "PARTIAL ORDER cancelled."
     end
     order.messages << msg
+    Notify.cancelled_order(order, msg).deliver
   end
   
   def can_be_edited(current_user)

@@ -1,21 +1,37 @@
 <% title "Fees" %>
 
-<%= content_tag :div, class: 'span12' do %>
-	<%= content_tag :table, class: 'condensed-table' do %>
+<%= content_tag :h2, class: 'row' do %>
+	<% if params[:t] == 'bf' %>
+		<%= content_tag :span, ph_currency(@all_fees.supplier_share), class: 'span2' %>
+		<%= display_buyer_company %>
+	<% else %>
+		<%= content_tag :span, ph_currency(@all_fees.total_fee), class: 'span2' %>
+		<%= content_tag :small, "Base: #{currency(@all_fees.base_fee)}", class: 'span2' %>
+		<%= content_tag :small, "VAT: #{currency(@all_fees.vat)}", class: 'span2' %>
+		<%= display_seller_company %>
+	<% end %>
+<% end %>
+
+<%= content_tag :p, page_entries_info(@fees), class: 'muted' %>
+
+	<%= content_tag :table, class: 'table table-condensed' do %>
 		<%= content_tag :thead do %>
 			<%= content_tag :tr do %>
 				<%= content_tag :th, 'Vehicle', class: 'span4' %>
 				<%= content_tag :th, 'Parts', class: 'span4' %>
-				<%= content_tag :th, 'Lowest Bid', class: 'span2 right' %>
-				<%= content_tag :th, 'Factors', class: 'span1 center' %>
-				<%= content_tag :th, 'Fee', class: 'span2 right' %>
-				<%= content_tag :th, 'Supplier Share', class: 'span2 right' %>
+				<%= content_tag :th, 'Lowest Bid', class: 'span2 txtright' %>
+				<%= content_tag :th, 'Factors', class: 'span1 txtcenter' %>
+				<%= content_tag :th, 'Fee', class: 'span2 txtright' %>
+				<% if params[:t] == 'bf' %>
+					<%= content_tag :th, 'Supplier Share', class: 'span2 txtright' %>
+				<% else %>
+					<%= content_tag :th, '', class: 'span2 txtright' %>
+				<% end %>
 			<% end %>
 		<% end %>
 		
-		<%= content_tag :tbody do %>
 			<% @fees.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_fees| %>
-				<%= content_tag :tr do %>
+				<%= content_tag :tr, class: 'well' do %>
 					<%= content_tag :td, colspan: 6 do %>
 						<%= content_tag :h5, regular_date(date) %>
 					<% end %>
@@ -25,30 +41,39 @@
 
 				<%= content_tag :tr do %>
 					<%= content_tag :td, class: 'span4', rowspan: fees.count + 1 do %>
-			      <%= content_tag :p, link_to(entry.model_name, entry)  %>
-						<%= content_tag :p, entry.plate_no %>
-						<%= content_tag :em, "created by #{entry.user.username}" %>
+			      <%= content_tag :p, link_to(entry.model_name, seller_show_path(entry))  %>
+						<%= content_tag :span, entry.plate_no %>
+						<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
 					<% end %>
 				<% end %>
 
 				<% for f in fees %>
 					<%= content_tag :tr do %>
 						<%= content_tag :td, f.line_item.name, class: 'span4' %>
-						<%= content_tag :td, class: 'span2 right' do %>
-							<%= content_tag :p, currency(f.bid_total), class: "" %>
-							<%= content_tag :em, f.bid_type, class: 'small' %>
+						<%= content_tag :td, class: 'span2 txtright' do %>
+							<% if f.reversal? %>
+								<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
+							<% else %>
+								<%= content_tag :span, currency(f.bid_total), class: "" %>
+								<%= content_tag :span, f.bid_type[0], class: 'label' %>
+							<% end %>
 						<% end %>
-						<%= content_tag :td, class: 'span1 center small' do %>
-							<%= content_tag :em, time_in_words(f.bid_speed), class: 'small' if f.bid_speed %><br>
-							<%= content_tag :em, 'PR: ' + f.perf_ratio.to_s, class: 'small' if f.perf_ratio %>
+						<%= content_tag :td, class: 'span2 txtcenter small' do %>
+							<%= content_tag :em, time_in_words(f.bid_speed) if f.bid_speed %><br>
+							<%= content_tag :em, 'PR: ' + f.perf_ratio.to_s if f.perf_ratio %>
 						<% end %>
-						<%= content_tag :td, class: 'span2 right' do %>
-							<%= content_tag :p, currency(f.fee), class: "" %>
-							<%= content_tag :em, percentage3(f.fee_rate), class: 'small' if f.fee_rate %>
+						<%= content_tag :td, class: 'span2 txtright' do %>
+							<%= content_tag :b, currency(f.fee), class: "#{'negative' if f.fee < 0}" if f.fee != 0 %>
+							<%= content_tag :p, percentage3(f.fee_rate), class: 'small' if f.fee_rate %>
 						<% end %>
-						<%= content_tag :td, class: 'span2 right' do %>
-							<%= content_tag :p, currency(f.split_amount), class: "" %>
-							<%= content_tag :em, f.seller_company.nickname, class: 'small' if f.order_id.nil? %>
+						<%= content_tag :td, class: 'span2 txtright' do %>
+						<% if params[:t] == 'bf' %>
+								<%= content_tag :b, currency(f.split_amount), class: "#{'negative' if f.fee < 0}" if f.fee != 0  %><br>
+								<%= content_tag :em, f.seller_company.nickname, class: 'small' if f.order_id.nil? %>
+						<% else %>
+								<%= content_tag :p, link_to("PO # #{f.order_id}", f.order) %>
+								<%= content_tag :em, f.seller_company.nickname, class: 'small' %>
+						<% end %>
 						<% end %>
 					<% end %>
 				<% end %>
@@ -56,21 +81,27 @@
 				<% end %>
 
 			<% end %>
-		<% end %>
+			<%= content_tag :tr, class: 'total' do %>
+				<%= content_tag :td, '', rowspan: 3, colspan: 2  %>
+				<%= content_tag :td, 'Sub-totals', class: 'txtright', colspan: 2 %>
+				<%= content_tag :td, class: 'txtright' do %>
+					<%= content_tag :p, currency(@fees.base_fee) %>
+				<% end %>
+			<% end %>
 		
 	<% end %>
-<% end %>
 
 <%= will_paginate @fees %>
-<p><%= link_to "New Fee", new_fee_path %></p>
 
 <% content_for :sidebar do %>
 	<%= content_tag :h3, 'Search Fees' %>
-	<%= search_form_for @q, :url => fees_path do |f| %>
+	<%= search_form_for @q, url: fees_path(t: params[:t]) do |f| %>
 	  <%= f.label 'Plate No.' %>
-	  <%= f.text_field :entry_plate_no_cont, class: 'span3' %>
+	  <%= f.text_field :entry_plate_no_cont, class: 'span2' %>
 	  <%= f.label 'Buyer' %>
 	  <%= content_tag :p, (f.collection_select :buyer_company_id_matches, Company.where(primary_role: 2), :id, :nickname, include_blank: true) %>
+	  <%= f.label 'Seller' %>
+	  <%= content_tag :p, (f.collection_select :seller_company_id_matches, Company.where(primary_role: 3), :id, :nickname, include_blank: true) %>
 	  <%= f.label 'Period Covered' %>
 		<%= content_tag :p do %>
 		<%= f.text_field :created_at_gteq, id: 'start', class: 'span1 small' %> -
@@ -79,3 +110,5 @@
 	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
 	<% end %>
 <% end %>
+
+<%= render 'shared/datepicker2' %>

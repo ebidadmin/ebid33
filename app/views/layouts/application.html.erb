@@ -14,7 +14,6 @@
   <body class="<%= params[:controller] %>">
         <%= render 'shared/navigation' %>
     <div class="container">
-      <section id="main" role="main">
 	     <% flash.each do |name, msg| %>
 	       <%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
 	     <% end %>
@@ -36,7 +35,6 @@
 						<%= yield(:search_form) %>
 					</div> <!-- end of span4 -->
 				</div>
-      </section>
     </div> <!--! end of .container -->
       <footer>
       </footer>

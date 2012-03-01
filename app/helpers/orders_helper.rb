@@ -5,10 +5,10 @@ module OrdersHelper
       if order.confirmed >= Date.today - 3.days
         display = order.status
       elsif order.confirmed >= Date.today - 5.days
-        display = "Age: #{time_ago_in_words(order.confirmed)} ago"
+        display = "Age: #{time_ago_in_words(order.confirmed)}"
         color = "label-warning"
       else
-        display = "Not delivered?<br> Age: #{time_ago_in_words(order.confirmed)} ago".html_safe
+        display = "Not delivered?<br> Age: #{time_ago_in_words(order.confirmed)}".html_safe
         color = "label-important"
       end
     when 'Delivered'
@@ -56,9 +56,9 @@ module OrdersHelper
     tag = case order.status
     when 'For-Delivery' then 'Delivered'
     when 'Delivered' #then 'Paid'
-      if can? :create, :order
+      if can? :create, :orders
         'Paid!' # buyer's tagging only ... for subsequent confirmation by seller
-      else
+      elsif can? :create, :bids
         'Paid'
       end
     else nil

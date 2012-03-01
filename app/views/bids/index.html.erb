@@ -1,70 +1,62 @@
 <% title "Bids" %>
 
-<%= content_tag :div, class: 'row' do %>
-	<%= content_tag :div, class: 'span12' do %>
-		<%= content_tag :table, class: 'condensed-table' do %>
+<%= content_tag :p, page_entries_info(@line_items), class: 'muted' %>
 
-			<%= content_tag :thead do %>
-				<%= content_tag :tr do %>
-					<%= content_tag :th, 'Vehicle', class: 'span4' %>
-					<%= content_tag :th, 'Parts', class: 'span5' %>
-					<%= content_tag :th, 'Orig', class: 'span2 center' %>
-					<%= content_tag :th, 'Rep', class: 'span2 center' %>
-					<%= content_tag :th, 'Surp', class: 'span2 center' %>
-				<% end %>
-			<% end %>
+<%= content_tag :table, class: 'table table-condensed' do %>
 
-			<%= content_tag :tbody do %>
-				<% @line_items.group_by(&:entry).each do |entry, items| %>
+	<%= content_tag :thead do %>
+			<%= content_tag :th, 'Vehicle', class: 'span4' %>
+			<%= content_tag :th, 'Parts', class: 'span5' %>
+			<%= content_tag :th, 'Orig', class: 'span2 txtcenter' %>
+			<%= content_tag :th, 'Rep', class: 'span2 txtcenter' %>
+			<%= content_tag :th, 'Surp', class: 'span2 txtcenter' %>
+	<% end %>
 
-					<%= content_tag :tr do %>
-						<%= content_tag :td, class: 'span4', rowspan: items.count + 1  do %>
-				      <%= content_tag :p, link_to(entry.model_name, entry)  %>
-							<%= content_tag :p, entry.plate_no %>
-							<%= content_tag :em, "created by #{entry.user.username}" %>
-							<%= content_tag :p, long_date(entry.online), class: 'small' %>
-						<% end %>
-					<% end %>
-					
-					<% items.each do |item| %>
-						<%= content_tag :tr do %>
+		<% @line_items.group_by(&:entry).each do |entry, items| %>
 
-							<%= content_tag :td, "#{item.name} #{item.id}", class: 'span5' %>						
-							<%= content_tag :td, class: 'span2 center' do %>
-								<% item.bids.orig.each do |bid| %>
-									<%= render bid if bid.present? %>
-								<% end %>
-							<% end %>
-							<%= content_tag :td, class: 'span2 center' do %>
-								<% item.bids.rep.each do |bid| %>
-									<%= render bid if bid.present? %>
-								<% end %>
-							<% end %>
-							<%= content_tag :td, class: 'span2 center' do %>
-								<% item.bids.surp.each do |bid| %>
-									<%= render bid if bid.present? %>
-								<% end %>
-							<% end %>
-							
-						<% end %>
-					<% end %>
-
+			<%= content_tag :tr do %>
+				<%= content_tag :td, class: 'span4', rowspan: items.count + 1  do %>
+		      <%= content_tag :p, link_to(entry.model_name, entry)  %>
+					<%= content_tag :p, entry.plate_no %>
+					<%= content_tag :em, "created by #{entry.user.username}" %>
+					<%= content_tag :p, long_date(entry.online), class: 'small' %>
 				<% end %>
 			<% end %>
 			
+			<% items.each do |item| %>
+				<%= content_tag :tr do %>
+
+					<%= content_tag :td, "#{item.name} #{item.id}", class: 'span5' %>						
+					<% %w(original replacement surplus).each do |t| %>
+						<td class="<%= t[0..3] %> bids span2 txtcenter">
+
+							<% item.bids.group_by(&:bid_type).each do |type, bids| %>
+								<% if t == type %>
+									<%= render bids %>
+								<% end %> 
+							<% end %>
+
+						</td>
+					<% end %>
+					
+				<% end %>
+			<% end %>
+
 		<% end %>
-	<% end %>
+	
 <% end %>
 
 <%= will_paginate @line_items, inner_window: 2 %>
-<%= content_tag :p, page_entries_info(@line_items) %>
-<p><%= link_to "New Bid", new_bid_path %></p>
 
 <% content_for :sidebar do %>
 	<%= content_tag :h3, 'Search Entries' %>
-	<%= search_form_for @q, :url => bids_path, class: 'search' do |f| %>
+		<%= search_form_for @q, :url => bids_path, class: 'search' do |f| %>
 	  <%= f.label 'Plate No.' %>
-	  <%= f.text_field :entry_plate_no_cont, class: 'span3' %>
+	  <%= f.text_field :entry_plate_no_cont, class: 'span2' %>
+	  <%= f.label 'Car Brand' %>
+	  <%= f.grouped_collection_select :entry_car_brand_id_eq, CarOrigin.all, :car_brands, :name, :id, :name, {include_blank: true} %>
+	  <%= f.label 'Status' %>
+	  <%= f.select :bids_status_eq, Bid::STATUS_TAGS, {include_blank: true} %>
 	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
 	<% end %>
 <% end %>

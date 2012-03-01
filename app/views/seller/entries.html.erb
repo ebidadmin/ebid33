@@ -43,13 +43,13 @@
 					<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), seller_show_path(entry)) %>
 				<% end %>
 				<%= content_tag :td, class: 'span3' do %>
-					<%= content_tag :p, supplier_bid_rate(entry, entry.bids.by_user(current_user)) %>
+					<%= content_tag :p, supplier_bid_rate(entry, entry.bids.by_user(current_user.company.users)) %>
 		      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small muted' if entry.bid_until && entry.is_online %>
 				<% end %>
-				<%= content_tag :td, class: 'span3 center' do %>
+				<%= content_tag :td, class: 'span3 txtcenter' do %>
 					<%= entry_status_helper(entry) %>
 					<%= content_tag :span, "as of #{regular_date(entry.status_date)}", class: 'small' %>
-					<%= check_box_tag 'entries[]', entry.id %>
+					<%= check_box_tag 'entries[]', entry.id if entry.is_online %>
 				<% end %>
 			<% end %>
 		<% end %>
@@ -58,8 +58,9 @@
 <% end %>
 
 <div class="well">
-	<%= content_tag :em, 'You can print a bidding worksheet. Use the checkboxes to select the items you want to print.', class: 'small' %>
 	<%= submit_tag 'Print Bidding Worksheet', class: 'btn floatright' %>
+	<%= content_tag :em, 'You can print a bidding worksheet. Use the checkboxes to select the items you want to print.', class: 'small' %><br>
+	<%= content_tag :em, '(leave them blank to select all)', class: 'small' %>
 </div>
 <% end %>
 <%= will_paginate @entries, inner_window: 2 %>

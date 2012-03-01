@@ -1,4 +1,4 @@
-$("div.msg-form").html("<%= escape_javascript(content_tag :h3, flash[:notice], class: 'highlight center') %>"); 
+$("div.msg-form").html("<%= escape_javascript(content_tag :h3, flash[:notice], class: 'highlight txtcenter') %>"); 
 <% if @message.open_tag == true %>
 	$("div.messages #public").replaceWith("<%= escape_javascript(render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public') %>");
 	// $("div.messages #public").append("<%= escape_javascript(render 'messages/msg_line', m: @message, k: nil) %>");

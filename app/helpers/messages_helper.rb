@@ -24,6 +24,14 @@ module MessagesHelper
     end
   end
   
+  def btn_class(order=nil)
+    if order
+      'span8'
+    else
+      'span5'
+    end
+  end
+  
   def user_signature(message, current_user)
     sender = case message.user
     when current_user then content_tag :span, 'YOU said', class: 'label label-info'

@@ -1,0 +1,35 @@
+one:
+  user_id: 1
+  company_id: 1
+  seller_company_id: 1
+  entry_id: 1
+  line_item_id: 1
+  bid_id: 1
+  amount: 9.99
+  qty: 1
+  total: 9.99
+  bid_type: MyString
+  var_amt: 9.99
+  var_total: 9.99
+  discount: 9.99
+  var_base: 9.99
+  variance: 9.99
+  var_company: 1
+
+two:
+  user_id: 1
+  company_id: 1
+  seller_company_id: 1
+  entry_id: 1
+  line_item_id: 1
+  bid_id: 1
+  amount: 9.99
+  qty: 1
+  total: 9.99
+  bid_type: MyString
+  var_amt: 9.99
+  var_total: 9.99
+  discount: 9.99
+  var_base: 9.99
+  variance: 9.99
+  var_company: 1

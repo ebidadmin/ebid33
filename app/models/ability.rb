@@ -11,10 +11,11 @@ class Ability
     elsif user.role?(:buyer)
       can :access, :home, :cart
       can :access, :users#, id: user.id
-      can :access, [:entries, :orders]#, user_id: [user.company.users]
+      can :access, [:orders]#, user_id: [user.company.users]
       can :access, [:car_brands, :car_models, :car_variants, :regions]
       can :access, :messages, user_id: user.id
       can :read, :fees
+      can :create, :car_variant
     elsif user.role?(:seller)
       can :access, :home, :bids
       can :access, :users, id: user.id

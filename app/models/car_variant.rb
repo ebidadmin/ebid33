@@ -6,4 +6,9 @@ class CarVariant < ActiveRecord::Base
   has_many :entries
   
   attr_accessible :car_brand_id, :car_model_id, :name, :start_year, :end_year
+  attr_accessor :new_model
+  
+  validates_presence_of :name
+  
+  
 end

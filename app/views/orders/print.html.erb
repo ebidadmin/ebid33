@@ -1,0 +1,103 @@
+<% title "Purchase Order" %>
+<% subtitle "ID# #{@order.id}" %>
+
+<%= content_tag :section, class: 'order row' do %>
+	<%= content_tag :div, class: 'buyer-company span3' do %>
+		<%= content_tag :p, 'Buyer', class: 'label'  %>
+		<%= content_tag :h5, @order.company.name %>
+		<%= content_tag :p, @order.branch.address1  %>
+		<%= content_tag :p, @order.branch.address2  %>
+		<%= content_tag :p, @order.branch.city.name %>
+		<%= content_tag :p, class: 'user' do %>
+		  <% if @order.user != @entry.user %>
+				<%= @order.user.profile %> /
+			<% end %>
+			  <%= @entry.user.profile %>
+			<% end %>
+		<%= content_tag :p, @order.user.phone %>
+		<%= content_tag :p, @order.user.email %>
+	<% end %>
+
+	<%= content_tag :div, class: 'seller-company span3' do %>
+		<%= content_tag :p, 'Seller', class: 'label'  %>
+		<%= content_tag :h5, @order.seller.company.name %>
+		<%= content_tag :p, @order.seller.address1  %>
+		<%= content_tag :p, @order.seller.address2  %>
+		<%= content_tag :p, @order.seller.city_name %>
+		<%= content_tag :p, @order.seller.profile, class: 'user' %>
+		<%= content_tag :p, @order.seller.phone %>
+		<%= content_tag :p, @order.seller.email %>
+	<% end %>
+
+	<%= content_tag :div, class: 'status-box span4' do %>
+		<%= content_tag :h3, "Buyer's PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
+		<dl>
+			<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
+			<% if @order.confirmed %>
+				<%= dl_helper 'PO Confirmed', long_date(@order.confirmed) %>
+			<% else %>
+				<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...') %>
+			<% end %>
+			<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
+			<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>
+			<%= dl_helper 'Tagged as Paid', (regular_date(@order.paid_temp) + '<br>' + confirm_payment_link(@order, current_user)).html_safe if @order.paid_temp && @order.paid.nil? %>
+			<%= dl_helper 'Paid', regular_date(@order.paid) if @order.paid %>
+			<%= dl_helper 'Cancelled', regular_date(@order.cancelled) if @order.cancelled %>
+		</dl>
+	<% end %>
+<% end %>
+
+<%= content_tag :section, class: 'order row' do %>
+	<%= content_tag :h2, 'Order Details', class: 'order-caption span10'  %>
+	<%= content_tag :div, class: 'span4' do %>
+		<%= render 'shared/info_vehicle' %>
+	<% end %>
+	
+	<%= content_tag :div, class: 'delivery span4 floatright' do %>
+		<%= content_tag :h5, 'DELIVER TO'  %>
+		<%= content_tag :h4, @order.deliver_to %>
+		<%= content_tag :p do %>
+			<%= @order.address1.gsub(/\,/,"") %>
+			<%= ", #{@order.address2}" if @order.address2.present? %>
+		<% end %>
+		<%= content_tag :dl do %>
+			<%= dl_helper 'Contact person', @order.contact_person %>
+			<%= dl_helper 'Phone', @order.phone %>
+			<%= dl_helper 'Fax', @order.fax if @order.fax.present? %>
+			<%= dl_helper 'Instructions', @order.instructions, 'instr' if @order.instructions.present? %>
+		<% end %>
+	<% end %>
+<% end %>
+
+<%= content_tag :table, class: 'table' do %>
+	<%= content_tag :thead do %>
+		<%=  content_tag :th %>
+		<%=  content_tag :th, 'Part Description' %>
+		<%=  content_tag :th, 'Type', class: 'center' %>
+		<%=  content_tag :th, 'Qty', class: 'center' %>
+		<%=  content_tag :th, 'Unit Price', class: 'right' %>
+		<%=  content_tag :th, 'Cost', class: 'right' %>
+	<% end %>
+	<% @order.bids.each_with_index do |bid, index| %>
+		<%= content_tag :tr, class: "#{'cancelled' if bid.cancelled?}" do %>
+			<%=  content_tag :td, "#{content_tag :b, index + 1, class: 'label'}".html_safe, class: 'span1' %>
+			<%=  content_tag :td, class: 'span4' do %>
+				<%= bid.line_item.part_name %>
+				<%= content_tag :code, bid.line_item.specs, class: 'small' if bid.line_item.specs.present? %>
+			<% end %>
+			<%=  content_tag :td, (content_tag :span, bid.bid_type.upcase, class: 'label'), class: 'span2 center' %>
+			<%=  content_tag :td, bid.quantity, class: 'span1 center' %>
+			<%=  content_tag :td, currency(bid.amount), class: 'span2 right' %>
+			<%=  content_tag :td, currency(bid.total), class: 'span2 right' %>
+		<% end %>
+	<% end %>
+
+	<%= content_tag :tr, class: 'total' do %>
+		<%= content_tag :td, total_label_helper(@order.bids.not_cancelled, params[:action]), colspan: 5, class: 'right' %>
+		<%= content_tag :td, total_amount_helper(@order.bids.not_cancelled, params[:action]), class: 'span2 right' %>
+	<% end %>
+<% end %>
+
+<%= content_tag :section, class: 'order messages' do %>
+	<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' if @pvt_messages.present? %>
+<% end %>

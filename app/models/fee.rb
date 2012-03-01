@@ -33,7 +33,7 @@ class Fee < ActiveRecord::Base
     else     
       where(:buyer_id => user)
     end
-   end
+  end
   
   def self.filter_period(search_query=nil)
     if search_query.present?

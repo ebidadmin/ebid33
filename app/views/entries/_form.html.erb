@@ -1,10 +1,10 @@
 <%= content_tag :fieldset do %>
 	<%= content_tag :legend, 'Vehicle' %>
 	<div class="clearfix row">
-		<%= f.input :ref_no, label: 'Claim No.', hint: 'What will you use to track your entry?', wrapper_class: 'span4' %>
-		<%= f.input :date_of_loss, as: :string, input_html: {id: 'datepicker'}, wrapper_class: 'span4', placeholder: 'Click to select date', hint: 'Format: YYYY-MM-DD' %>
+		<%= f.input :ref_no, label: 'Claim No.', wrapper_class: 'span4' %>
+		<%= f.input :date_of_loss, as: :string, input_html: {id: 'datepickers'}, wrapper_class: 'span4', placeholder: 'Click to select date', hint: 'Format: YYYY-MM-DD' %>
 	</div>
-	<%= f.input :vehicle, required: true do  %>
+	<%= f.input :vehicle, wrapper_class: 'clearfix', required: true do  %>
 		<%= f.input :year_model, collection: Entry::YEAR_MODELS, label: false, wrapper_html: { id: 'veh-year' }, prompt: 'Select Year' %>
 		<%= f.input :car_brand, label: false, wrapper_html: { id: 'veh-brand' } do %>
 		  <%= f.grouped_collection_select :car_brand_id,  @car_origins, :car_brands, :name, :id, :name, :include_blank => 'Select Brand' %>
@@ -12,6 +12,7 @@
 		<% end %>
 		<%= f.input :car_model_id, collection:  @car_models, label: false, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type', hint: 'example: Fortuner' %>
 		<%= f.input :car_variant_id, collection:  @car_variants, label: false, wrapper_html: { id: 'veh-variant' }, :include_blank => 'Select Variant', hint: 'example: 2.5 G AT' %>
+		<%= link_to 'Click here', new_car_variant_path %>
 	<% end %>
 	<div class="clearfix row">
 		<%= f.input :plate_no, label: 'Plate Number', hint: "#{content_tag :strong, 'Proper format: XYZ-123'} (except diplomatic plates or conduction stickers)".html_safe, wrapper_class: 'span3' %>
@@ -45,18 +46,17 @@
 		<%= f.link_to_add "#{content_tag :i, '', class: 'icon-picture icon-white' } Add Another Photo".html_safe, :photos, class: 'btn btn-primary' %>
 <% end %>
 
-<%= render 'misc_details' %>
+<%= render 'misc_details', f: f  %>
 <%#= render 'edit_parts_list', f: f %>
 
 <div class="well">
-  <%= f.button :submit, class: 'btn btn-primary floatright'  %>
+  <%= f.button :submit, class: 'btn-primary floatright'  %>
 	<%= link_to "Cancel", :back, class: 'btn', type: 'reset' %>
 </div>
 
 <% content_for :javascripts do %>
 	<% stylesheet 'blitzer/jquery-ui-1.8.6.custom' %>
-	<%= javascript_include_tag 'jquery_nested_form' %>
-	<%#= javascript_include_tag 'jquery.fileupload', 'jquery.fileupload-ui', 'jquery.fileupload-ip' %>
+	<%= javascript_include_tag 'jquery_nested_form', 'rails.validations' %>
 	<script type="text/javascript" charset="utf-8">
 	$(function() {
 		$('#datepicker').datepicker({ 

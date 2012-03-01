@@ -1,9 +1,11 @@
 <div id="<%= msg_type.downcase %>" class="row">
 	<%= content_tag :h3, "#{msg_type} Messages", class: 'span4' %>
 
-	<div id="" class="msg-buttons span5 ">
-		<%= message_buttons(msg_type, @entry, @order) %>
-	</div>
+	<% if params[:action] != 'print_entry' && params[:action] != 'print' %>
+		<div class="msg-buttons <%= btn_class(@order) %>">
+			<%= message_buttons(msg_type, @entry, @order) %>
+		</div>
+	<% end %>
 
 	<% if messages.present? %>
 		<%= content_tag :dl do %>

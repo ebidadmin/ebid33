@@ -10,7 +10,7 @@
 				
 			<% if @entry.line_items.present? %>
 				<%= content_tag :tr, (content_tag :th, 'Existing Parts', colspan: 3), class: 'well' %>
-				<% @entry.line_items.each_with_index do |item, index| %>
+				<% @entry.line_items.includes(:car_part).each_with_index do |item, index| %>
 					<%= content_tag :tr, id: "item_#{item.id}" do %>
 						<%= content_tag :td, class: 'span3' do %>
 							<%= content_tag :span, index + 1, class: 'label index'  %>

@@ -75,9 +75,10 @@
 	<%= render 'orders/items_table', bids: @order.bids %>
 
 	<%= content_tag :div, class: 'well' do %>
-	  <%= link_to "Edit", edit_order_path(@order), class: 'btn' if can? :update, :order %> 
+	  <%= link_with_icon("Back", :back, 'backward') %>
+	  <%= link_with_icon("Edit", edit_order_path(@order), 'pencil') if can? :update, :order %> 
 	  <%= link_to "Delete", @order, :confirm => 'Are you sure?', :method => :delete, class: 'btn' if can? :access, :all %> 
-	  <%= link_to "Previous Page", :back, class: 'btn' %>
+		<%= link_with_icon('Preview', print_order_path(@order), 'print') %>
 		<% if can? :accept, :orders %>
 			<%= link_to "Accept Order", accept_order_path(@order), class: 'btn btn-success floatright' unless @order.seller_confirmation? %>
 		<% end %>

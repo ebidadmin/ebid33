@@ -1,0 +1,26 @@
+<% content_for :javascripts do %>
+	<% stylesheet 'blitzer/jquery-ui-1.8.6.custom' %>
+	<script type="text/javascript" charset="utf-8">
+	$(function() {
+		var dates = $( "#start, #end" ).datepicker({
+			dateFormat: "yy-mm-dd",
+			maxDate: 0,
+			numberOfMonths: 3,
+			showButtonPanel: true, 
+			showOn: "both",
+			buttonImage: '/assets/calendar.gif',
+			buttonImageOnly: true,
+			onSelect: function( selectedDate ) {
+				var option = this.id == "start" ? "minDate" : "maxDate",
+					instance = $( this ).data( "datepicker" ),
+					date = $.datepicker.parseDate(
+						instance.settings.dateFormat ||
+						$.datepicker._defaults.dateFormat,
+						selectedDate, instance.settings );
+				dates.not( this ).datepicker( "option", option, date );
+			}
+		});
+				
+	});
+	</script>
+<% end %>

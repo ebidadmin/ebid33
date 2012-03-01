@@ -1,11 +1,12 @@
 Ebid33::Application.routes.draw do
 
+  resources :var_companies
+
   devise_for :users, path: :account, controllers: {sessions: "sessions"}
   
-  
   # match 'users/:user_id/entries(/:page)' => 'entries#index', :as => :user_entries, :via => :get
-  resources :users do
-    resources :entries, :shallow => true
+  resources :users, :shallow => true do
+    resources :entries
   end
 
   resources :entries, :shallow => true do
@@ -16,6 +17,7 @@ Ebid33::Application.routes.draw do
       get :reactivate
       get :print
     end
+    resources :variances
   end
 
   resources :line_items do
@@ -88,14 +90,24 @@ Ebid33::Application.routes.draw do
   scope 'buyer' do
     get 'entries(/:s)' => 'buyer#entries', as: :buyer_entries
     get 'show/:id' => 'buyer#show', as: :buyer_show
-    get 'surrender/:id' => 'buyer#surrender', as: :buyer_surrender
-    post 'surrender_letter/:id' => 'buyer#surrender_letter', as: :buyer_surrender_letter
+    get 'show/:id/print' => 'buyer#print_entry', as: :print_entry
     get 'reactivate/:id' => 'buyer#reactivate', as: :buyer_reactivate
     get 'orders(/:s(/:id))' => 'buyer#orders', as: :buyer_orders
     get 'fees(/:t)' => 'buyer#fees', as: :buyer_fees
+    get 'surrender/:id' => 'buyer#surrender', as: :surrender_parts
+    post 'surrender_letter/:id' => 'buyer#surrender_letter', as: :surrender_letter
+  end
+  
+  scope 'admin' do
+    get 'update_ratios' => 'admin#update_ratios', as: :update_ratios
+    get 'expire_entries' => 'admin#expire_entries', as: :expire_entries
+    get 'tag_payments' => 'admin#tag_payments', as: :tag_payments
+    get 'send_payment_reminder' => 'admin#send_payment_reminder', as: :send_payment_reminder
   end
 
-  resources :fees
+  resources :fees do
+    get :bprint, on: :collection
+  end
   resources :ratings
   resources :searches
   resources :branches

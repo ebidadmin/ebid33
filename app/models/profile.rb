@@ -9,7 +9,7 @@ class Profile < ActiveRecord::Base
   belongs_to :branch
   belongs_to :rank
   
-  default_scope includes(:company)
+  # default_scope includes(:company)
   
   validates_presence_of :company, :branch_id, :first_name, :last_name, :phone, :birthdate
   

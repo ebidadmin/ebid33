@@ -4,8 +4,7 @@
 
 <% end %>
 
-<%= content_tag :div, class: 'span12' do %>
-	<%= content_tag :table, class: '' do %>
+	<%= content_tag :table, class: 'table table-condensed' do %>
 		<%= content_tag :thead do %>
 			<%= content_tag :th, 'ID', class: 'span1 center' %>
 			<%= content_tag :th, 'Sender', class: 'span2' %>
@@ -48,7 +47,6 @@
 			<% end %>
 		<% end %>
 	<% end %>
-<% end %>
 
 
 <%= will_paginate @messages, inner_window: 2 %>

@@ -1,6 +1,7 @@
 <% title "New Entry" %>
+<% subtitle "Fields marked with #{content_tag :em, 'asterisks (*)'} are required.".html_safe %>
 
-<%= simple_nested_form_for @entry, form_class: '' do |f| %>
+<%= simple_nested_form_for @entry, validate: true do |f| %>
 	<%= render 'form', f: f %>
 <% end %>
 

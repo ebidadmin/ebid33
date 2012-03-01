@@ -1,0 +1,19 @@
+<% title "Var Companies" %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Creator</th>
+  </tr>
+  <% for var_company in @var_companies %>
+    <tr>
+      <td><%= var_company.name %></td>
+      <td><%= var_company.creator_id %></td>
+      <td><%= link_to "Show", var_company %></td>
+      <td><%= link_to "Edit", edit_var_company_path(var_company) %></td>
+      <td><%= link_to "Destroy", var_company, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Var Company", new_var_company_path %></p>

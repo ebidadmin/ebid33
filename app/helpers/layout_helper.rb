@@ -40,4 +40,17 @@ module LayoutHelper
     "active" if params[:action] == action
   end
   
+  def drop_active_cont?(controller)
+    "active" if params[:controller] == controller
+  end
+
+  def link_with_icon(name, page, icon_name, klass=nil, white=false, print=false)
+    icon = content_tag(:i, '', class: "icon-#{icon_name}#{' icon-white' if white == true}")
+    if print == true
+  		link_to (icon + ' ' + name), page, class: "btn #{klass}", onclick: "window.print(); return false" 
+    else
+      link_to (icon + ' ' + name), page, class: "btn #{klass}"
+    end
+  end
+  
 end

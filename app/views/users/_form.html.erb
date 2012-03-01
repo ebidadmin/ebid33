@@ -42,6 +42,12 @@
 			</div>
 		</div>
 	</fieldset>
+	<% if can? :assign, :role %>
+		<fieldset>
+			<legend>Roles</legend>
+			<%= f.association :roles, label: false, as: :check_boxes %>
+		</fieldset>	
+	<% end %>
 	<hr>
 	
 	<div class="well">
@@ -49,7 +55,7 @@
 		  <%= link_to "Show", @user, class: 'btn' %> 
 		  <%= link_to "View All", users_path, class: 'btn' %>
 		<% end %>
-		<%= f.button :submit, class: 'btn success floatright' %>
+		<%= f.button :submit, class: 'btn btn-success floatright' %>
 		<%= link_to "Cancel", :back, class: 'btn floatright' %>
 	</div>
 

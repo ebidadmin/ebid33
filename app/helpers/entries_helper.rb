@@ -1,5 +1,12 @@
 module EntriesHelper
   
+  def entry_username_helper(entry)
+    if entry.user == current_user
+      content_tag :span, 'Yours', class: 'label'
+    else
+      content_tag :em, entry.user.username, class: 'small'
+    end
+  end
   def bidding_session_time_helper(entry, klass=nil)
     if entry.is_online 
       if Time.now < entry.bid_until
@@ -31,6 +38,22 @@ module EntriesHelper
   def entry_status_helper(entry, klass=nil)
     content_tag :p, class: "label #{entry.status_color} #{klass}" do
       "#{entry.show_status}#{'<br> (with cancellation)' if entry.bids.collect(&:status).include?('Cancelled')}".html_safe
+    end
+  end
+  
+  def order_now_helper(entry)
+    if (entry.status == "For-Decision" || entry.status == "Ordered-IP" || entry.status == "Declined-IP") && entry.expired.nil?
+      deadline = entry.bid_until + 3.days
+      if Time.now < deadline 
+        content_tag(:span, "Order Now!", class: 'label label-important') +
+        content_tag(:p, "Expiry: #{time_ago_in_words(deadline)}")
+      elsif Time.now == deadline
+        content_tag(:span, "Order Now!", class: 'label label-important') +
+        content_tag(:p, "Expiring Today")
+      elsif Time.now > deadline
+        content_tag(:span, "Lapsed", class: 'label') +
+        content_tag(:p, regular_date(deadline), class: 'muted')
+      end
     end
   end
   

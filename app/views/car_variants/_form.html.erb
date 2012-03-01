@@ -1,41 +1,26 @@
-<%= form_for(@car_variant) do |f| %>
-  <% if @car_variant.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@car_variant.errors.count, "error") %> prohibited this car_variant from being saved:</h2>
-
-      <ul>
-      <% @car_variant.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :car_brand_id %><br />
-    <%= f.number_field :car_brand_id %>
-  </div>
-  <div class="field">
-    <%= f.label :car_model_id %><br />
-    <%= f.number_field :car_model_id %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :start_year %><br />
-    <%= f.text_field :start_year %>
-  </div>
-  <div class="field">
-    <%= f.label :end_year %><br />
-    <%= f.text_field :end_year %>
-  </div>
-  <div class="field">
-    <%= f.label :creator_id %><br />
-    <%= f.number_field :creator_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+<%= simple_form_for @car_variant do |f| %>
+	<%= f.input :car_brand, wrapper_html: { id: 'veh-brand' } do %>
+	  <%= f.grouped_collection_select :car_brand_id,  CarOrigin.all, :car_brands, :name, :id, :name, {:include_blank => 'Choose Brand'} %>
+	<% end %>
+	<%= f.input :car_model_id, collection:  @car_models, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type', hint: 'example: Fortuner' %>
+	<%= f.input :new_model, :label => 'New Model' do %>
+		<%= f.text_field :new_model %>
+		<%= f.hint 'Note: use this field only to create a new Car Model' %>
+		<%= f.hint "#{content_tag :strong, 'Example: Innova (Diesel)'}".html_safe %>
+	<% end %>
+	<%= f.input :name, :label => 'New Variant' do %>
+		<%= f.text_field :name %>
+		<%= f.hint "#{content_tag :strong, 'Example: 2.5 MT Special'}".html_safe %>
+	<% end %>
+	<% if current_user.role?('admin') %>
+		<%= f.input :start_year %>
+		<%= f.input :end_year %>
+	<% end %>
+	<%= f.button :submit %>
+	<%= link_to "Cancel", :back, :class => 'italic' if current_user.role?('admin') %> 
+	<%= link_to "Cancel", new_user_entry_path(current_user), :class => 'italic' unless current_user.role?('admin')%> 
+	<% if current_user.role?('admin') %>
+	  | <%= link_to "Show", @car_variant %> 
+	  | <%= link_to "View All", car_variants_path %>
+	<% end %>
 <% end %>

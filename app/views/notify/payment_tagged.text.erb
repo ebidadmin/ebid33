@@ -1,0 +1,24 @@
+Hello <%= @order.seller.profile.first_name %>!
+
+<%= @entry.company.nickname %> tagged a Purchase Order as "Paid":
+
+	Vehicle:    <%= @entry.model_name %>
+	Plate No.: 	<%= @entry.plate_no %>
+
+	Parts Delivered: 
+	
+		<% @order.bids.each do |li| %>
+		[ <%= li.quantity %> ]  <%= li.line_item.part_name.html_safe %>
+		<% end %>
+		
+	PO Released:     <%= regular_date(@order.created_at) %>	
+	Date Delivered:  <%= regular_date(@order.delivered) %>
+
+	Tagged asPaid:   <%= regular_date(@order.paid_temp) %>
+
+Please login to your account to confirm this payment (<%= order_url(@order.id) %>).
+
+In case you cannot confirm this action within three (3) days, it means that you have already received the payment 
+and E-Bid shall consider this PO as "Closed".
+
+Thank you!
