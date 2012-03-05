@@ -1,4 +1,5 @@
 class SellerController < ApplicationController
+  before_filter :search_by_origin, only: [:bids, :fees]
   
   def entries
     @q ||= Entry.find_status(params[:s]).search(params[:q])
@@ -33,9 +34,8 @@ class SellerController < ApplicationController
     @q = Order.search(params[:q])
     @all_orders ||= @q.result.find_status(params[:s]).by_this_seller(current_user.company)
     @orders = @all_orders.includes([:entry => [:car_brand, :car_model, :user]], :company, :messages).page(params[:page]).per_page(10)
-    # generate mailers if FD orders become old
  
-    buyer_present?
+    @buyer_company = Company.find(params[:q][:company_id_matches]).nickname if params[:q]
   end
   
   def fees
@@ -44,13 +44,7 @@ class SellerController < ApplicationController
     @fees = @all_fees.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], [:seller_company], :order).page(params[:page]).per_page(20)
 
     buyer_present?
+    seller_present?
   end
 
-  private
-  
-  def buyer_present?
-    if params[:q] && params[:q][:company_id_matches].present?
-      @buyer_company = Company.find(params[:q][:company_id_matches])
-    end
-  end
 end

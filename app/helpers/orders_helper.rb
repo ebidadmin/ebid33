@@ -1,6 +1,13 @@
 module OrdersHelper
   def order_status_helper(order)
     case order.status
+    when 'New PO', 'PO Released'
+      if order.created_at <= Time.now - 2.days
+        display = "Still unaccepted by #{order.seller.nickname}?<br> Age: #{time_ago_in_words(order.created_at)}".html_safe
+        color = "label-warning"
+      else
+        display = order.status
+      end
     when 'For-Delivery'
       if order.confirmed >= Date.today - 3.days
         display = order.status
@@ -35,20 +42,13 @@ module OrdersHelper
   
   def payment_tag(order)
     if order.was_fulfilled
-      # if order.is_not_yet_paid 
-      #   if Date.today > order.due_date
-      #     content_tag :span, "Overdue: #{pluralize order.days_overdue, 'day'}", class: 'label important'
-      #   else
-      #     content_tag :span, "Due in: #{pluralize order.days_underdue, 'day'}", class: 'label important'
-      #   end
       if order.paid && order.paid_but_overdue
         if order.paid_but_overdue > 0
-          content_tag :span, "Overdue: #{pluralize order.paid_but_overdue, 'day'}", class: 'label label-important'
+          content_tag :span, "Overdue: #{pluralize order.paid_but_overdue, 'day'}", class: 'payment-tag label label-important'
         else
-          content_tag :span, "Paid on time!", class: 'label label-success'
+          content_tag :span, "Paid on time!", class: 'payment-tag label label-success'
         end
       end
-      
     end
   end
   
@@ -58,7 +58,7 @@ module OrdersHelper
     when 'Delivered' #then 'Paid'
       if can? :create, :orders
         'Paid!' # buyer's tagging only ... for subsequent confirmation by seller
-      elsif can? :create, :bids
+      else
         'Paid'
       end
     else nil
@@ -69,7 +69,7 @@ module OrdersHelper
   def confirm_payment_link(order, user)
     if order.paid_temp && order.paid.nil?
       if order.seller_id == user.id
-        link_to("#{content_tag :i, '', class: 'icon-check icon-white'} Confirm Payment".html_safe, change_status_order_path(order, cs: 'Confirm Payment'), confirm: 'Are you sure?', class: 'btn small btn-info')
+        link_to("#{content_tag :i, '', class: 'icon-check icon-white'} Confirm Payment".html_safe, change_status_order_path(order, cs: 'Paid'), confirm: 'Are you sure?', class: 'btn small btn-info')
       else
         content_tag :span, "awaiting seller's confirmation", class: 'label label-info'
       end
@@ -77,12 +77,16 @@ module OrdersHelper
   end
   
   def link_to_entry_helper(entry)
-		if can? :create, :entry
-		  link_to "Review Entry & Photos",	buyer_show_path(@entry), class: 'btn btn-info floatright'
-		else                                                                                 
-		  link_to "Review Entry & Photos", seller_show_path(@entry), class: 'btn btn-info floatright' 
+		if can? :create, :entries                                                       
+      # link_to "Review Entry & Photos",  buyer_show_path(@entry), class: 'btn btn-info'
+		  link_with_icon "Review Entry/Photos", buyer_show_path(@entry), 'folder-open', 'btn-info', true 
+		else                                                                             
+      # link_to "Review Entry & Photos", seller_show_path(@entry), class: 'btn btn-info' 
+		  link_with_icon "Review Entry/Photos", seller_show_path(@entry), 'folder-open', 'btn-info', true 
 		end
-		
   end
   
+  def link_to_accept(order)
+    link_to "Accept Order", accept_order_path(order), rel: 'popover', data: { content: 'Accept the order to confirm.', "original-title" => 'Can you deliver?'}, class: 'accept btn btn-success floatright'		
+  end
 end

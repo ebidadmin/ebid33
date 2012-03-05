@@ -10,7 +10,7 @@
 //= require_tree .
 
 $(function() { 
-	var loading = "<span class='loading'>loading ...</span>"	
+	var loading = "<span class='loading'><img src='/assets/loading.gif'></span>"	
 	$('div#veh-brand select').change(function() {
 		var brand_id = $(this).val();	
 		$('div#veh-model select').after(loading)
@@ -69,14 +69,6 @@ $(function() {
 	});
 	
 	// $('div#cart-search').hide();
-	$('.photo-set a').fancybox({
-		'transitionIn'		: 'none',
-		'transitionOut'		: 'none',
-		'titlePosition' 	: 'over',
-		'titleFormat'		: function(title, currentArray, currentIndex, currentOpts) {
-			return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
-		}
-	});
 	// function autosaveForm() {
 	//   $('form[data-remote]').submit();
 	// }

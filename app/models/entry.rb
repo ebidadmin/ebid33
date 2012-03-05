@@ -63,8 +63,8 @@ class Entry < ActiveRecord::Base
   def self.find_status(status)
     case status
     when 'new' then where(status: ['New', 'Edited'])
-    when 'online' then online#.active
-    when 'for-decision' then for_decision.unexpired
+    when 'online' then online.active
+    when 'for-decision' then for_decision.unexpired.order('decided DESC')
     when 'ordered' then with_orders
     when 'declined' then declined
     when 'all' then for_seller
@@ -73,15 +73,15 @@ class Entry < ActiveRecord::Base
   end
     
   def self.by_this_buyer(user, search_query=nil)
-    if search_query.present?
-      scoped
-    else
+    # if search_query.present?
+    #   scoped
+    # else
       if user.role?(:powerbuyer)
         where(company_id: user.company)
       else
         where(user_id: user)
       end
-    end
+    # end
   end
   
 	def add_line_items_from_cart(cart, specs, hash_items=nil)
@@ -138,7 +138,7 @@ class Entry < ActiveRecord::Base
 	  if self.update_attributes(status: "Online", online: Time.now, bid_until: 1.week.from_now)
       self.update_associated_status("Online")
       self.send_online_mailer
-      flash = "Your entry is #{content_tag :strong, 'now online'}. Thanks!".html_safe
+      flash = "Your entry is #{content_tag :strong, 'now online'}. Suppliers have been notifed through email.".html_safe
     end
 	end
 	
@@ -159,7 +159,7 @@ class Entry < ActiveRecord::Base
     self.company.friends.includes(:users => :profile).each do |friend|
       if friend.users.opt_in.present?
         sellers = friend.users.opt_in.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }
-        Notify.online_entry(sellers, self).deliver 
+        Notify.delay.online_entry(sellers, self)#.deliver 
       end
     end
   end
@@ -171,14 +171,21 @@ class Entry < ActiveRecord::Base
     end
   end
   
-	def expire
-    deadline = bid_until + DAYS_TO_EXPIRY 
-    if Time.now >= deadline && expired.blank?
+	def expire(force=nil)
+	  if force
       line_items.each { |item| item.expire unless item.cannot_be_expired }
       if update_attributes(:chargeable_expiry => true, :expired => Time.now)
         update_status #unless orders.exists?
       end
-    end
+	  else
+      deadline = bid_until + DAYS_TO_EXPIRY 
+      if Time.now >= deadline && expired.blank?
+        line_items.each { |item| item.expire unless item.cannot_be_expired }
+        if update_attributes(:chargeable_expiry => true, :expired => Time.now)
+          update_status #unless orders.exists?
+        end
+      end
+	  end
 	end
 	
 	def newly_created? 

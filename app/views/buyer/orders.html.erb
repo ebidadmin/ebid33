@@ -56,6 +56,14 @@
 	<%= search_form_for @q, :url => buyer_orders_path, class: 'search' do |f| %>
 	  <%= f.label 'Plate No.' %>
 	  <%= f.text_field :entry_plate_no_cont, class: 'span2' %>
+	  <%= f.label 'Claim No.' %>
+	  <%= f.text_field :entry_ref_no_cont, class: 'span2' %>
+	  <%= f.label 'Car Brand' %>
+	  <%= f.grouped_collection_select :entry_car_brand_id_eq, @car_origins, :car_brands, :name, :id, :name, {include_blank: true} %>
+		<% if can? :search, :users %>
+			<%= f.label 'User' %>
+		  <%= f.grouped_collection_select :user_id_eq, @branches, :users, :name, :id, :shortname, {include_blank: true} %>
+		<% end %>
 	  <%= f.label 'Seller' %>
 	  <%= f.collection_select :seller_company_id_matches, Company.where(primary_role: 3), :id, :nickname, include_blank: true %>
 	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>

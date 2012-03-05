@@ -30,7 +30,7 @@
 	<% end %>
 
 	<%= content_tag :div, class: 'status-box span5 offset1' do %>
-		<%= content_tag :h3, "Buyer's PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
+		<%= content_tag :h3, "#{@order.company.nickname}'s PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
 		<dl>
 			<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
 			<% if @order.confirmed %>
@@ -75,19 +75,29 @@
 	<%= render 'orders/items_table', bids: @order.bids %>
 
 	<%= content_tag :div, class: 'well' do %>
-	  <%= link_with_icon("Back", :back, 'backward') %>
-	  <%= link_with_icon("Edit", edit_order_path(@order), 'pencil') if can? :update, :order %> 
-	  <%= link_to "Delete", @order, :confirm => 'Are you sure?', :method => :delete, class: 'btn' if can? :access, :all %> 
+	  <%= link_with_icon("", :back, 'backward') %>
+	  <%= link_with_icon("Edit", edit_order_path(@order), 'pencil') if can? :update, :orders %> 
+	  <%= link_to "Delete", @order, :confirm => 'Are you sure?', :method => :delete, class: 'btn' if can? :delete, :orders %> 
 		<%= link_with_icon('Preview', print_order_path(@order), 'print') %>
-		<% if can? :accept, :orders %>
-			<%= link_to "Accept Order", accept_order_path(@order), class: 'btn btn-success floatright' unless @order.seller_confirmation? %>
-		<% end %>
 		<%= link_to_entry_helper(@entry) %>
-		<% if @order.can_be_cancelled(current_user, params[:action]) %>
-		<%= content_tag :div, id: 'order-cancel-box', class: 'floatright' do %>
-			<%= content_tag :span, 'Cancellations? Check some items or check all' %> 
-			<%= submit_tag 'Cancel', class: 'btn' %>
+
+		<% if can?(:accept, :orders) && !@order.seller_confirmation? %>
+			<%= link_to_accept(@order) %>
+			<% content_for :javascripts do %>
+				<%= javascript_include_tag 'bootstrap-tooltip' %>
+				<%= javascript_include_tag 'bootstrap-popover' %>
+				<script type="text/javascript" charset="utf-8">
+					$('a.accept').popover({placement: 'top'}).popover('show');
+				</script>
+			<% end %>
 		<% end %>
+
+
+		<% if @order.can_be_cancelled(current_user, params[:action]) %>
+			<%= content_tag :div, id: 'order-cancel-box', class: 'pull-right' do %>
+				<%= content_tag :span, 'Use the checkboxes to select.' %> 
+				<%= submit_tag 'Cancel Items', class: 'btn' %>
+			<% end %>
 		<% end %>
 	<% end %>
 <% end %>

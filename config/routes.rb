@@ -103,11 +103,20 @@ Ebid33::Application.routes.draw do
     get 'expire_entries' => 'admin#expire_entries', as: :expire_entries
     get 'tag_payments' => 'admin#tag_payments', as: :tag_payments
     get 'send_payment_reminder' => 'admin#send_payment_reminder', as: :send_payment_reminder
+    get 'delivery_reminder' => 'admin#delivery_reminder', as: :delivery_reminder
   end
 
-  resources :fees do
-    get :bprint, on: :collection
+  # match 'fees/:t' => 'fees#index', as: :fees
+  # resources :fees do
+  #   get :bprint, on: :collection
+  # end
+  
+  scope 'fees' do
+    get '/:t' => 'fees#index', as: :fees
+    get '/:t/print' => 'fees#print', as: :print_fees
   end
+  
+  resources :fees
   resources :ratings
   resources :searches
   resources :branches

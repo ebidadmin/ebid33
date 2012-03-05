@@ -4,13 +4,7 @@
 
 <%= content_tag :table, class: 'table table-condensed' do %>
 
-	<%= content_tag :thead do %>
-			<%= content_tag :th, 'Vehicle', class: 'span4' %>
-			<%= content_tag :th, 'Parts', class: 'span5' %>
-			<%= content_tag :th, 'Orig', class: 'span2 txtcenter' %>
-			<%= content_tag :th, 'Rep', class: 'span2 txtcenter' %>
-			<%= content_tag :th, 'Surp', class: 'span2 txtcenter' %>
-	<% end %>
+	<%= render 'bids/thead_index' %>
 
 		<% @line_items.group_by(&:entry).each do |entry, items| %>
 
@@ -20,13 +14,17 @@
 					<%= content_tag :p, entry.plate_no %>
 					<%= content_tag :em, "created by #{entry.user.username}" %>
 					<%= content_tag :p, long_date(entry.online), class: 'small' %>
+					<%= content_tag :span, entry.show_status, class: "label #{entry.status_color}" %>
 				<% end %>
 			<% end %>
 			
 			<% items.each do |item| %>
 				<%= content_tag :tr do %>
 
-					<%= content_tag :td, "#{item.name} #{item.id}", class: 'span5' %>						
+				<%= content_tag :td, class: 'span4' do %>
+					<%= content_tag :p, item.part_name %>
+					<%= content_tag :span, item.id %>
+				<% end %>
 					<% %w(original replacement surplus).each do |t| %>
 						<td class="<%= t[0..3] %> bids span2 txtcenter">
 

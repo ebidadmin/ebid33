@@ -4,6 +4,6 @@
 		<%= content_tag :span, bid.status, class: 'small' %>
 		<%#= content_tag :span, bid.bid_type, class: 'small' %>
 		<%#= content_tag :span, time_in_words(bid.bid_speed), class: 'small' %>
-		<%= link_to('&times;'.html_safe, bid, confirm: 'Are you sure??? This will permanently delete your bid.', method: :delete, remote: true, class: 'close') if bid.online? %>
+		<%= link_to('&times;'.html_safe, bid, rel: 'tooltip', data: {'original-title' => 'delete bid'}, confirm: 'Are you sure??? This will permanently delete your bid.', method: :delete, remote: true, class: 'close') if bid.online? %>
 	<% end %>
 <% end %>

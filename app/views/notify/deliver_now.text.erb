@@ -1,0 +1,27 @@
+*** THIS IS A SYSTEM-GENERATED REMINDER. DO NOT REPLY (for comments, email to: cymarquez@ebid.com.ph) ***
+
+Hello <%= @company_name %>!
+
+Please be reminded of the following orders worth <%= ph_currency(@orders.collect(&:order_total).sum) %> that have not been delivered per our records:
+
+<% @orders.each do |order| %>
+	Claim No      : <%= order.entry.ref_no %>
+	Vehicle       : <%= order.entry.model_name %>
+	Plate No.     : <%= order.entry.plate_no %>
+		
+	Order Total   : <%= ph_currency(order.order_total) %>
+
+	PO Date       : <%= regular_date(order.created_at) %>
+	PO Accepted   : <%= regular_date(order.confirmed) %>
+
+	Age           : <%= time_ago_in_words(order.confirmed) %>
+	
+	Use this link to view PO:  <%= order_url(order.id) %>
+	
+	********
+	
+<% end %>
+
+Please tag the orders as "Delivered" as soon as you are done.
+
+Thank you!

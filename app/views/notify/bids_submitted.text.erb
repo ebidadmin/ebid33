@@ -8,7 +8,7 @@ Bids were posted for
 	Vehicle:    <%= @entry.model_name %>
 	Plate No.:  <%= @entry.plate_no %>
 
-	Link:		<%= buyer_show_url(@entry) %>
+	Link:       <%= buyer_show_url(@entry) %>
 	
 PARTS BIDED (Note: bids are hidden while the bidding session is still ongoing)
 
@@ -23,6 +23,6 @@ PARTS BIDED (Note: bids are hidden while the bidding session is still ongoing)
 		
 	<% end %>
 
-BIDDING SPEED (TAT): <%= distance_of_time_in_words(@bids.first.bid_speed) %>
+BIDDING SPEED (TAT): <%= time_in_words(@bids.first.bid_speed) %>
 
 You may start deciding on the bids, or wait a while longer for other possible bidders.

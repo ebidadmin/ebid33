@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   # enable_authorization :unless => :devise_controller? 
+  before_filter :latest_messages 
   
   rescue_from CanCan::Unauthorized do |exception|
     flash[:error] = exception.message
@@ -39,6 +40,39 @@ class ApplicationController < ActionController::Base
     rescue ActiveRecord::RecordNotFound 
       @cart = Cart.create#Cart.create(user_id: current_user.id) 
       session[:cart_id] = @cart.id 
+  end
+ 
+  private
+  
+  def buyer_present?
+    if params[:q] && params[:q][:buyer_company_id_matches].present?
+      @buyer_company = Company.find(params[:q][:buyer_company_id_matches]).nickname
+    else
+      if can? :access, :bids
+        @buyer_company = 'all buyers'
+      else
+        @buyer_company = current_user.company.nickname
+      end
+    end
+  end
+ 
+  def seller_present?
+    if params[:q] && params[:q][:seller_company_id_matches].present?
+      @seller_company = Company.find(params[:q][:seller_company_id_matches]).nickname
+    else
+      @seller_company = 'all sellers'
+      # if can? :access, :all
+      #   @seller_company = 'all sellers'
+      # else
+      #   @seller_company = current_user.company.nickname
+      # end
+    end
+  end
+  
+  def latest_messages
+    if user_signed_in?
+    @global_messages = Message.pvt.where(receiver_company_id: current_user.company).order('created_at DESC').limit(5)
+    end
   end
   
 end

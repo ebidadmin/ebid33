@@ -56,7 +56,7 @@ class OrdersController < ApplicationController
 
     if @orders.all?(&:valid?) 
       @entry.update_status unless @entry.is_online
-      @orders.each { |o| Notify.new_order(o).deliver }
+      @orders.each { |o| Notify.delay.new_order(o) }
       unless @orders.count < 2
         flash[:success] = "Your POs have been released and will be processed right away.<br>
           Your suppliers are #{content_tag :strong, @orders.collect{ |o| o.seller.company.name }.to_sentence}. Thanks!".html_safe

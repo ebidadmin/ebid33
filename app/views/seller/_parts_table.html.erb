@@ -1,44 +1,55 @@
-<%= form_tag bids_path(entry_id: @entry), remote: true do %>
+<div id="bidding-message" class="txtcenter"></div>
 
-		<%= content_tag :table, class: 'table table-striped' do %>
-			<%= render 'entries/thead_show' %>
-			<%= content_tag :tbody do %>
-				<% @entry.line_items.order('status DESC').each_with_index do |item, index| %>
-				<%= content_tag :tr do %>
-					<%= content_tag :td, class: 'span4' do %>
-						<%= content_tag :span, index + 1, class: 'label index'  %>
-						<%= content_tag :span, item.part_name %>
-						<%= "<br> #{content_tag :code, 'Specs: ' + item.specs}".html_safe if item.specs.present? %>
-						<%#= content_tag :p, item.id %>
-					<% end %>
-					<%= content_tag :td, class: 'span9' do %>
-						<% if item.is_online %>
-							<%= div_for item, class: 'bids-array' do %>
-								<%= bid_box_helper item.id, 'original' %>
-								<%= bid_box_helper item.id, 'replacement' %>
-								<%= bid_box_helper item.id, 'surplus' %>
-				 			<% end %>
+<%= form_tag bids_path(:entry_id => @entry), remote: true do %>
+	<%= content_tag :table, class: 'table table-striped' do %>
+		<%= content_tag :thead do %>
+			<tr>
+				<%= content_tag :th, 'Part Description', class: 'span4', rowspan: 2 %>
+				<%= content_tag :th, 'Bids (unit price)', class: 'txtcenter', colspan: 3 %>
+				<%= content_tag :th, 'Status', class: 'span3 txtcenter', rowspan: 2 %>
+			</tr>
+			<tr>
+				<%= th_bidtype_helper('Original') %>
+				<%= th_bidtype_helper('Replacement') %>
+				<%= th_bidtype_helper('Surplus') %>
+			</tr>
+		<% end %>
+		<% @entry.line_items.includes(:car_part, :bids).order('created_at DESC').each_with_index do |item, index| %>
+		<%= content_tag :tr, id: "#{item.id}" do %>
+			<%= content_tag :td, class: 'span4' do %>
+				<%= content_tag :span, index + 1, class: 'label index'  %>
+				<%= content_tag :span, item.part_name %>
+				<%= "<br> #{content_tag :code, 'Specs: ' + item.specs}".html_safe if item.specs.present? %>
+			<% end %>
+
+			<% %w(original replacement surplus).each do |t| %>
+				<td class="<%= t[0..3] %> bids span2 txtcenter">
+					<%= bid_box_helper item.id, t if item.is_online %>
+					<div class="bid-container">
+						<% item.bids.group_by(&:bid_type).each do |type, bids| %>
+							<% bids.group_by(&:user).each do |user, bs| %>
+								<% if t == type && current_user.company.users.include?(user) %>
+									<%= render bs unless bs.nil? %>
+								<% end %> 
+							<% end %>
 						<% end %>
-						<%= content_tag :div, class: 'bids-array' do %>
-							<% item.bids.by_user(current_user.company.users).group_by(&:bid_type).each do |type, bids| %>
-								<div class="cat <%= type %>">
-									<%= render bids if bids %>
-								</div>
-				 			<% end %>
-						<% end %>
-					<% end %>
-					<%= content_tag :td, class: 'span3 txtcenter' do %>
-						<%= content_tag :p, item.status, class: "label #{item.status_color}" %>
-						<%= content_tag :p, "as of #{regular_date(item.updated_at)}", class: 'small' %>
-						<%= link_to "PO# #{item.order_id}", item.order if item.order && item.order.seller == current_user %>
-					<% end %>
-				<% end %>
-				<% end %>
+					</div>
+				</td>
+			<% end %>
+
+			<%= content_tag :td, class: 'span3 txtcenter' do %>
+				<%= content_tag :p, item.status, class: "label #{item.status_color}" %>
+				<%= content_tag :p, "as of #{regular_date(item.updated_at)}", class: 'small' %>
+				<%= link_to "PO# #{item.order_id}", item.order if item.order && item.order.seller == current_user %>
 			<% end %>
 		<% end %>
+		<% end %>
+	<% end %>
 
 <div class="well">
-	<%= link_to 'Previous Page', :back, class: 'btn' %>
-	<%= submit_tag "Submit Bids", class: 'btn btn-primary floatright' if @entry.is_online %>
+	<%= link_to 'Other Online Entries', seller_entries_path(s: 'online'), class: 'btn' %>
+	<%= submit_tag "Submit Bids", class: 'btn btn-success floatright' if @entry.is_online %>
 </div>
 <% end %>
+
+<%= render 'shared/tooltip_delete' %>

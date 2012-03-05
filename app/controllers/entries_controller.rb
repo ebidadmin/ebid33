@@ -37,7 +37,7 @@ class EntriesController < ApplicationController
   def create
     @entry = current_user.entries.build(params[:entry])
     if current_user.company.entries << @entry
-      flash[:notice] = "Successfully created entry."
+      flash[:notice] = "Successfully created entry. Next step is to search and add parts."
       if current_user.role?(:buyer)
         redirect_to buyer_show_path(@entry)
       else
@@ -47,7 +47,7 @@ class EntriesController < ApplicationController
       @car_models = @car_variants = @cities = []
       2.times { @entry.photos.build }
       @entry.term_id = 4 # default credit term is 30 days
-      flash[:error] = "Looks like you forgot to complete the required vehicle info.  Try again!"
+      # flash[:error] = "Looks like you forgot to complete the required vehicle info.  Try again!"
       render 'new'
     end
   end

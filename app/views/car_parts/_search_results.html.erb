@@ -1,5 +1,8 @@
 <%= content_tag :div, class: 'span9' do %>
-<%= content_tag :h2, 'Search Results' %>
+<%= content_tag :h2 do %>
+	Search Results
+	<%= content_tag :small, 'arranged alphabetically' %>
+<% end %>
 <% if @car_parts.count > 0 %>
 	<% if params[:q] %>
 		<%= content_tag :h3, "#{content_tag :b, (pluralize @car_parts.count, 'part')} were found using your search keyword: #{content_tag :em, params[:q][:name_cont], class: 'highlight'}".html_safe %>

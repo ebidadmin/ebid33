@@ -33,12 +33,14 @@
 						<%= content_tag :td, class: 'span4 txtcenter' do %>
 							<%= content_tag :b, currency(order.order_total) %>
 							<%= content_tag :span, pluralize(order.items_count, 'part'), class: 'small' %>
-							<%= content_tag :p, link_to("PO##{order.id}", order) %>
-							<% if order.messages.present? %>
-							<span class='highlight'>
-								<%= content_tag :i, '', class: 'icon-comment' %>
-								<%= order.messages.size %>
-							</span>
+							<%= content_tag :p do %>
+								<%= link_to("PO##{order.id}", order) %>
+								<% if order.messages.present? %>
+								<span class='highlight'>
+									<%= content_tag :i, '', class: 'icon-comment' %>
+									<%= order.messages.size %>
+								</span>
+								<% end %>
 							<% end %>
 						<% end %>
 
@@ -68,6 +70,9 @@
 	  <%= f.grouped_collection_select :entry_car_brand_id_eq, CarOrigin.includes(:car_brands), :car_brands, :name, :id, :name, {include_blank: true} %>
 	  <%= f.label 'Buyer' %>
 	  <%= f.collection_select :company_id_matches, Company.where(primary_role: 2), :id, :nickname, include_blank: true %>
-	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	  <%= content_tag :p do %>
+			<%= f.submit 'Search', class: 'btn btn-primary' %>
+			<%= refresh_button %>
+		<% end %>
 	<% end %>
 <% end %>

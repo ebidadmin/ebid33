@@ -19,18 +19,18 @@
 					<%= content_tag :tr do %>
 						<%= content_tag :td, class: 'span2' do %>
 							<%= content_tag :p, entry.id, class: 'muted small' %>
-							<span>
+							<span rel='tooltip' title="<%= pluralize entry.photos.size, 'photo' %>">
 								<%= content_tag :i, '', class: 'icon-camera' %>
 								<%= entry.photos.size %>
 							</span>
 							<% if entry.messages.present? %>
-							<span class='highlight'>
+							<span class='highlight' rel='tooltip' title="<%= pluralize entry.messages.size, 'message' %>">
 								<%= content_tag :i, '', class: 'icon-comment' %>
 								<%= entry.messages.size %>
 							</span>
 							<% end %>
 							<% if entry.orders.present? %>
-							<span class='highlight'>
+							<span class='highlight' rel='tooltip' title="<%= pluralize entry.orders.size, 'order' %>">
 								<%= content_tag :i, '', class: 'icon-shopping-cart' %>
 								<%= entry.orders.size %>
 							</span>
@@ -74,8 +74,17 @@
 	  <%= f.text_field :plate_no_cont, class: 'span2' %>
 	  <%= f.label 'Claim No.' %>
 	  <%= f.text_field :ref_no_cont, class: 'span2' %>
-	  <%= f.label 'User' %>
-	  <%= f.grouped_collection_select :user_id_eq, @branches, :users, :name, :id, :shortname, {include_blank: true} %>
-	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	  <%= f.label 'Car Brand' %>
+	  <%= f.grouped_collection_select :car_brand_id_eq, @car_origins, :car_brands, :name, :id, :name, {include_blank: true} %>
+		<% if can? :search, :users %>
+			<%= f.label 'User' %>
+		  <%= f.grouped_collection_select :user_id_eq, @branches, :users, :name, :id, :shortname, {include_blank: true} %>
+		<% end %>
+	  <%= content_tag :p do %>
+			<%= f.submit 'Search', class: 'btn btn-primary' %>
+			<%= refresh_button %>
+		<% end %>
 	<% end %>
 <% end %>
+
+<%= render 'shared/tooltip_entries' %>

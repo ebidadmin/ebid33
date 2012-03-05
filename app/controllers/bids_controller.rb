@@ -39,7 +39,7 @@ class BidsController < ApplicationController
     end
     if @valid_bids.compact.length > 0 
       @valid_bids.each(&:save!)
-      Notify.bids_submitted(@valid_bids, @entry, current_user).deliver 
+      Notify.delay.bids_submitted(@valid_bids, @entry, current_user)#.deliver 
     end
     respond_to do |format|
       format.html { redirect_to :back; flash[:notice] = "Bids submitted. Thank you!" }
@@ -66,7 +66,7 @@ class BidsController < ApplicationController
     @bid = Bid.find(params[:id])
     @bid.destroy
     respond_to do |format|
-      format.html { redirect_to :back, :notice => "Successfully deleted bid." }
+      format.html { redirect_to :back, :notice => "Deleted bid." }
       format.js
     end
   end

@@ -51,7 +51,7 @@ SimpleForm.setup do |config|
     b.use :label
     b.wrapper :tag => 'div', :class => 'controls' do |ba|
       ba.use :input
-      ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
+      ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-block' }
       ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
     end
   end
@@ -65,7 +65,7 @@ SimpleForm.setup do |config|
         prepend.use :input
       end
       input.use :hint,  :wrap_with => { :tag => 'span', :class => 'help-block' }
-      input.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
+      input.use :error, :wrap_with => { :tag => 'span', :class => 'help-block' }
     end
   end
 
@@ -78,7 +78,7 @@ SimpleForm.setup do |config|
         append.use :input
       end
       input.use :hint,  :wrap_with => { :tag => 'span', :class => 'help-block' }
-      input.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
+      input.use :error, :wrap_with => { :tag => 'span', :class => 'help-block' }
     end
   end
 
@@ -146,7 +146,7 @@ SimpleForm.setup do |config|
 
   # Tell browsers whether to use default HTML5 validations (novalidate option).
   # Default is enabled.
-  config.browser_validations = false
+  # config.browser_validations = false
 
   # Collection of methods to detect if a file type was given.
   # config.file_methods = [ :mounted_as, :file?, :public_filename ]
@@ -163,7 +163,7 @@ SimpleForm.setup do |config|
   # config.country_priority = nil
 
   # Default size for text inputs.
-  # config.default_input_size = 50
+  config.default_input_size = 20
 
   # When false, do not use translations for labels.
   # config.translate_labels = true

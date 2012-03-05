@@ -30,7 +30,8 @@ class Message < ActiveRecord::Base
     
   end
   
-  def create_message(current_user, msg_for, open_msg_tag = nil, entry = nil, order = nil, receiver = nil, receiver_company = nil)
+  # def create_message(current_user, msg_for, open_msg_tag = nil, entry = nil, order = nil, receiver = nil, receiver_company = nil)
+  def create_message(current_user, msg_for, open_msg_tag = nil, entry = nil, order = nil)
     self.user_company_id = current_user.company.id
     self.user_type = current_user.roles.first.name
     self.entry_id = entry.id unless entry.blank?
@@ -86,7 +87,7 @@ class Message < ActiveRecord::Base
       # "PARTIAL ORDER cancelled."
     end
     order.messages << msg
-    Notify.cancelled_order(order, msg).deliver
+    Notify.delay.cancelled_order(order, msg)#.deliver
   end
   
   def can_be_edited(current_user)

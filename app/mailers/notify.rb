@@ -17,7 +17,7 @@ class Notify < ActionMailer::Base
     @entry = entry
     mail(
       to: "#{entry.user.shortname} <#{entry.user.email}>", 
-      subject: "Bids by #{bidder.nickname}", 
+      subject: "Bids Submitted #{entry.model_name}", 
       bcc: "Chris Marquez <cymarquez@ebid.com.ph>"
       )
   end
@@ -57,6 +57,16 @@ class Notify < ActionMailer::Base
     mail(
       to: powerbuyers, 
       subject: "DUE NOW Reminder", 
+      bcc: ["Chris Marquez <cymarquez@ebid.com.ph>", "Efren Magtibay <epmagtibay@ebid.com.ph>"]
+      )
+  end
+  
+  def deliver_now(sellers, company, orders)
+    @orders = orders
+    @company_name = company
+    mail(
+      to: sellers, 
+      subject: "LATE DELIVERY Reminder", 
       bcc: ["Chris Marquez <cymarquez@ebid.com.ph>", "Efren Magtibay <epmagtibay@ebid.com.ph>"]
       )
   end

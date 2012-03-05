@@ -14,7 +14,7 @@ Hello <%= @order.seller.profile.first_name %>!
 	PO Released:     <%= regular_date(@order.created_at) %>	
 	Date Delivered:  <%= regular_date(@order.delivered) %>
 
-	Tagged asPaid:   <%= regular_date(@order.paid_temp) %>
+	Tagged as Paid:  <%= regular_date(@order.paid_temp) %>
 
 Please login to your account to confirm this payment (<%= order_url(@order.id) %>).
 

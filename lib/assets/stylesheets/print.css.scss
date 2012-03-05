@@ -5,8 +5,8 @@ dt, dd { float: left; }
 dt { clear: both; font-size: 0.8em; text-transform: uppercase; width: 30%; }
 dd { width: 67%; }
 
-.center { text-align: center !important; }
-.right { text-align: right !important; }
+.txtcenter { text-align: center !important; }
+.txtright { text-align: right !important; }
 .small { font-size: 0.95em; }
 .floatright { float: right; }
 .negative { color: #C00; font-weight: normal; }
@@ -17,7 +17,7 @@ dd { width: 67%; }
 #print-nav { margin: 0; position: absolute; bottom: 5px; right: 0; }
 
 table td { border-top: 1px solid black !important; }
-th { padding: 10px !important; }
+//th { padding: 10px !important; }
 table p { margin: 0;  }
 table .total { font-size: 1.2em; font-weight: bold; }
 td.bids { padding-right: 20px; padding-left: 20px; }
@@ -44,6 +44,16 @@ td.bids { padding-right: 20px; padding-left: 20px; }
 	.due-date { margin-top: 10px; }
 	.status-box a { margin-left: 32%; }
 	.help-block { margin-bottom: 15px; }
+	}
+	
+.fees table {
+	div { float: left; }
+	.vehicle { width: 140px; }
+	.fee { clear: both; margin-bottom: 4px; position: relative; }
+	.part { min-height: 1em; }
+	.amount { margin-left: 8px; min-height: 1em; width: 80px; }
+	.factors { margin-left: 8px; min-height: 1em; width: 65px; }
+	.close { position: absolute; top: -2px; right: -15px; }
 	}
 
 @media print {

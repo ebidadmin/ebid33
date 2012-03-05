@@ -33,6 +33,16 @@
 			      </div>
 						<%= yield(:sidebar2) %>
 						<%= yield(:search_form) %>
+						<% if current_user %>
+							<h3>Latest Messages</h3>
+							<%= content_tag :dl do %>
+								<% @global_messages.each do |m| %>
+									<%= render 'messages/msg_line', m: m, k: nil %>
+								<% end %>
+							<% end %>
+							
+							
+						<% end %>
 					</div> <!-- end of span4 -->
 				</div>
     </div> <!--! end of .container -->
@@ -40,7 +50,6 @@
       </footer>
 		<div id="javascripts">
 	    <%= javascript_include_tag "application" %>
-			<%= javascript_include_tag 'fancybox/jquery.fancybox-1.3.4.pack.js' %>
 			<%= yield(:javascripts) %>
 		</div>
   </body>

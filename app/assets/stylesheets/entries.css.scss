@@ -90,7 +90,8 @@ td.bids {
 	dl { margin-top: 25px; }
 	.instr { padding: 5px 0; border-top: 1px dotted black; border-bottom: 1px dotted black; margin-top: 25px; }
 	.due-date { margin-top: 10px; }
-	.status-box a { margin-left: 32%; }
+	.status-box > a { margin-left: 32%; }
+	.payment-tag { margin-left: 32%; }
 	.help-block { margin-bottom: 15px; }
 	}
 .delivery h5 { font-weight: normal; margin-top: 0; }
@@ -139,7 +140,7 @@ td.bids {
 
 .sidebar { 
 	label { text-align: left; width: 100%; }
-	.btn { margin-top: 25px; }
+	/*.btn { margin-top: 25px; }*/
 	}
 
 #special-action-box { border: 2px solid white; /*margin: -8px 0 0 0; padding: 10px;*/ padding-left: 5px; }

@@ -1,8 +1,9 @@
+<%= f.error_notification %>
 <%= content_tag :fieldset do %>
 	<%= content_tag :legend, 'Vehicle' %>
 	<div class="clearfix row">
 		<%= f.input :ref_no, label: 'Claim No.', wrapper_class: 'span4' %>
-		<%= f.input :date_of_loss, as: :string, input_html: {id: 'datepickers'}, wrapper_class: 'span4', placeholder: 'Click to select date', hint: 'Format: YYYY-MM-DD' %>
+		<%= f.input :date_of_loss, as: :string, input_html: {id: 'datepicker'}, wrapper_class: 'span4', placeholder: 'Click to select date', hint: 'Format: YYYY-MM-DD' %>
 	</div>
 	<%= f.input :vehicle, wrapper_class: 'clearfix', required: true do  %>
 		<%= f.input :year_model, collection: Entry::YEAR_MODELS, label: false, wrapper_html: { id: 'veh-year' }, prompt: 'Select Year' %>
@@ -29,29 +30,14 @@
 <% end %>
 
 <%#= render 'entries/attach_photos', f: f %>
-<%= content_tag :fieldset, class: 'photouploads' do %>
-	<%= content_tag :legend, 'Photos' %>
-		<%= f.fields_for :photos do |photo|  %>
-			<% unless photo.object.new_record?  %>
-				<% if photo.object.processing == false %>
-				<%= image_tag photo.object.photo.url(:tiny), class: "span1" %>
-				<% else %>
-				<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				
-				<% end %>
-			<% end %>
-		
-			<%= photo.input :photo, :as => :file %>
-			<%= photo.link_to_remove "x", class: 'close' %>
-		<% end %>
-		<%= f.link_to_add "#{content_tag :i, '', class: 'icon-picture icon-white' } Add Another Photo".html_safe, :photos, class: 'btn btn-primary' %>
-<% end %>
 
 <%= render 'misc_details', f: f  %>
 <%#= render 'edit_parts_list', f: f %>
-
+<%= f.error :base %>
 <div class="well">
   <%= f.button :submit, class: 'btn-primary floatright'  %>
 	<%= link_to "Cancel", :back, class: 'btn', type: 'reset' %>
+	<%= link_with_icon "", new_user_entry_path(current_user), 'refresh' %>
 </div>
 
 <% content_for :javascripts do %>

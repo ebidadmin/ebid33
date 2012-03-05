@@ -3,7 +3,9 @@ class FeesController < ApplicationController
     @q = Fee.find_type(params[:t]).filter_period(params[:q]).search(params[:q])
     @all_fees ||= @q.result
     @fees = @all_fees.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], [:seller_company], :order).paginate(page: params[:page], per_page: 20)
-
+    
+    buyer_present?
+    seller_present?
   end
 
   def show
@@ -39,25 +41,26 @@ class FeesController < ApplicationController
   def destroy
     @fee = Fee.find(params[:id])
     @fee.destroy
-    redirect_to fees_url, :notice => "Successfully destroyed fee."
+    respond_to do |format|
+      format.html { redirect_to :back, :notice => "Deleted fee." }
+      format.js
+    end
   end
   
-  def bprint
-    @q = Fee.for_decline.by_this_buyer(current_user).filter_period(params[:q]).search(params[:q])
+  def print
+    if can? :create, :entries
+      @q = Fee.for_decline.by_this_buyer(current_user).filter_period(params[:q]).search(params[:q])
+    elsif can? :create, :bids #current_user.role?(:seller)
+      @q = Fee.find_type(params[:t]).by_this_seller(current_user.company).filter_period(params[:q]).search(params[:q])
+    else
+      @q = Fee.find_type(params[:t]).filter_period(params[:q]).search(params[:q])
+    end
     @all_fees ||= @q.result
-    @fees = @all_fees.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part])#.paginate(page: params[:page], per_page: 15)
+    @fees = @all_fees.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], :seller_company)#.paginate(page: params[:page], per_page: 15)
     
-    @buyer_company = current_user.company.nickname
+    buyer_present?
     seller_present?
     render layout: 'print'
-  end
-  
-  private
-  
-  def seller_present?
-    if params[:q] && params[:q][:seller_company_id_matches].present?
-      @seller_company = Company.find(params[:q][:seller_company_id_matches])
-    end
   end
   
 end

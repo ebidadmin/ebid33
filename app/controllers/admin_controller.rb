@@ -17,7 +17,7 @@ class AdminController < ApplicationController
   def expire_entries
     if params[:id]
       @entry = Entry.find(params[:id])
-      @entry.expire
+      @entry.expire(1)
       flash[:success] = "Expired #{@entry.id}."
     else
       @entries = Entry.unscoped.for_decision.unexpired.includes(:line_items => :bids).order(:created_at)#.limit(5)
@@ -43,7 +43,7 @@ class AdminController < ApplicationController
     if overdue_orders.present?
       overdue_orders.group_by(&:company).each do |company, overdue|
         @powerbuyers = company.users.where(:id => Role.find_by_name('powerbuyer').users).opt_in.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }
-        Notify.overdue_payment(@powerbuyers, company.nickname, overdue).deliver
+        Notify.delay.overdue_payment(@powerbuyers, company.nickname, overdue)#.deliver
       end
     end
     
@@ -51,9 +51,20 @@ class AdminController < ApplicationController
     if due_now_orders.present?
       due_now_orders.group_by(&:company).each do |company, due_now|
         @powerbuyers = company.users.where(:id => Role.find_by_name('powerbuyer').users).opt_in.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }
-        Notify.due_now(@powerbuyers, company.nickname, due_now).deliver
+        Notify.delay.due_now(@powerbuyers, company.nickname, due_now)#.deliver
       end
     end
     redirect_to :back, :notice => 'Sent payment reminders to Buyers.'
+  end
+  
+  def delivery_reminder
+    late_deliveries = Order.find_status('for-delivery').where('confirmed <= ?', 3.days.ago)
+    if late_deliveries
+      late_deliveries.group_by(&:seller_company).each do |company, ld|
+        @sellers = company.users.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }
+        Notify.delay.deliver_now(@sellers, company.nickname, ld)#.deliver
+      end
+    end
+    redirect_to :back, :notice => "Sent delivery reminders to Sellers for #{pluralize late_deliveries.count, 'order'}"
   end
 end

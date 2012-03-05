@@ -17,7 +17,8 @@ class MessagesController < ApplicationController
     @message = current_user.messages.build(params[:message])
     @entry = Entry.find(params[:entry]) unless params[:entry].blank?
     @order = Order.find(params[:order]) unless params[:order].blank?
-    @message.create_message(current_user, params[:msg_for], params[:open_tag], @entry, @order, params[:receiver], params[:receiver_company])
+    # @message.create_message(current_user, params[:msg_for], params[:open_tag], @entry, @order, params[:receiver], params[:receiver_company])
+    @message.create_message(current_user, params[:msg_for], params[:open_tag], @entry, @order)
     
     unless request.env["HTTP_REFERER"] == new_message_url
       respond_to do |format|
@@ -92,8 +93,8 @@ class MessagesController < ApplicationController
   end
   
   def cancel
-    @entry = Entry.find(params[:entry])
-    @order = Order.find(params[:order]) unless params[:order].blank?
+    # @entry = Entry.find(params[:entry])
+    # @order = Order.find(params[:order]) unless params[:order].blank?
     respond_to do |format| 
       format.html { redirect_to :back }
       format.js 

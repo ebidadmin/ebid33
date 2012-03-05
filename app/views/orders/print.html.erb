@@ -30,13 +30,13 @@
 	<% end %>
 
 	<%= content_tag :div, class: 'status-box span4' do %>
-		<%= content_tag :h3, "Buyer's PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
+		<%= content_tag :h3, "#{@order.company.nickname}'s PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
 		<dl>
 			<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
 			<% if @order.confirmed %>
-				<%= dl_helper 'PO Confirmed', long_date(@order.confirmed) %>
+				<%= dl_helper 'PO Accepted', long_date(@order.confirmed) %>
 			<% else %>
-				<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...') %>
+				<%= dl_helper 'PO Accepted', (content_tag :em, 'Waiting for seller to accept the order ...', class: 'highlight') %>
 			<% end %>
 			<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
 			<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>
@@ -73,10 +73,10 @@
 	<%= content_tag :thead do %>
 		<%=  content_tag :th %>
 		<%=  content_tag :th, 'Part Description' %>
-		<%=  content_tag :th, 'Type', class: 'center' %>
-		<%=  content_tag :th, 'Qty', class: 'center' %>
-		<%=  content_tag :th, 'Unit Price', class: 'right' %>
-		<%=  content_tag :th, 'Cost', class: 'right' %>
+		<%=  content_tag :th, 'Type', class: 'txtcenter' %>
+		<%=  content_tag :th, 'Qty', class: 'txtcenter' %>
+		<%=  content_tag :th, 'Unit Price', class: 'txtright' %>
+		<%=  content_tag :th, 'Cost', class: 'txtright' %>
 	<% end %>
 	<% @order.bids.each_with_index do |bid, index| %>
 		<%= content_tag :tr, class: "#{'cancelled' if bid.cancelled?}" do %>
@@ -85,16 +85,16 @@
 				<%= bid.line_item.part_name %>
 				<%= content_tag :code, bid.line_item.specs, class: 'small' if bid.line_item.specs.present? %>
 			<% end %>
-			<%=  content_tag :td, (content_tag :span, bid.bid_type.upcase, class: 'label'), class: 'span2 center' %>
-			<%=  content_tag :td, bid.quantity, class: 'span1 center' %>
-			<%=  content_tag :td, currency(bid.amount), class: 'span2 right' %>
-			<%=  content_tag :td, currency(bid.total), class: 'span2 right' %>
+			<%=  content_tag :td, (content_tag :span, bid.bid_type.upcase, class: 'label'), class: 'span2 txtcenter' %>
+			<%=  content_tag :td, bid.quantity, class: 'span1 txtcenter' %>
+			<%=  content_tag :td, currency(bid.amount), class: 'span2 txtright' %>
+			<%=  content_tag :td, currency(bid.total), class: 'span2 txtright' %>
 		<% end %>
 	<% end %>
 
 	<%= content_tag :tr, class: 'total' do %>
-		<%= content_tag :td, total_label_helper(@order.bids.not_cancelled, params[:action]), colspan: 5, class: 'right' %>
-		<%= content_tag :td, total_amount_helper(@order.bids.not_cancelled, params[:action]), class: 'span2 right' %>
+		<%= content_tag :td, total_label_helper(@order.bids.not_cancelled, params[:action]), colspan: 5, class: 'txtright' %>
+		<%= content_tag :td, total_amount_helper(@order.bids.not_cancelled, params[:action]), class: 'span2 txtright' %>
 	<% end %>
 <% end %>
 

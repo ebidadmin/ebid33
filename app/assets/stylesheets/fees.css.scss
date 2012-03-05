@@ -1,0 +1,7 @@
+.fees table, table.fees {
+	div { float: left; }
+	.fee { clear: both; margin-bottom: 4px; position: relative; }
+	.part { min-height: 1em; }
+	.amount, .factors { margin-left: 8px; min-height: 1em; width: 80px; }
+	.close { position: absolute; top: -2px; right: -15px; }
+	}

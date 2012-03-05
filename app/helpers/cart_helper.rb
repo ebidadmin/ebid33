@@ -23,11 +23,11 @@ module CartHelper
   
   def cart_rules_helper(bad_desc, good_desc=nil, specs=nil)
     (content_tag :p, class: 'bad-p' do
-      content_tag(:span, "Bad", class: 'label important') + 
+      content_tag(:span, "Bad", class: 'label label-important') + 
       content_tag(:span, bad_desc, class: 'bad-code')
     end) + 
     (content_tag :p, class: 'good-p' do
-      content_tag(:span, "Good", class: 'label success') + 
+      content_tag(:span, "Good", class: 'label label-success') + 
       content_tag(:code, good_desc, class: 'good-code') + 
       (content_tag(:em, "#{content_tag :b, 'Specs:'} #{specs}".html_safe, class: 'specs highlight') if specs.present?)
     end if good_desc.present?)

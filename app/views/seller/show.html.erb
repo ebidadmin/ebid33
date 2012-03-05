@@ -6,10 +6,10 @@
 	<%= render 'shared/sidebar_dates' %>
 <% end %>
 
-<%#= render 'shared/photo_set' %>
+<%= render 'shared/photo_set' %>
 
 <% if @entry.line_items.size > 0 %>
-		<%= render 'seller/parts_table2' %>
+		<%= render 'seller/parts_table' %>
 <% else %>
 		<%= content_tag :h2, 'Sorry, parts list is empty.' %>
 <% end %>
@@ -21,7 +21,7 @@
 	<%= render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public' %>
 <% end %>
 
-
+<%= render 'shared/fancy_box' %>
 
 
 

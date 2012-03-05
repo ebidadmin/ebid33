@@ -18,7 +18,7 @@ module ApplicationHelper
   end
   
   def short_date(date)
-    date.strftime("%d %b '%y, %R")
+    date.strftime("%d %b %Y, %R")
   end
   
   def regular_date(date, requirement=nil)
@@ -69,10 +69,18 @@ module ApplicationHelper
   
   # for Orders and Fees
   def display_seller_company
-    content_tag :span, @seller_company.nickname, class: 'label label-info' if @seller_company
+    content_tag :span, @seller_company, class: 'label label-info' if @seller_company
   end
   
   def display_buyer_company
-    content_tag :span, @buyer_company.nickname, class: 'label label-info' if @buyer_company
+    content_tag :span, @buyer_company, class: 'label label-info' if @buyer_company
+  end
+
+  def th_bidtype_helper(bidtype)
+    content_tag :th, content_tag(:span, bidtype, class: 'label label-important'), class: 'span2 txtcenter'
+  end
+  
+  def refresh_button
+    link_with_icon '', request.path, 'refresh'
   end
 end

@@ -1,9 +1,4 @@
-<% title "Entries" %>
-
-<%= content_tag :ul, class: 'nav nav-pills' do %>
-	<%= nav_link('All', seller_entries_path(s: 'all')) %>
-	<%= nav_link('Online', seller_entries_path(s: 'online')) %>
-<% end %>
+<% title "Entries #{': ' + params[:s].titleize if params[:s]}" %>
 
 <%= content_tag :p, page_entries_info(@entries) %>
 
@@ -15,7 +10,7 @@
 	<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
 		<%= content_tag :tr do %>
 			<%= content_tag :td, colspan: 6, class: 'well' do %>
-				<%= content_tag :h5, regular_date(date) %>
+				<%= content_tag :h5, regular_date(date, 'day') %>
 			<% end %>
 		<% end %>
 
@@ -23,17 +18,17 @@
 			<%= content_tag :tr do %>
 				<%= content_tag :td, class: 'span2' do %>
 					<%= content_tag :p, entry.id, class: 'muted small' %>
-					<span>
+					<span rel='tooltip' title="<%= pluralize entry.photos.size, 'photo' %>">
 						<%= content_tag :i, '', class: 'icon-camera' %>
 						<%= entry.photos.size %>
 					</span>
 					<% if entry.messages.present? %>
-					<span class='highlight'>
+					<span class='highlight' rel='tooltip' title="<%= pluralize entry.messages.size, 'message' %>">
 						<%= content_tag :i, '', class: 'icon-comment' %>
 						<%= entry.messages.size %>
 					</span>
 					<% end %><br>
-					<%= content_tag :em, "created by #{entry.user.username}" if entry.user && entry.has_order %>
+					<%= content_tag :em, "by #{entry.user.username}", class: 'small' if entry.user && entry.has_order %>
 				<% end %>
 				<%= content_tag :td, class: 'span4' do %>
 		      <%= content_tag :p, link_to(entry.model_name, seller_show_path(entry))  %>
@@ -44,6 +39,7 @@
 				<% end %>
 				<%= content_tag :td, class: 'span3' do %>
 					<%= content_tag :p, supplier_bid_rate(entry, entry.bids.by_user(current_user.company.users)) %>
+		      <%= content_tag :p, "Online: #{entry.online.strftime('%R')}", class: 'small muted' if entry.online %>
 		      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small muted' if entry.bid_until && entry.is_online %>
 				<% end %>
 				<%= content_tag :td, class: 'span3 txtcenter' do %>
@@ -59,8 +55,7 @@
 
 <div class="well">
 	<%= submit_tag 'Print Bidding Worksheet', class: 'btn floatright' %>
-	<%= content_tag :em, 'You can print a bidding worksheet. Use the checkboxes to select the items you want to print.', class: 'small' %><br>
-	<%= content_tag :em, '(leave them blank to select all)', class: 'small' %>
+	<%= content_tag :p, 'You can print a bidding worksheet. Use the checkboxes to select the vehicles you want, or just leave them blank to select all.' %>
 </div>
 <% end %>
 <%= will_paginate @entries, inner_window: 2 %>
@@ -75,3 +70,5 @@
 	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
 	<% end %>
 <% end %>
+
+<%= render 'shared/tooltip_entries' %>

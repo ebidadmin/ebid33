@@ -108,10 +108,10 @@ class Order < ActiveRecord::Base
       Please send your invoice to buyer asap so we can help you <strong>track the payment</strong>.".html_safe
     when 'Paid!'
       self.update_attributes(status: 'Paid', paid_temp: Date.today)
-      Notify.payment_tagged(self, self.entry).deliver
+      Notify.delay.payment_tagged(self, self.entry)#.deliver
       flash = "Updated the status of the order to <strong>Paid</strong>.<br>
       We will notify the seller to confirm your payment.".html_safe
-    when 'Paid', 'Confirm Payment'
+    when 'Paid'
       self.update_attributes(status: 'Paid', paid: Date.today)
       flash = "Updated the status of the order to <strong>Paid</strong>.<br>
       Please rate your buyer to close the order.".html_safe
@@ -174,7 +174,7 @@ class Order < ActiveRecord::Base
   end
 
   def days_overdue # used in ORDERS#INDEX, SHOW
-    (Date.today - due_date).abs.to_i - 1
+    (Date.today - due_date).abs.to_i 
   end
   
   def paid_but_overdue # used in ORDERS#SHOW

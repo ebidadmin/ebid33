@@ -1,0 +1,94 @@
+<% if params[:t] == 'bf' %>
+	<% title "Decline Fees of #{@buyer_company}" %>
+	<% subtitle "for parts not ordered" %>
+<% else %>
+	<% title "Market Fees of #{@seller_company}" %>
+	<% subtitle "for paid orders" %>
+<% end %>
+
+<%= content_tag :p, "Period covered #{period_covered_helper(@all_fees, params[:q])}" %>
+
+<%= content_tag :h2, class: 'row' do %>
+	<%= content_tag :span, ph_currency(@all_fees.total_fee), class: 'span2' %>
+	<%= content_tag :small, "Base: #{currency(@all_fees.base_fee)}", class: 'span2' %>
+	<%= content_tag :small, "VAT: #{currency(@all_fees.vat)}", class: 'span2' %>
+	<%= content_tag :small, "For #{@seller_company}: #{currency(@all_fees.supplier_share)}", class: 'span3' if params[:t] == 'bf' %>
+<% end %>
+
+<%= content_tag :table, class: 'table table-condensed' do %>
+
+	<%= content_tag :thead do %>
+		<tr>
+			<%= content_tag :th, 'Vehicle', class: 'vehicle' %>
+			<th>
+				<%= content_tag :div, 'Parts', class: 'part span3' %>
+				<%= content_tag :div, 'Lowest Bid', class: 'amount txtright' %>
+				<%= content_tag :div, 'Speed', class: 'factors txtright' %>
+				<%= content_tag :div, 'Rate', class: 'factors txtcenter' %>
+				<%= content_tag :div, 'Fee', class: 'amount txtright' %>
+				<% if params[:t] == 'bf' %>
+					<%= content_tag :div, 'Supplier Share', class: 'amount txtright' %>
+				<% else %>
+					<%= content_tag :div, '', class: 'amount txtright' %>
+				<% end %>
+			</th>
+		</tr>
+	<% end %>
+	
+	<% @fees.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_fees| %>
+		<%= content_tag :tr, class: 'well' do %>
+			<%= content_tag :td, colspan: 2 do %>
+				<%= content_tag :h5, regular_date(date, 'day') %>
+			<% end %>
+		<% end %>
+
+
+		<% grouped_fees.group_by(&:entry).each do |entry, fees| %>
+		<tr>
+			<%= content_tag :td, class: 'vehicle' do %>
+	      <%= content_tag :p, entry_link(entry) %>
+				<%= content_tag :span, entry.plate_no %>
+				<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
+			<% end %>
+
+			<td>
+				<% for f in fees %>
+					<%= div_for f do %>
+						<%= content_tag :div, f.line_item.name, class: 'part span3' %>
+						<%= content_tag :div, class: 'amount txtright' do %>
+							<% if f.reversal? %>
+								<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
+							<% else %>
+								<%= content_tag :span, currency(f.bid_total), class: "" %>
+								<%= content_tag :span, f.bid_type[0], class: 'label' %>
+							<% end %>
+						<% end %>
+						<%= content_tag :div, class: 'factors txtright small' do %>
+							<%= content_tag :em, time_in_words(f.bid_speed) if f.bid_speed %>
+						<% end %>
+						<%= content_tag :div, percentage3(f.fee_rate), class: 'factors txtcenter small' %>
+						<%= content_tag :div, class: 'amount txtright' do %>
+							<%= content_tag :b, currency(f.fee), class: "#{'negative' if f.fee < 0}" if f.fee != 0 %>
+						<% end %>
+						<%= content_tag :div, class: 'amount txtright' do %>
+							<% if params[:t] == 'bf' %>
+									<%= content_tag :b, currency(f.split_amount), class: "#{'negative' if f.fee < 0}" if f.fee != 0  %>
+									<%= content_tag :em, f.seller_company.nickname, class: 'small'  %>
+							<% else %>
+									<%= content_tag :b, link_to("PO # #{f.order_id}", f.order), class: 'small' %>
+									<%= content_tag :em, f.seller_company.nickname, class: 'small' %>
+							<% end %>
+						<% end %>
+						<%= link_to('&times;'.html_safe, f, rel: 'tooltip', data: {'original-title' => 'delete fee'}, confirm: 'Are you sure??? This will permanently delete fee.', method: :delete, remote: true, class: 'close') if can? :access, :all %>
+					<% end %>
+				<% end %>
+			</td>
+		</tr>
+		<% end %>
+	<% end %>
+
+	<%= total_row('Sub-totals', currency(@fees.base_fee), currency(@fees.supplier_share)) %>
+	<%= total_row('VAT', currency(@fees.vat)) %>
+	<%= total_row('Totals', currency(@fees.total_fee), currency(@fees.supplier_share)) %>
+	
+<% end %>

@@ -10,7 +10,7 @@
 		<%= yield(:head) %>
   </head>
 
-  <body>
+  <body class="<%= params[:controller] %>">
 		<div id="print-header">
 			<%= link_to (content_tag :h1, "E-Bid Auto Parts Auction System"), root_path %>
 			<div id="print-nav" class="btn-group">
@@ -29,5 +29,8 @@
 			<hr>
 			<p><strong>Copyright &copy; 2006-<%= Time.now.year -%> E-Bid, Inc.</strong>   All rights reserved.</p>
     </div>
+		<div id="javascripts">
+	    <%= javascript_include_tag "application" %>
+		</div>
   </body>
 </html>

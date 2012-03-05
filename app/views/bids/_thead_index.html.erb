@@ -1,0 +1,12 @@
+<%= content_tag :thead do %>
+	<tr>
+		<%= content_tag :th, 'Vehicle', class: 'span4', rowspan: 2 %>
+		<%= content_tag :th, 'Part Description', class: 'span4', rowspan: 2 %>
+		<%= content_tag :th, 'Bids (unit price)', class: 'txtcenter', colspan: 3 %>
+	</tr>
+	<tr>
+		<%= th_bidtype_helper('Original') %>
+		<%= th_bidtype_helper('Replacement') %>
+		<%= th_bidtype_helper('Surplus') %>
+	</tr>
+<% end %>
