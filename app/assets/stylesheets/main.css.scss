@@ -1,46 +1,38 @@
-div {
-  &.field, &.actions {
-    margin-bottom: 10px; } }
-
-#notice {
-  color: green; }
-
-.field_with_errors {
-  padding: 2px;
-  background-color: red;
-  display: table; }
-
-#error_explanation {
-  width: 450px;
-  border: 2px solid red;
-  padding: 7px;
-  padding-bottom: 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px;
-    margin-bottom: 0px;
-    background-color: #c00;
-    color: #fff; }
-  ul li {
-    font-size: 12px;
-    list-style: square; } }
-
+#main { position: relative; }
+.alert-message { padding-top: 15px; padding-bottom: 15px; }
+table p { margin-bottom: 0px; }
+.floatright { float: right; margin-left: 5px;}
+.floatleft { float: left; margin-right: 5px; }
+.txtcenter { text-align: center !important; }
+.txtright { text-align: right !important; }
+.cancelled { text-decoration: line-through; }
+.negative { color: #C00; font-weight: normal; }
+.help-block { display: block; margin-top: 0; }
+.required label { color: #C00; }
 .small { font-size: 0.8em; }
+.ui-datepicker-trigger { margin-left: 5px; }
+h2 .label { font-size: 100%; }
 
-form {
-	//input, select { margin-left: 5px; }
-	select { width: auto; }
-}
+form select { width: auto; }
+input.btn { margin-bottom: 0; }
+.boolean input { float: left; margin-right: 15px; }
+.user { 
+	div.radio { margin-top: 15px; padding: 0; }
+	label.radio { padding-left: 0;  }
+	label.radio, .radio input, .radio label, .check_boxes label, .check_boxes input { float: left; margin-left: 5px; }
+ } 
+
+.label { text-transform: uppercase; }
+.label.index { float: left; margin-left: -35px; text-align: center; width: 15px; }
+.label-black { background-color: black; font-size: 0.8em; }
+.label-highlight, .highlight { background-color: #FFF6BF; color: black; }
+.label-highlight:hover { color: black; }
+.label-cool { background-color: #049CDB }
+.label-primary { color: #ffffff; background-color: #0064cd; }
 
 dt, dd { float: left; }
 dt { clear: both; font-size: 0.8em; text-transform: uppercase; width: 30%; }
 dd { width: 67%; }
-//dl .label { font-size: 16px; }
 
 .sidebar {
 	h3 { margin-bottom: 10px; }
@@ -48,4 +40,18 @@ dd { width: 67%; }
 	dt { font-size: 0.8em; width: 100%;}
 	dd { margin-bottom: 5px; margin-left: 0; width: 100%; }
 	dd.important { background-color: white; font-size: 1.1em; padding: 4px 2px; }
+	label { text-align: left; width: 100%; }
 }
+.sidebar-status { border: 2px solid white; padding: 10px; text-align: center; }
+
+.pagination { 
+	a, em, .gap, .disabled { border: none; }
+	 }
+
+.parts-surrender { 
+ 	li { clear: both; font-size: 1.1em; margin-bottom: 5px; }
+ 	p input { margin-top: 15px; }
+	}
+
+td.padrt { padding-right: 10px; } 
+.alert-heading { margin-bottom: 10px; }

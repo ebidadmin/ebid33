@@ -7,7 +7,9 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
+//= require twitter/bootstrap
 //= require_tree .
+//= require rails.validations
 
 $(function() { 
 	var loading = "<span class='loading'><img src='/assets/loading.gif'></span>"	

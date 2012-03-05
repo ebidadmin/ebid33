@@ -35,6 +35,7 @@ class EntriesController < ApplicationController
   end
 
   def create
+    # raise params.to_yaml
     @entry = current_user.entries.build(params[:entry])
     if current_user.company.entries << @entry
       flash[:notice] = "Successfully created entry. Next step is to search and add parts."
@@ -44,11 +45,14 @@ class EntriesController < ApplicationController
         redirect_to @entry
       end
     else
-      @car_models = @car_variants = @cities = []
-      2.times { @entry.photos.build }
-      @entry.term_id = 4 # default credit term is 30 days
+      @car_models = CarModel.where(car_brand_id: @entry.car_brand_id)
+      @car_variants = CarVariant.where(car_model_id: @entry.car_model_id)
+      @entry.region = params[:entry][:region]
+      @cities = params[:entry][:region].present? ? City.where(region_id: @entry.region) : []
+      @entry.term_id = params[:entry][:term_id]
+      # 2.times { @entry.photos.build }
       # flash[:error] = "Looks like you forgot to complete the required vehicle info.  Try again!"
-      render 'new'
+      render action: 'new'
     end
   end
 

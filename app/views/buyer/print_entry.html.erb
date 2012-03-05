@@ -44,7 +44,7 @@
 					<% end %>
 				<% else %>
 					<% %w(original replacement surplus).each do |t| %>
-						<td class="<%= t %> bids span2">
+						<td class="<%= t[0..3] %> bids span2">
 
 							<% item.bids.group_by(&:bid_type).each do |type, bids| %>
 								<% if t == type %>

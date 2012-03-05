@@ -1,0 +1,21 @@
+#order-caption { border-bottom: 1px solid #DDD; margin-bottom: 17px; }
+.order { margin-bottom: 17px;
+	h5, h4 { line-height: 20px; margin: 10px 0; }
+	p { margin-bottom: 0; }
+	.user { margin-top: 15px; font-weight: bold; }
+	dl { margin-top: 25px; }
+	.instr { padding: 5px 0; border-top: 1px dotted black; border-bottom: 1px dotted black; margin-top: 25px; }
+	.due-date { margin-top: 10px; }
+	.status-box > a { margin-left: 32%; }
+	.payment-tag { margin-left: 32%; }
+	.help-block { margin-bottom: 15px; }
+	}
+.delivery h5 { font-weight: normal; margin-top: 0; }
+.total { font-size: 1.2em; }
+#address-note { font-style: italic; margin-bottom: 10px;}
+#supplier-count { font-size: 25px; margin-bottom: 10px; }
+#order-items table { margin-bottom: 0; }
+
+#order-cancel-box { border: 2px solid white; margin-top: -10px; padding: 10px;}
+#order-cancel-msg { float: left; }
+#order-cancel-btn { float: left; margin-top: 40px; }

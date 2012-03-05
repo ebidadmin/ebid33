@@ -1,29 +1,11 @@
-.jumbotron { padding-bottom: 30px; }
-#main { position: relative; }
-.alert-message { padding-top: 15px; padding-bottom: 15px; }
-table p { margin-bottom: 0px; }
-.floatright { float: right; margin-left: 5px;}
-.floatleft { float: left; margin-right: 5px; }
-.txtcenter { text-align: center !important; }
-.txtright { text-align: right !important; }
-.cancelled { text-decoration: line-through; }
-.help-block { display: block; margin-top: 0; }
-h2 .label { font-size: 100%; }
-.required label { color: #C00; }
-
-.entries .pills a { line-height: 25px; }
-.ui-datepicker-trigger { margin-left: 5px; }
-
 .new_entry {
 	.clearfix { margin-bottom: 18px; overflow: hidden; }
-	/*.clearfix .clearfix { float: left; margin-bottom: 0; }*/
 	#veh-year, #veh-brand, #veh-model, #veh-variant, #regions, #cities { clear: none; float: left; margin-right: 5px; }
 	legend { padding-bottom: 10px; }
 	p { margin-bottom: 2px; }
 	.thumbnail { margin-top: 10px; }
 	}
 #vehicle-info { margin-bottom: 15px; overflow: hidden; }
-.sidebar-status { border: 2px solid white; padding: 10px; text-align: center; }
 
 .photouploads { 
 	.clearfix, input { margin-bottom: 0; }
@@ -36,8 +18,17 @@ h2 .label { font-size: 100%; }
 	.thumbnail { border: 1px solid #ddd; float: left; height: 50px;  overflow: hidden; width: 75px; }
  	}
  
-
+#cart { margin-top: 20px; }
 #cart-search form, #cart-search fieldset { margin-bottom: 0; }
+#parts-rules { 
+	li { color: black; font-size: 14px; line-height: 20px; margin-bottom: 30px; }
+	li p { margin-left: 20px; }
+	.bad-p { margin-bottom: 5px; margin-top: 12px; }
+	.good-p { margin-bottom: 20px;  }
+	.bad-code { color: #919191; margin-left: 25px; }
+	.good-code { margin-left: 13px; }
+	.specs { font-size: 13px; margin-left: 10px; padding: 1px 15px; }
+	}
 #search-results { 
 	li { background-color: #CCC; line-height: 25px; margin: 5px 0; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; }
 	li:hover { color: white; background-color: #0064CD; }
@@ -45,17 +36,9 @@ h2 .label { font-size: 100%; }
 	.parts a:hover { color: white; font-size: 1.1em; text-decoration: none; }
  	}
 
-
 .photo-set li { display: inline; }
-.label.index { float: left; margin-left: -35px; text-align: center; width: 15px; }
-.label-black { background-color: black; font-size: 0.8em; }
-.label-highlight, .highlight { background-color: #FFF6BF; color: black; }
-.label-cool { background-color: #049CDB }
-.label-primary { color: #ffffff; background-color: #0064cd; }
 
-td.bids { 
-	input { margin-bottom: 4px; text-align: right; width: 100px }
-	}
+td.bids input { margin-bottom: 4px; text-align: right; width: 100px }
 .bids-array { clear: both; position: relative; min-height: 1em; margin-bottom: 5px; 
 	p.label { font-size: 0.9em; font-weight: normal; /*margin-bottom:5px;*/ text-transform: none; }
 	}
@@ -64,13 +47,13 @@ td.bids {
 	input[type="radio"] { margin: 0 8px 0 -15px; width: auto; }
 	p { text-align: center; }
 	}
-	.bid-amount { margin-right: 5px; text-align: right; width: 68px; }
-	.bids p.label { font-size: 0.9em; font-weight: normal; text-transform: none; }
+.bid-amount { margin-right: 5px; text-align: right; width: 68px; }
+.bids p.label { font-size: 0.9em; font-weight: normal; text-transform: none; }
 
-.bid-box { 
-	float: left; margin-right: 10px; text-align: right; width: 115px;
-	.label { margin-right: 5px; }
-	}
+//.bid-box { 
+//	float: left; margin-right: 10px; text-align: right; width: 115px;
+//	.label { margin-right: 5px; }
+//	}
 
 .original { float: left; }
 .replacement { position: absolute; top: 0; left: 128px;  }
@@ -81,88 +64,6 @@ td.bids {
 	.bids-array { position: relative; }
 	}
 
-
-#order-caption { border-bottom: 1px solid #DDD; margin-bottom: 17px; }
-.order { margin-bottom: 17px;
-	h5, h4 { line-height: 20px; margin: 10px 0; }
-	p { margin-bottom: 0; }
-	.user { margin-top: 15px; font-weight: bold; }
-	dl { margin-top: 25px; }
-	.instr { padding: 5px 0; border-top: 1px dotted black; border-bottom: 1px dotted black; margin-top: 25px; }
-	.due-date { margin-top: 10px; }
-	.status-box > a { margin-left: 32%; }
-	.payment-tag { margin-left: 32%; }
-	.help-block { margin-bottom: 15px; }
-	}
-.delivery h5 { font-weight: normal; margin-top: 0; }
-.total { font-size: 1.2em; }
-#address-note { font-style: italic; margin-bottom: 10px;}
-#supplier-count { font-size: 25px; margin-bottom: 10px; }
-#order-items table { margin-bottom: 0; }
-
-#order-cancel-box { border: 2px solid white; margin-top: -10px; padding: 10px;}
-#order-cancel-msg { float: left; }
-#order-cancel-btn { float: left; margin-top: 40px; }
-
-.messages { overflow: hidden;
-	h3 { clear: both; /*float: left;*/ margin-bottom: 10px; }
-	h6 { clear: both; margin-bottom: 20px;  }
-	.msg-buttons {  
-		b, a { float: right; margin-right: 5px;}
-		b { margin-top: 10px; margin-right: 15px;}
-		}
-	dt, dd { margin-bottom: 10px; }
-	/*dd { width: 589px; }*/
-	.nested { padding-left: 15px; }
-	dt.nested { background: url(/assets/arrow_right.png) no-repeat scroll left 4px; margin-left: 20px; }
-	dd.nested { padding-left: 0; /*width: 550px;*/ }
-	.msg-form, hr { clear: both; }
-	.msg-form .btn { margin-bottom: 15px; }
- 	}
-.order.messages { 
-	h3 { margin-bottom: 15px; }
-	dl { clear: both; overflow: hidden; }
-	dd { width: 780px; }
-	dd.nested { width: 765px; }
-	textarea { width: 930px; }
-	}
-	
-.boolean input { float: left; margin-right: 15px; }
-.user { 
-	div.radio { margin-top: 15px; padding: 0; }
-	label.radio { padding-left: 0;  }
-	label.radio, .radio input, .radio label, .check_boxes label, .check_boxes input { float: left; margin-left: 5px; }
- } 
-
-.pagination { 
-	a, em, .gap, .disabled { border: none; }
-	 }
-
-.sidebar { 
-	label { text-align: left; width: 100%; }
-	/*.btn { margin-top: 25px; }*/
-	}
-
 #special-action-box { border: 2px solid white; /*margin: -8px 0 0 0; padding: 10px;*/ padding-left: 5px; }
-input.btn { margin-bottom: 0; }
 
-#parts-rules { 
-	li { color: black; font-size: 14px; line-height: 20px; margin-bottom: 30px; }
-	li p { margin-left: 20px; }
-	.bad-p { margin-bottom: 5px; margin-top: 12px; }
-	.good-p { margin-bottom: 20px;  }
-	.bad-code { color: #919191; margin-left: 25px; }
-	.good-code { margin-left: 13px; }
-	.specs { font-size: 13px; margin-left: 10px; padding: 1px 15px; }
-	}
 	
-#cart { margin-top: 20px; }
-.negative { color: #C00; font-weight: normal; }
-
-.parts-surrender { 
- 	li { clear: both; font-size: 1.1em; margin-bottom: 5px; }
- 	p input { margin-top: 15px; }
-	}
-
-td.padrt { padding-right: 10px; } 
-.alert-heading { margin-bottom: 10px; }

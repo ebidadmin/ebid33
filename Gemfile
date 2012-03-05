@@ -8,6 +8,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier', '>= 1.0.3'
 	gem "twitter-bootstrap-rails"
+	gem "client_side_validations"
 end
 gem 'jquery-rails'
 if HOST_OS =~ /linux/i
@@ -63,5 +64,3 @@ gem "squeel"
 gem "ransack"#, :git => "git://github.com/ernie/ransack.git"
 gem "has_scope"
 gem "ancestry"
-gem "client_side_validations"
-

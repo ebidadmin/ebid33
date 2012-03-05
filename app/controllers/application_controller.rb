@@ -8,19 +8,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
   
-  def search_by_origin
-    @car_origins = CarOrigin.includes(:car_brands) # eager loading to make query faster
-  end
-  
-  def search_by_region
-    @regions = Region.includes(:cities) # eager loading to make query faster
-  end
-  
   private
   
   def after_sign_in_path_for(resource_or_scope)
     if current_user.role?(:admin)
-      entries_path
+      entries_path(s: 'for-decision')
     elsif current_user.role?(:buyer)
       buyer_entries_path(s: 'for-decision')
     elsif current_user.role?(:seller)
@@ -35,6 +27,8 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
+  private
+
   def initialize_cart 
     @cart = Cart.find(session[:cart_id]) 
     rescue ActiveRecord::RecordNotFound 
@@ -42,7 +36,14 @@ class ApplicationController < ActionController::Base
       session[:cart_id] = @cart.id 
   end
  
-  private
+  
+  def search_by_origin
+    @car_origins = CarOrigin.includes(:car_brands) # eager loading to make query faster
+  end
+  
+  def search_by_region
+    @regions = Region.includes(:cities) # eager loading to make query faster
+  end
   
   def buyer_present?
     if params[:q] && params[:q][:buyer_company_id_matches].present?

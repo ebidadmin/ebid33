@@ -1,0 +1,22 @@
+.messages { overflow: hidden;
+	h3 { clear: both; /*float: left;*/ margin-bottom: 10px; }
+	h6 { clear: both; margin-bottom: 20px;  }
+	.msg-buttons {  
+		b, a { float: right; margin-right: 5px;}
+		b { margin-top: 10px; margin-right: 15px;}
+		}
+	dt, dd { margin-bottom: 10px; }
+	/*dd { width: 589px; }*/
+	.nested { padding-left: 15px; }
+	dt.nested { background: url(/assets/arrow_right.png) no-repeat scroll left 4px; margin-left: 20px; }
+	dd.nested { padding-left: 0; /*width: 550px;*/ }
+	.msg-form, hr { clear: both; }
+	.msg-form .btn { margin-bottom: 15px; }
+ 	}
+.order.messages { 
+	h3 { margin-bottom: 15px; }
+	dl { clear: both; overflow: hidden; }
+	dd { width: 780px; }
+	dd.nested { width: 765px; }
+	textarea { width: 930px; }
+	}

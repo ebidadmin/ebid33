@@ -1,0 +1,66 @@
+@import "twitter/bootstrap/bootstrap";
+@iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
+@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
+
+body { font-size: 11px; }
+.container { clear: both; margin: 15px auto; width: 780px; background: transparent; position: relative; overflow: hidden; }
+section { padding-top: 1.5em; }
+dt, dd { float: left; }
+dt { clear: both; font-size: 0.8em; text-transform: uppercase; width: 30%; }
+dd { width: 67%; }
+
+.txtcenter { text-align: center !important; }
+.txtright { text-align: right !important; }
+.small { font-size: 0.95em; }
+.floatright { float: right; }
+.negative { color: #C00; font-weight: normal; }
+.cancelled { text-decoration: line-through; }
+
+#print-header { border-bottom: 1px solid black; margin: 0px auto; overflow: hidden; padding-bottom: 5px; position: relative; width: 780px;  }
+#print-header h1 { height: 95px; background: transparent url(../assets/ebidlogo.jpg) no-repeat; margin: 0; text-indent: -9999px; overflow: hidden;  }
+#print-nav { margin: 0; position: absolute; bottom: 5px; right: 0; }
+
+table td { border-top: 1px solid black !important; }
+//th { padding: 10px !important; }
+table p { margin: 0;  }
+table .total { font-size: 1.2em; font-weight: bold; }
+td.bids { padding-right: 20px; padding-left: 20px; }
+.bids p { font: 100%; text-align: right; }
+.index { float: left; padding-right: 8px; text-align: right; width: 18px; }
+.part-desc { float: left;}
+.messages { overflow: hidden;
+	h3 { clear: both; font-weight: 300; margin-bottom: 10px; }
+	h6 { clear: both; margin-bottom: 20px;  }
+	dt, dd { margin-bottom: 5px; }
+	dd { width: 620px; }
+	dt.nested { background: url(/assets/arrow_right.png) no-repeat scroll left 4px; margin-left: 30px; padding-left: 15px; }
+	dd.nested { width: 590px; }
+ 	}
+
+.order { margin-bottom: 17px;
+	h5, h4 { line-height: 20px; margin: 10px 0; }
+	p { margin-bottom: 0; }
+	.user { margin-top: 15px; font-weight: bold; }
+	dl { margin-top: 25px; }
+	.order-caption { border-bottom: 1px solid #DDD; margin-bottom: 10px; }
+	.delivery { border: 1px solid black; padding: 0 30px 20px 30px; }
+	.instr { padding: 5px 0; border-top: 1px dotted black; border-bottom: 1px dotted black; margin-top: 25px; }
+	.due-date { margin-top: 10px; }
+	.status-box a { margin-left: 32%; }
+	.help-block { margin-bottom: 15px; }
+	}
+	
+.fees table {
+	div { float: left; }
+	.vehicle { width: 140px; }
+	.fee { clear: both; margin-bottom: 4px; position: relative; }
+	.part { min-height: 1em; }
+	.amount { margin-left: 8px; min-height: 1em; width: 80px; }
+	.factors { margin-left: 8px; min-height: 1em; width: 65px; }
+	.close { position: absolute; top: -2px; right: -15px; }
+	}
+
+@media print {
+	#print-header, #print-nav, form, #confirmation { display: none; }
+}
+

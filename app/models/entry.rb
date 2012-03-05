@@ -17,8 +17,8 @@ class Entry < ActiveRecord::Base
   belongs_to :city
   belongs_to :term
 
-  has_many :photos, dependent: :destroy, validate: true
-  accepts_nested_attributes_for :photos, :allow_destroy => true, :reject_if => proc { |a| a['photo'].blank? }
+  has_many :photos, dependent: :destroy#, validate: true
+  accepts_nested_attributes_for :photos, allow_destroy: true, :reject_if => proc { |a| a['photo'].blank? }
   
   has_many :line_items, dependent: :destroy
   accepts_nested_attributes_for :line_items, allow_destroy: true, reject_if: proc { |obj| obj.blank? }
@@ -42,6 +42,7 @@ class Entry < ActiveRecord::Base
   
   validates_presence_of :year_model, :car_brand, :car_brand_id, :car_model_id, 
   :plate_no, :serial_no, :motor_no, :date_of_loss, :city_id, :term_id
+  validates_associated :photos
   
   delegate :term_name, to: :term
   

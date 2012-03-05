@@ -4,7 +4,7 @@
     <title>
       <%= content_for?(:title) ? "Print | " + yield(:title) : "E-Bid Inc. - The Philippines' Vehicle Parts Auction Hub" %>
     </title>
-		<%= stylesheet_link_tag 'bootstrap', 'print', media: 'all' %>
+		<%= stylesheet_link_tag 'print', media: 'all' %>
     <%= csrf_meta_tag %>
 		<link rel="shortcut icon" href="/images/base/favicon.ico" />
 		<%= yield(:head) %>

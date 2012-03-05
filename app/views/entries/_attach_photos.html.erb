@@ -1,16 +1,23 @@
 <%= content_tag :fieldset, class: 'photouploads' do %>
-	<%= content_tag :legend, 'Photos' %>
-		<%= f.fields_for :photos do |photo|  %>
-			<% unless photo.object.new_record?  %>
-				<% if photo.object.processing == false %>
+	<%= content_tag :legend, 'Photos', data: { content: "First photo should always be the full view of the vehicle.", "original-title" => "Minimum: 2 photos" } %>
+	<%= f.simple_fields_for :photos do |photo|  %>
+		<% unless photo.object.new_record?  %>
+			<% if photo.object.processing == false %>
 				<%= image_tag photo.object.photo.url(:tiny), class: "span1" %>
-				<% else %>
+			<% else %>
 				<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				
-				<% end %>
 			<% end %>
-		
-			<%= photo.input :photo, :as => :file %>
-			<%= photo.link_to_remove "x", class: 'close' %>
 		<% end %>
-		<%= f.link_to_add "#{content_tag :i, '', class: 'icon-picture icon-white' } Add Another Photo".html_safe, :photos, class: 'btn btn-primary' %>
+	
+		<%= photo.input :photo %>
+		<%= photo.link_to_remove "x", class: 'close', rel: 'tooltip', data: {'original-title' => 'remove field'} %>
+	<% end %>
+	<%= f.link_to_add "#{content_tag :i, '', class: 'icon-picture icon-white' } Add Another Photo".html_safe, :photos, class: 'btn btn-primary' %>
+<% end %>
+
+<%= render 'shared/tooltip_delete' %>
+<% content_for :javascripts do %>
+	<script type="text/javascript" charset="utf-8">
+		$('legend').popover('show');
+	</script>
 <% end %>
