@@ -29,6 +29,7 @@ class Entry < ActiveRecord::Base
   has_many :messages, dependent: :destroy
   has_many :fees
   has_many :variances, dependent: :destroy
+  has_many :surrenders, dependent: :destroy
   
   default_scope order('created_at DESC')
   scope :active, where('entries.bid_until >= ?', Date.today)

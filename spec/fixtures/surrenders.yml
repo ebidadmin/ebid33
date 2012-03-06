@@ -1,0 +1,15 @@
+one:
+  entry_id: 1
+  shop: MyString
+  address1: MyString
+  address2: MyString
+  retriever: MyString
+  items_count: 1
+
+two:
+  entry_id: 1
+  shop: MyString
+  address1: MyString
+  address2: MyString
+  retriever: MyString
+  items_count: 1

@@ -1,0 +1,27 @@
+<% title "Surrenders" %>
+
+<table>
+  <tr>
+    <th>Entry</th>
+    <th>Shop</th>
+    <th>Address1</th>
+    <th>Address2</th>
+    <th>Retriever</th>
+    <th>Items Count</th>
+  </tr>
+  <% for surrender in @surrenders %>
+    <tr>
+      <td><%= surrender.entry_id %></td>
+      <td><%= surrender.shop %></td>
+      <td><%= surrender.address1 %></td>
+      <td><%= surrender.address2 %></td>
+      <td><%= surrender.retriever %></td>
+      <td><%= surrender.items_count %></td>
+      <td><%= link_to "Show", surrender %></td>
+      <td><%= link_to "Edit", edit_surrender_path(surrender) %></td>
+      <td><%= link_to "Destroy", surrender, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Surrender", new_surrender_path %></p>

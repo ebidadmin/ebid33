@@ -1,0 +1,56 @@
+<%= content_tag :p, regular_date(@surrender.created_at), class: 'date' %>
+<div class="address">
+	<%= content_tag :p, @surrender.shop %>
+	<%= content_tag :p, @surrender.address1 %>
+	<%= content_tag :p, @surrender.address2 %>
+</div>
+
+<%= content_tag :p, class: 'prelims row' do %>
+	<%= content_tag :span, 'Attention', class: 'span2' %>
+	<%= content_tag :span, ': SERVICE MANAGER' %>
+<% end %>
+
+<%= content_tag :p, class: 'prelims second row' do %>
+	<%= content_tag :span, 'RE', class: 'span2' %>
+	<%= content_tag :span, ': AUTHORITY TO RETRIEVE SALVAGE PARTS' %>
+<% end %>
+
+<%= content_tag :p, 'Gentlemen:' %>
+
+<p class="parts">
+	This is to authorize <%= content_tag :b, @surrender.retriever.upcase %> and/or his representatives 
+	whose signature appears below, to retrieve and pull-out from your custody various salvaged/damaged 
+	replaced parts, subject for surrender to <%= content_tag :b, current_user.company.name %> for the
+	following unit:
+</p>
+
+<div class="row parts">
+	<div class="span4 offset1">
+		<%= content_tag :h4, "#{@entry.model_name} #{content_tag :em, @entry.variant.upcase, class: 'small' if @entry.car_variant.present?}".html_safe %>
+		<%= content_tag :dl do %>
+			<%= dl_helper 'Claim No.', @entry.ref_no if current_user.role?(:buyer) || @order %>
+			<%= dl_helper 'Plate No.',  @entry.plate_no %>
+		<% end %>
+	</div>
+	<div class="span4">
+		<ol>
+			<% for p in @surrender.surrender_parts %>
+				<%= content_tag :li, p.name %>
+			<% end %>
+		</ol>
+	</div>
+</div>
+
+<p>
+	Thank you and we appreciate your kind assistance.
+</p>
+
+<%= content_tag :p, 'Very truly yours,', class: 'signature-line' %>
+<div class="address signature-line">
+<%= content_tag :b, current_user.branch.approver.profile.to_s.upcase %>
+<%= content_tag :p, current_user.branch.approver.profile.rank %>
+</div>
+<div class="row">
+	<%= content_tag :p, 'Authorized Retriever:', class: 'signature-line span12' %>
+	<%= content_tag :p, @surrender.retriever, class: 'retriever span2' %>
+</div>

@@ -57,7 +57,8 @@
 			<%= content_tag :span, '', class: 'caret' %>
 		<% end %>
 		<ul class="dropdown-menu">
-			<%= nav_link('Parts Surrender', surrender_parts_path(@entry)) %>
+			<%#= nav_link('Parts Surrender', surrender_parts_path(@entry)) %>
+			<%= nav_link('Parts Surrender', new_surrender_path(id: @entry)) %>
 			<%= nav_link('Compute Variance', new_entry_variance_path(@entry)) %>
 			<%= nav_link('Show Variance', variance_path(id: @entry)) %>
 		</ul>

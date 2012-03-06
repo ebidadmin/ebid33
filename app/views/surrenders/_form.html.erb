@@ -1,0 +1,30 @@
+<%= content_tag :h2, class: 'clearfix' do %>
+	<%= @entry.model_name %>
+	<%= content_tag :small, "#{@entry.variant} (#{@entry.plate_no})" %>
+<% end %>
+
+<%= content_tag :div, class: 'parts-surrender row' do %>
+<%= simple_form_for @surrender do |f| %>
+	<%= hidden_field_tag :id, @entry.id %>
+	<div class="span4">
+	<%= f.input :shop %>
+	<%= f.input :address1, label: 'Bldg, number, street' %>
+	<%= f.input :address2, label: "Baranggay/district, city or province".html_safe %>
+	<%= f.input :retriever %>
+	</div>
+	<ol class="span4" >
+		<% for item in @entry.line_items %>
+			<%= content_tag :li, class: 'span4' do %>
+				<%= item.name %>
+				<%= check_box_tag 'items[]', item.id, true, class: 'pull-right' %>
+			<% end %>
+		<% end %>
+	</ol>
+	<%= content_tag :p, class: 'span3 offset1 txtcenter' do %>
+		<%= content_tag :em, 'Select the parts you want to include.' %>
+		<%= f.submit 'Generate Letter', class: 'btn btn-success btn-large' %>
+	<% end %>
+<% end %>
+<% end %>
+
+ 

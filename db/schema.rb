@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120224023216) do
+ActiveRecord::Schema.define(:version => 20120306070922) do
 
   create_table "bids", :force => true do |t|
     t.integer  "user_id"
@@ -249,10 +249,15 @@ ActiveRecord::Schema.define(:version => 20120224023216) do
   add_index "fees", ["seller_company_id"], :name => "index_fees_on_seller_company_id"
   add_index "fees", ["seller_id"], :name => "index_fees_on_seller_id"
 
-  create_table "friendships", :force => true do |t|
+  create_table "friendships", :id => false, :force => true do |t|
+    t.integer  "company_id"
+    t.integer  "friend_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "friendships", ["company_id"], :name => "index_friendships_on_company_id"
+  add_index "friendships", ["friend_id"], :name => "index_friendships_on_friend_id"
 
   create_table "line_items", :force => true do |t|
     t.integer  "entry_id"
@@ -386,6 +391,29 @@ ActiveRecord::Schema.define(:version => 20120224023216) do
     t.integer "user_id"
     t.integer "role_id"
   end
+
+  create_table "surrender_parts", :force => true do |t|
+    t.integer "surrender_id"
+    t.integer "line_item_id"
+    t.integer "car_part_id"
+  end
+
+  add_index "surrender_parts", ["car_part_id"], :name => "index_surrender_parts_on_car_part_id"
+  add_index "surrender_parts", ["line_item_id"], :name => "index_surrender_parts_on_line_item_id"
+  add_index "surrender_parts", ["surrender_id"], :name => "index_surrender_parts_on_surrender_id"
+
+  create_table "surrenders", :force => true do |t|
+    t.integer  "entry_id"
+    t.string   "shop"
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "retriever"
+    t.integer  "items_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "surrenders", ["entry_id"], :name => "index_surrenders_on_entry_id"
 
   create_table "temp_companies", :force => true do |t|
     t.string   "name"

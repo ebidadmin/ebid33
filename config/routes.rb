@@ -1,5 +1,7 @@
 Ebid33::Application.routes.draw do
 
+  resources :surrenders
+
   resources :var_companies
 
   devise_for :users, path: :account, controllers: {sessions: "sessions"}
