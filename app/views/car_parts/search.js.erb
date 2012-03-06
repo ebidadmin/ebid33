@@ -1,3 +1,3 @@
-$("div#search-results").html("<%= escape_javascript(render 'car_parts/search_results') %>").show('slide');
-// $(".spinner").show().fadeOut(1000);
+$("div#search-results").html("<%= escape_javascript(image_tag 'loading.gif') %>");
+$("div#search-results").html("<%= escape_javascript(render 'car_parts/search_results') %>").show();
 

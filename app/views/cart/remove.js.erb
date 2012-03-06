@@ -1,3 +1,5 @@
 // $("div#cart-notice").html("<%= escape_javascript(render 'cart/notice') %>").hide().slideDown().stop().fadeOut(5000);
 $("div#parts-list tr#<%= @item.id %>").fadeOut();
-
+<% if @cart.cart_items.empty? %>
+	$('.clear').remove();
+<% end %>

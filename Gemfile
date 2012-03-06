@@ -58,7 +58,7 @@ gem "paperclip", '2.3.11'
 gem "delayed_job_active_record"
 gem "will_paginate", "~> 3.0"
 gem "squeel"
-# gem "tire"
+gem "tire"
 # gem 'elastic_searchable'
 # gem 'rd_searchlogic', :require => 'searchlogic', :git => 'git://github.com/railsdog/searchlogic.git'
 gem "ransack"#, :git => "git://github.com/ernie/ransack.git"

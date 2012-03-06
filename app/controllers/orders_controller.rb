@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   include ActionView::Helpers::TagHelper
-  # load_and_authorize_resource
+  load_and_authorize_resource
   
   def index
     @q = Order.search(params[:q])
@@ -40,21 +40,24 @@ class OrdersController < ApplicationController
   def create
     # raise params.to_yaml
     @orders = Array.new
-    @entry = Entry.find(params[:entry_id])
+    @entry = Entry.find(params[:id])
     winning_bids = params[:bids]
     @bids ||= Bid.find(winning_bids.collect { |k,v| k })
 
     # Create a unique PO per seller
     @bids.group_by(&:user).each do |bidder, bids|
-      @order = current_user.orders.build(params[:order])
+      # @order = current_user.orders.build(params[:order])
+      @order = @entry.orders.build(params[:entry][:order])
       @order.populate(current_user, request.remote_ip, bidder, bids) ### check this, total does not match updated bids
-      if @entry.orders << @order
+      if current_user.orders << @order
         bids.each { |bid| bid.process_order(@order, winning_bids.fetch(bid.id.to_s)[0].to_i) }
       end
+      # @orders << @order
       @orders << @order
     end 
 
     if @orders.all?(&:valid?) 
+      @entry.update_attribute(:ref_no, params[:entry][:ref_no])
       @entry.update_status unless @entry.is_online
       @orders.each { |o| Notify.delay.new_order(o) }
       unless @orders.count < 2

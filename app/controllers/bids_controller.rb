@@ -1,5 +1,6 @@
 class BidsController < ApplicationController
-  
+  load_and_authorize_resource
+
   def index
     # @bids = Bid.unscoped.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], :user).order('created_at DESC').paginate(page: params[:page], per_page: 30)
     @q = LineItem.with_bids.search(params[:q])
@@ -77,8 +78,8 @@ class BidsController < ApplicationController
       @entry = Entry.find(params[:entry_id])
       @bids = Bid.find(params[:bids].collect { |item, id| id.values }, include: [:line_item => :car_part])
       @bidders = @bids.collect(&:user_id).uniq
+      @order = @entry.orders.build
       # @order = current_user.orders.build
-      @order = current_user.orders.build
       render layout: 'layout2'
     else
       flash[:error] = ("Ooops! Select the <strong>Low Bids</strong> first before you create a PO.").html_safe

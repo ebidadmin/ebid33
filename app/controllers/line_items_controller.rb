@@ -57,7 +57,9 @@ class LineItemsController < ApplicationController
   
   def add
     @entry = Entry.find(params[:id], include: :line_items)
-    @q = CarPart.search(params[:q])
+    @car_parts = CarPart.order(:name).page(params[:page]).per_page(32)
+    
+    render layout: 'layout2'
   end
   
   def cancel

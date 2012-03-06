@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :buyers, through: :fees
   has_many :sellers, through: :fees
   has_many :variances, dependent: :destroy
+  has_one :approver, through: :branch
   
   delegate :address1, :address2, :city_name, to: :branch, allow_nil:true
   delegate :first_name, :shortname, :phone, :fax, :birthdate, to: :profile, allow_nil:true

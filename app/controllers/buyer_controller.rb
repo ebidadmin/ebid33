@@ -10,10 +10,12 @@ class BuyerController < ApplicationController
   
   def show
     @entry = Entry.find(params[:id], include: :line_items)
-    @q = CarPart.search(params[:q])
-    
-    @pvt_messages = @entry.messages.pvt.restricted(current_user.company)
-    @pub_messages = @entry.messages.pub
+    if @entry.line_items.present?
+      @pvt_messages = @entry.messages.pvt.restricted(current_user.company)
+      @pub_messages = @entry.messages.pub
+    else
+      redirect_to add_line_items_path(id: @entry)
+    end
   end
   
   def print_entry
@@ -50,8 +52,9 @@ class BuyerController < ApplicationController
   end
   
   def surrender_letter
+    raise params.to_yaml
     @entry = Entry.find(params[:id], include: :line_items)
-    render layout: 'layout2'
+    render layout: 'print'
   end
   
   private

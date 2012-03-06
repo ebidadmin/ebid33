@@ -1,0 +1,17 @@
+<% title "Add Parts: #{@entry.model_name}" %>
+<% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
+
+<div class="row">
+	<div id="parts-list" class="span6">
+		<% unless @entry.line_items.blank? %>
+		<%= render 'cart/cart' %>
+		<% else %>
+			<%= render 'cart/cart_rules' %>
+		<% end %>
+	</div>
+	<div class="span6">
+		<%= render 'cart/search_form' %>
+		<%= content_tag :div, '', id: 'search-results' %>
+	</div>
+</div>
+

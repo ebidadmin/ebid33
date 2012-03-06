@@ -1,5 +1,4 @@
-// $("table#cart").append("<%= escape_javascript(render 'cart/item', item: @item, index: @index ) %>");
 $("div#search-results").slideUp('slow');
 $("div#parts-list").html("<%= escape_javascript(render 'cart/cart') %>");
 $("div#parts-list tr#<%= @item.id %>").effect("highlight", {}, 4000);
-// $("div#cart-notice").html("<%= escape_javascript(render 'cart/notice') %>").fadeOut(5000);
+$(".search-query").val('');

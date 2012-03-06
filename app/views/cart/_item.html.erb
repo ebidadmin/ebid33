@@ -2,7 +2,7 @@
 	<%= content_tag :td, class: 'span3' do %>
 		<%= content_tag :span, index + 1, class: 'label index'  %>
 		<%= content_tag :span, item.part_name %>
+		<%= content_tag :p, "#{remove_link(item.car_part, @entry)} Temporary".html_safe, class: 'muted'  %>
 	<% end %>
-	<%= content_tag :td, (text_field_tag "specs[#{item.id}][]", item.specs), class: 'span3'  %>
-	<%= content_tag :td, "Temporary #{remove_link(item.car_part, @entry)}".html_safe, class: 'span3 center'  %>
+	<%= content_tag :td, (text_field_tag "specs[#{item.id}][]", item.specs, class: 'span3'), class: 'span3 txtcenter highlight'  %>
 <% end %>

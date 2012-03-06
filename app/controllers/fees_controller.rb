@@ -48,12 +48,12 @@ class FeesController < ApplicationController
   end
   
   def print
-    if can? :create, :entries
+    if can? :access, :all
+      @q = Fee.find_type(params[:t]).filter_period(params[:q]).search(params[:q])
+    elsif can? :create, :entries
       @q = Fee.for_decline.by_this_buyer(current_user).filter_period(params[:q]).search(params[:q])
     elsif can? :create, :bids #current_user.role?(:seller)
       @q = Fee.find_type(params[:t]).by_this_seller(current_user.company).filter_period(params[:q]).search(params[:q])
-    else
-      @q = Fee.find_type(params[:t]).filter_period(params[:q]).search(params[:q])
     end
     @all_fees ||= @q.result
     @fees = @all_fees.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], :seller_company)#.paginate(page: params[:page], per_page: 15)

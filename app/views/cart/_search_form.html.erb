@@ -1,9 +1,9 @@
-<%= search_form_for @q, url: search_car_parts_path(:id => params[:id]), html: { class: 'form-search well' }, method: :get, remote: true do |f| %>
-	<%= content_tag :h3, class: 'span4' do %>
-		Search Car Parts
+<%= form_tag search_car_parts_path(:id => params[:id]), class: 'form-search well', method: :get, remote: true do |f| %>
+	<%= content_tag :h3, class: 'clearfix' do %>
+		Search Parts
 		<%= content_tag :small, 'Type keywords here'  %>
 	<% end %>
 
-  <%= f.text_field :name_cont, class: 'search-query span3' %>
-  <%= f.submit 'Search', class: 'btn primary' %>
+  <%= text_field_tag :query, params[:query], class: 'search-query span4' %>
+  <%= submit_tag 'Search', class: 'btn btn-primary' %>
 <% end %>

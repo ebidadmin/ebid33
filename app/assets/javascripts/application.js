@@ -65,7 +65,7 @@ $(function() {
 	$('div.fields').addClass('well');
 	$('div.fields div').addClass('span5');
 	$("#parts-pagination a").live("click", function() {
-    $(".pagination").html("Page is loading...");
+    $(".pagination").html(loading);
 		$.getScript(this.href);
 		return false;
 	});

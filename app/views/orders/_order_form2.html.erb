@@ -1,0 +1,61 @@
+<% subtitle "#{@entry.model_name} #{@entry.variant}" %>
+
+<%= simple_form_for @entry, url: orders_path(id: @entry.id), method: :post do |f|  %>
+
+	<!-- create an order for each supplier -->
+	<%= content_tag :h2 do %>
+		Check order items and quantities
+		<%= content_tag :small, "You have #{content_tag :span, pluralize(@bidders.count, 'supplier')}".html_safe, class: 'highlight' %>
+	<% end %>
+
+	<% @bids.group_by(&:user_id).each do |seller, seller_bids| %>
+		<%= render 'orders/items_table', bids: seller_bids %>
+	<% end %>
+
+	<%= content_tag :h2 do %>
+		Encode your delivery details
+		<%= content_tag :small, "Fields marked with #{content_tag :em, 'asterisks (*)'} are required.".html_safe, class: 'highlight' %>
+	<% end %>
+
+	<%= f.fields_for :order do |o| %>
+	<%= content_tag :div, class: 'well' do %>
+		<%= content_tag :div, class: 'row' do %>
+
+			<%= content_tag :div, class: 'span4' do %>
+				<%= o.input :ref_no, label: "What's your PO Number?" %>
+				<%= o.input :ref_name, label: "Who is the Insured?" %>
+				<%= f.input :ref_no, label: "Is this the correct Claim No.?", hint: 'Make sure this is accurate' %>
+			<% end %>
+
+			<%= content_tag :div, class: 'span4' do %>
+				<%= content_tag :div, class: 'clearfix' do %>
+					<%= o.input :deliver_to, label: 'Delivery Recipient', hint: 'Name of repair shop or receiving establishment' %>
+					<%= o.label 'Address', required: true %>
+					<%= content_tag :p, "Note: your original request was #{content_tag :span, @entry.city.name, class: 'label label-info'} <br> Charges may apply for farther areas".html_safe, id: 'address-note' %>
+				<% end %>
+				<%= o.input :address1, label: 'Bldg, number, street', required: true %>
+				<%= o.input :address2, label: "Baranggay/district, city or province".html_safe, required: true %>
+			<% end %>
+
+			<%= content_tag :div, class: 'span3' do %>
+				<%= o.input :contact_person, label: 'Contact Person' %>
+				<%= o.input :phone %>
+				<%= o.input :fax %>
+				<%= o.input :instructions, label: 'Special Request or Instructions', input_html: { rows: 3 } %>
+			<% end %>
+
+		<% end %>
+	<% end %>
+	<% end %>
+
+	<%= content_tag :div, class: 'well' do %>
+		<%= f.submit 'Submit Order', class: 'btn btn-success floatright' %> 
+		<%= link_to "Cancel", (current_page?(accept_bids_path) ? :back : @order), class: 'btn floatright' %>
+		<%= content_tag :p do %>
+			<%= content_tag :span, 'Important', class: 'label label-important' %>
+			Please ensure the correctness of your order above. In creating a PO,
+			<%= content_tag :b, "you agree that you are responsible for making sure that the recipient accepts the delivery." %>
+		<% end %>
+	<% end %>
+	
+<% end %>

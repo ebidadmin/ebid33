@@ -24,7 +24,8 @@ class Entry < ActiveRecord::Base
   accepts_nested_attributes_for :line_items, allow_destroy: true, reject_if: proc { |obj| obj.blank? }
   has_many :car_parts, through: :line_items
   has_many :bids, dependent: :destroy
-  has_many :orders
+  has_many :orders, validate: true
+  accepts_nested_attributes_for :orders, allow_destroy: true, reject_if: proc { |obj| obj.blank? }
   has_many :messages, dependent: :destroy
   has_many :fees
   has_many :variances, dependent: :destroy
@@ -40,9 +41,9 @@ class Entry < ActiveRecord::Base
   scope :declined, where(status: ['Declined-IP', 'Declined-All'])
   scope :for_seller, where{(status.not_like '%New%') & (status.not_like '%Edited%') & (status.not_like '%Removed%')} #where('entries.status NOT LIKE ?', ['New', 'Edited', 'Removed'])
   
-  validates_presence_of :year_model, :car_brand, :car_brand_id, :car_model_id, 
+  validates_presence_of :ref_no, :year_model, :car_brand, :car_brand_id, :car_model_id, 
   :plate_no, :serial_no, :motor_no, :date_of_loss, :city_id, :term_id
-  validates_associated :photos
+  validates_associated :photos, :orders
   
   delegate :term_name, to: :term
   
@@ -194,7 +195,7 @@ class Entry < ActiveRecord::Base
   end
   
   def can_be_edited
-    created_at > 3.weeks.ago
+    created_at > 3.weeks.ago || decided.nil? || expired.nil?
   end
   
   def can_online

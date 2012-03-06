@@ -17,7 +17,7 @@ class EntriesController < ApplicationController
     @entry = Entry.find(params[:id], include: [[:line_items => [:car_part, :bids, :order]], [:messages => [[:user => :roles], [:receiver => :roles]]]])
     @q = CarPart.search(params[:q])
 
-    if current_user.role?(:admin)
+    if can? :access, :all
       @pvt_messages = @entry.messages.pvt
     else
       @pvt_messages = @entry.messages.pvt.restricted(current_user.company)
@@ -32,6 +32,7 @@ class EntriesController < ApplicationController
     @car_models = @car_variants = @cities = []
     2.times { @entry.photos.build }
     @entry.term_id = 4 # default credit term is 30 days
+    render layout: 'layout2'
   end
 
   def create

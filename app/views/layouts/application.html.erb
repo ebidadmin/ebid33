@@ -7,47 +7,48 @@
     <title><%= content_for?(:title) ? "E-Bid | #{yield(:title)}" : "E-Bid Inc." %></title>
     <meta name="description" content="">
     <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
     <%= stylesheet_link_tag "application", media: "all" %>
     <%= csrf_meta_tags %>
     <%= yield(:head) %>
+    <link href="/assets/favicon.ico" rel="shortcut icon">
   </head>
   <body class="<%= params[:controller] %>">
-        <%= render 'shared/navigation' %>
+    <%= render 'shared/navigation' %>
     <div class="container">
-	     <% flash.each do |name, msg| %>
-	       <%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
-	     <% end %>
-				<div class="row">
-					<div class="span9">
-						<div class="page-header">
-							<%= content_tag :h1 do %>
-								<%= yield(:title) %>
-								<%= yield(:subtitle).html_safe %>
-							<% end %>
-						</div>
-		        <%= yield %>
-					</div> <!-- end of span12 -->
-					<div class="span3">
-			     	<div class="well sidebar">
-							<%= yield(:sidebar) %>
-			      </div>
-						<%= yield(:sidebar2) %>
-						<%= yield(:search_form) %>
-						<% if current_user %>
-							<h3>Latest Messages</h3>
-							<%= content_tag :dl do %>
-								<% @global_messages.each do |m| %>
-									<%#= render 'messages/msg_line', m: m, k: nil %>
-								<% end %>
-							<% end %>
-							
-							
+     <% flash.each do |name, msg| %>
+       <%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
+     <% end %>
+			<div class="row">
+				<div class="span9">
+					<div class="page-header">
+						<%= content_tag :h1 do %>
+							<%= yield(:title) %>
+							<%= yield(:subtitle).html_safe %>
 						<% end %>
-					</div> <!-- end of span4 -->
-				</div>
+					</div>
+			      <%= yield %>
+				</div> <!-- end of span9 -->
+	
+				<div class="span3">
+			    	<div class="well sidebar">
+						<%= yield(:sidebar) %>
+			     </div>
+					<%= yield(:sidebar2) %>
+
+					<% if current_user %>
+						<%= render 'layouts/chatbox' %>
+					<% end %>
+				</div> <!-- end of span3 -->
+			</div>
     </div> <!--! end of .container -->
-      <footer>
-      </footer>
+    <footer>
+    </footer>
 		<div id="javascripts">
 	    <%= javascript_include_tag "application" %>
 			<%= yield(:javascripts) %>

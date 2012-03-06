@@ -3,6 +3,7 @@ class Branch < ActiveRecord::Base
 
   belongs_to :company
   belongs_to :city
+  belongs_to :approver, :class_name => "User", :foreign_key => "approver_id"
   
   has_many :profiles
   has_many :users, through: :profiles

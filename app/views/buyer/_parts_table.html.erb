@@ -46,7 +46,7 @@
 			<% end %>
 			<ul class="dropdown-menu">
 				<%= nav_link 'Edit Entry', edit_entry_path(@entry) %>
-				<%= nav_link 'Edit or Add Parts', add_line_items_path(id: @entry), remote: true %>
+				<%= nav_link 'Edit or Add Parts', add_line_items_path(id: @entry) %>
 			</ul>
 		<% end %>
 	</div>

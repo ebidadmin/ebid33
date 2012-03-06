@@ -1,6 +1,10 @@
 #main { position: relative; }
 .alert-message { padding-top: 15px; padding-bottom: 15px; }
-table p { margin-bottom: 0px; }
+.table {
+	p { margin-bottom: 0px; }
+	tr:last-child { border-bottom: 1px solid #DDD; }
+	tbody tr.label:hover td, tbody tr.label:hover th { background-color: transparent !important; }
+	}
 .floatright { float: right; margin-left: 5px;}
 .floatleft { float: left; margin-right: 5px; }
 .txtcenter { text-align: center !important; }
@@ -13,6 +17,7 @@ table p { margin-bottom: 0px; }
 .ui-datepicker-trigger { margin-left: 5px; }
 h2 .label { font-size: 100%; }
 
+.pagination { text-align: center; } 
 form select { width: auto; }
 input.btn { margin-bottom: 0; }
 .boolean input { float: left; margin-right: 15px; }
@@ -20,7 +25,7 @@ input.btn { margin-bottom: 0; }
 	div.radio { margin-top: 15px; padding: 0; }
 	label.radio { padding-left: 0;  }
 	label.radio, .radio input, .radio label, .check_boxes label, .check_boxes input { float: left; margin-left: 5px; }
- } 
+	} 
 
 .label { text-transform: uppercase; }
 .label.index { float: left; margin-left: -35px; text-align: center; width: 15px; }
@@ -41,12 +46,10 @@ dd { width: 67%; }
 	dd { margin-bottom: 5px; margin-left: 0; width: 100%; }
 	dd.important { background-color: white; font-size: 1.1em; padding: 4px 2px; }
 	label { text-align: left; width: 100%; }
-}
+	}
 .sidebar-status { border: 2px solid white; padding: 10px; text-align: center; }
 
-.pagination { 
-	a, em, .gap, .disabled { border: none; }
-	 }
+//.pagination li.disabled { display: none; }
 
 .parts-surrender { 
  	li { clear: both; font-size: 1.1em; margin-bottom: 5px; }

@@ -1,21 +1,20 @@
-<%= content_tag :div, class: 'span9' do %>
-<%= content_tag :h2 do %>
-	Search Results
-	<%= content_tag :small, 'arranged alphabetically' %>
-<% end %>
 <% if @car_parts.count > 0 %>
-	<% if params[:q] %>
-		<%= content_tag :h3, "#{content_tag :b, (pluralize @car_parts.count, 'part')} were found using your search keyword: #{content_tag :em, params[:q][:name_cont], class: 'highlight'}".html_safe %>
+	<%= content_tag :h3 do %>
+		Search Results
+		<%= content_tag :small, 'arranged by relevance' %>
+	<% end %>
+	<% if params %>
+		<%#= content_tag :h4, "#{content_tag :b, (pluralize @car_parts.count, 'part')} were found using your search keyword: #{content_tag :em, params[:query], class: 'highlight'}".html_safe %>
 		<%= content_tag :p, 'Click on the part to put it in your parts list.' %>
 	<% end %>
 
-	<%= will_paginate @car_parts, id: 'parts-pagination' %>
+	<%= will_paginate @car_parts, id: 'parts-pagination', previous_label: '&laquo;', next_label: '&raquo;', inner_window: 1, outer_window: 1, remote: true %>
 
 	<ul class="unstyled parts">
-	<% @car_parts.in_groups_of(24, false).each do |car_part_array| %> 
+	<% @car_parts.results.in_groups_of(16, false).each do |car_part_array| %> 
 		<%= content_tag :div, class: 'row' do %>
 			<% car_part_array.in_groups_of(8, false).each do |parts| %>
-				<%= content_tag :div, class: 'span3' do %>
+				<%= content_tag :div, class: 'span3 set' do %>
 					<% parts.each do |p| %>
 						<%= content_tag :li, select_link(p, @entry) %> 
 					<% end %>
@@ -26,8 +25,11 @@
 	<% end %> 
 	</ul>
 
+	<%= will_paginate @car_parts, id: 'parts-pagination', previous_label: '&laquo;', next_label: '&raquo;', inner_window: 1, outer_window: 1, remote: true %>
+
 <% else %>
-	<%= content_tag :h3, "Sorry, #{content_tag :em, params[:q][:name_cont], class: 'highlight'} could not be found.".html_safe, :class => 'instruction' %>
-	<%= content_tag :h3, "Please check your spelling OR try another keyword.", :class => 'instruction' %>
-<% end %>
+	<%= content_tag :h3 do  %>
+		Sorry, the keyword-combination <%= content_tag :em, params[:query], class: 'highlight' %> could not be found. 
+		<%= content_tag :small, 'Please check your spelling OR try another keyword.' %>
+	<% end %>
 <% end %>

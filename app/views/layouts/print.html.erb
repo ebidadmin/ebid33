@@ -27,7 +27,10 @@
 	
       <%= yield %>
 			<hr>
-			<p><strong>Copyright &copy; 2006-<%= Time.now.year -%> E-Bid, Inc.</strong>   All rights reserved.</p>
+			<%= content_tag :p, class: 'small' do %>
+				<%= content_tag :strong, "Copyright &copy; 2006-#{Time.now.year} E-Bid, Inc.".html_safe %>
+				All rights reserved.
+			<% end %>
     </div>
 		<div id="javascripts">
 	    <%= javascript_include_tag "application" %>

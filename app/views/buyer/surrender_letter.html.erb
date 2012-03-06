@@ -1,0 +1,19 @@
+<%= content_tag :p, regular_date(Date.today) %>
+
+<%= content_tag :p, 'RE: AUTHORITY TO RETRIEVE SALVAGE PARTS' %>
+
+<%= content_tag :p, 'Gentlemen:' %>
+
+<p>
+	This is to authorize __ and/or his representatives whose signature appears below,
+	to retrieve and pull-out from your custody various salvaged/damaged replaced parts,
+	subject for surrender to <%= content_tag :b, current_user.company.name %>.
+</p>
+
+<p>
+	Thank you and we appreciate your kind assistance.
+</p>
+
+<%= content_tag :p, 'Very truly yours,' %>
+<%= content_tag :p, current_user.branch.approver.profile %>
+<%= content_tag :p, current_user.branch.approver.profile.rank %>
