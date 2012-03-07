@@ -60,5 +60,13 @@ module MessagesHelper
   	link_to("#{recipient}", show_fields_messages_path(msg_for: "#{recipient.downcase}", open_tag: false, entry: entry, order: order), class: 'btn small', remote: true) 
   end
   
+  def m_entry_link(entry, id)
+    if can? :access, :all then link = entry
+    elsif can? :create, :entries then link = buyer_show_path(entry)
+    elsif can? :access, :bids then link = seller_show_path(entry)
+    end
+    link
+  end
+  
   
 end

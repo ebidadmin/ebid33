@@ -14,7 +14,7 @@
 				<%= th_bidtype_helper('Surplus') %>
 			</tr>
 		<% end %>
-		<% @entry.line_items.includes(:car_part, :bids).order('created_at DESC').each_with_index do |item, index| %>
+		<% @entry.line_items.includes(:car_part, :bids).order('status DESC').each_with_index do |item, index| %>
 		<%= content_tag :tr, id: "#{item.id}" do %>
 			<%= content_tag :td, class: 'span4' do %>
 				<%= content_tag :span, index + 1, class: 'label index'  %>
@@ -28,11 +28,27 @@
 					<div class="bid-container">
 						<% item.bids.group_by(&:bid_type).each do |type, bids| %>
 							<% bids.group_by(&:user).each do |user, bs| %>
+								
 								<% if t == type && current_user.company.users.include?(user) %>
-									<%= render bs unless bs.nil? %>
+									<% own_bid = bs.last %>
+									<%= render own_bid if own_bid %>
+									
+									<% lo_bid = bids.last %>
+									<% if lo_bid != own_bid  %>
+										<%= content_tag :code, class: "small" do %>
+											<%= content_tag :span, currency(lo_bid.amount), class: " #{' cancelled' if lo_bid.cancelled?}" %>
+											<%= content_tag :em, 'winner' %>
+										<% end %>
+									<% end %>
+									
+									<%#= content_tag :p, currency(lo_bid.amount), class: 'small' if lo_bid != own_bid  %>
+
 								<% end %> 
+	
+	
 							<% end %>
-						<% end %>
+
+					<% end %>
 					</div>
 				</td>
 			<% end %>

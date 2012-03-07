@@ -10,11 +10,11 @@
 
 			<%= content_tag :tr do %>
 				<%= content_tag :td, class: 'span4', rowspan: items.count + 1  do %>
+					<%= content_tag :span, entry.show_status, class: "label #{entry.status_color}" %>
 		      <%= content_tag :p, link_to(entry.model_name, entry)  %>
 					<%= content_tag :p, entry.plate_no %>
 					<%= content_tag :em, "created by #{entry.user.username}" %>
 					<%= content_tag :p, long_date(entry.online), class: 'small' %>
-					<%= content_tag :span, entry.show_status, class: "label #{entry.status_color}" %>
 				<% end %>
 			<% end %>
 			

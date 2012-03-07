@@ -67,7 +67,10 @@
 	  <%= f.text_field :plate_no_cont, class: 'span2' %>
 	  <%= f.label 'Car Brand' %>
 	  <%= f.grouped_collection_select :car_brand_id_eq, CarOrigin.includes(:car_brands), :car_brands, :name, :id, :name, {include_blank: true} %>
-	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	  <%= content_tag :p do %>
+			<%= f.submit 'Search', class: 'btn btn-primary' %>
+			<%= refresh_button %>
+		<% end %>
 	<% end %>
 <% end %>
 

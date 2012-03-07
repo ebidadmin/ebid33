@@ -2,9 +2,11 @@
 .alert-message { padding-top: 15px; padding-bottom: 15px; }
 .table {
 	p { margin-bottom: 0px; }
-	tr:last-child { border-bottom: 1px solid #DDD; }
+	tr:last-child td { border-bottom: 1px solid #DDD; }
 	tbody tr.label:hover td, tbody tr.label:hover th { background-color: transparent !important; }
+	p.label { font-size: 0.9em; font-weight: normal; /*margin-bottom:5px;*/ text-transform: none; }
 	}
+.table tbody tr:hover td, .table tbody tr:hover th { background-color: white !important; }
 .floatright { float: right; margin-left: 5px;}
 .floatleft { float: left; margin-right: 5px; }
 .txtcenter { text-align: center !important; }

@@ -1,8 +1,14 @@
 <div id="recent-messages" class="">
-	<%= content_tag :p, 'Latest Messages' %>
+	<%= content_tag :h6, 'Latest Messages for You' %>
 	<%= content_tag :dl do %>
 		<% @global_messages.each do |m| %>
-			<%#= render 'messages/msg_line', m: m, k: nil %>
+			<%= content_tag :dt, class: "muted" do %>
+				<%= "#{m.user_type.titleize} ##{m.user_id} said" %>
+			<% end %>
+			<%= content_tag :dd, class: "" do  %>
+				<%= shorten(m.message, 50) %><br>
+				<%= link_to 'more ...', (m.order_id.present? ? m.order : m_entry_link(m.entry, m.id)) %>
+			<% end %>
 		<% end %>
 	<% end %>
 </div>

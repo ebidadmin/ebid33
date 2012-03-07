@@ -22,7 +22,7 @@ class Ability
     elsif user.role?(:seller)
       can :access, [:home, :bids]
       can :read, :entries
-      can :accept, :orders
+      can [:read, :accept], :orders
       can :confirm_payment, :orders
       can :access, :messages
       can :access, :users, id: user.id
