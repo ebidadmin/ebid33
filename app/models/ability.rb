@@ -6,14 +6,14 @@ class Ability
     if user.role?(:admin)
       can :access, :all
     elsif user.role?(:powerbuyer)
-      can [:create, :update, :put_online], :entries
+      can [:create, :update, :put_online, :relist], :entries
       can [:create, :update, :read, :print], :orders
       can [:create, :update], :users, id: user.id
     elsif user.role?(:buyer)
       can :access, :home, :cart
       can :access, :users, id: user.id
       cannot :search, :users
-      can [:create, :update, :put_online], :entries
+      can [:create, :update, :put_online, :relist], :entries
       can [:create, :update, :read, :print], :orders, user_id: user.id
       can :access, [:car_brands, :car_models, :car_variants, :regions]
       can :access, :messages, user_id: user.id

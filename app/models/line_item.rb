@@ -61,7 +61,7 @@ class LineItem < ActiveRecord::Base
 	end
 	
 	def can_be_ordered
-    status == "For-Decision" || status == "Expired"
+    status == "For-Decision" || status == "Expired" || self.cancelled
   end
   
   def cannot_be_expired

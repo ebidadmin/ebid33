@@ -20,7 +20,7 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :messages
   has_many :fees
   
-  validates_presence_of :deliver_to#, :address1, :phone
+  validates_presence_of :deliver_to, :address1, :phone, :ref_name
 
   # TAGS_FOR_INDEX = %w(new for-delivery delivered overdue paid closed cancelled)
   

@@ -1,5 +1,5 @@
 <%= content_tag :fieldset, class: 'photouploads' do %>
-	<%= content_tag :legend, 'Photos', data: { content: "First photo should always be the full view of the vehicle.", "original-title" => "Minimum: 2 photos" } %>
+	<%= content_tag :legend, 'Photos', data: { content: "First photo should always be the FULL VIEW of the vehicle. Please cooperate.  Thanks!", "original-title" => "Minimum: 2 photos" } %>
 	<%= f.simple_fields_for :photos do |photo|  %>
 		<% unless photo.object.new_record?  %>
 			<% if photo.object.processing == false %>
@@ -18,6 +18,6 @@
 <%= render 'shared/tooltip_delete' %>
 <% content_for :javascripts do %>
 	<script type="text/javascript" charset="utf-8">
-		$('legend').popover('show');
+		$('legend').popover({placement: 'bottom'}).popover('show');
 	</script>
 <% end %>

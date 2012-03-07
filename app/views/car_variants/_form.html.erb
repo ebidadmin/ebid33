@@ -1,26 +1,35 @@
-<%= simple_form_for @car_variant do |f| %>
-	<%= f.input :car_brand, wrapper_html: { id: 'veh-brand' } do %>
-	  <%= f.grouped_collection_select :car_brand_id,  CarOrigin.all, :car_brands, :name, :id, :name, {:include_blank => 'Choose Brand'} %>
-	<% end %>
-	<%= f.input :car_model_id, collection:  @car_models, wrapper_html: { id: 'veh-model' }, :include_blank => 'Select Model/Type', hint: 'example: Fortuner' %>
-	<%= f.input :new_model, :label => 'New Model' do %>
-		<%= f.text_field :new_model %>
-		<%= f.hint 'Note: use this field only to create a new Car Model' %>
-		<%= f.hint "#{content_tag :strong, 'Example: Innova (Diesel)'}".html_safe %>
-	<% end %>
-	<%= f.input :name, :label => 'New Variant' do %>
-		<%= f.text_field :name %>
-		<%= f.hint "#{content_tag :strong, 'Example: 2.5 MT Special'}".html_safe %>
-	<% end %>
-	<% if current_user.role?('admin') %>
-		<%= f.input :start_year %>
-		<%= f.input :end_year %>
-	<% end %>
-	<%= f.button :submit %>
-	<%= link_to "Cancel", :back, :class => 'italic' if current_user.role?('admin') %> 
-	<%= link_to "Cancel", new_user_entry_path(current_user), :class => 'italic' unless current_user.role?('admin')%> 
-	<% if current_user.role?('admin') %>
-	  | <%= link_to "Show", @car_variant %> 
-	  | <%= link_to "View All", car_variants_path %>
-	<% end %>
+<%= simple_form_for @car_variant, html: {class: 'row'} do |f| %>
+	<div class="span4">
+		<%= f.input :car_brand_id, label: 'Brand', wrapper_html: { id: 'veh-brand', class: 'control-group' } do %>
+		  <%= f.grouped_collection_select :car_brand_id,  CarOrigin.all, :car_brands, :name, :id, :name, include_blank: 'Choose Brand', wrapper_class: 'control-group' %>
+			<%= f.hint 'example: Toyota' %>
+		<% end %>
+		<%= f.input :car_model_id, collection:  @car_models, label: 'Model', wrapper_html: { id: 'veh-model' }, include_blank: 'Choose Model/Type', hint: 'example: Fortuner' %>
+		
+	</div>
+	<div class="span4">
+		<% if can? :access, :all %>
+			<%= f.input :new_model, :label => 'New Model' do %>
+				<%= f.text_field :new_model %>
+				<%= f.hint 'Note: use this field only to create a new Car Model' %>
+				<%= f.hint "#{content_tag :strong, 'Example: Innova (Diesel)'}".html_safe %>
+			<% end %>
+			<%= f.input :start_year %>
+			<%= f.input :end_year %>
+		<% end %>
+		<%= f.input :name, :label => 'New Variant' do %>
+			<%= f.text_field :name %>
+			<%= f.hint "#{content_tag :strong, 'Example: 2.5 MT Special'}".html_safe %>
+		<% end %>
+		<div class="well">
+			<%= f.submit 'Submit Variant', class: 'pull-right btn-success' %>
+			<% if can? :access, :all %>
+				<%= link_to "Cancel", :back, class: 'btn' %> 
+			  <%= link_to "Show", @car_variant, class: 'btn' %> 
+			  <%= link_to "View All", car_variants_path, class: 'btn' %>
+			<% else %>
+				<%= link_to "Cancel", new_user_entry_path(current_user), class: 'btn' %> 
+			<% end %>
+		</div>
+	</div>
 <% end %>

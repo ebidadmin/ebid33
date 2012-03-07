@@ -28,7 +28,9 @@
 						<%= content_tag :td, class: 'span3 txtcenter' do %>
 							<%= content_tag :p, item.status, class: "label #{item.status_color}" %>
 							<%= content_tag :p, "as of #{regular_date(item.updated_at)}", class: 'small' %>
-							<%= link_to "PO# #{item.order.id}", item.order if item.order %>
+							<% item.bids.group_by(&:order).each do |o, bids| %>
+								<%= link_to "PO# #{o.id}", o, class: "#{'cancelled' if bids.collect(&:status).include?('Cancelled')}" if o %>
+							<% end %>
 						<% end %>
 						
 					<% end %>

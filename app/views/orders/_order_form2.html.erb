@@ -23,13 +23,13 @@
 
 			<%= content_tag :div, class: 'span4' do %>
 				<%= o.input :ref_no, label: "What's your PO Number?" %>
-				<%= o.input :ref_name, label: "Who is the Insured?" %>
+				<%= o.input :ref_name, label: "Who is the Insured?", required: true %>
 				<%= f.input :ref_no, label: "Is this the correct Claim No.?", hint: 'Make sure this is accurate' %>
 			<% end %>
 
 			<%= content_tag :div, class: 'span4' do %>
 				<%= content_tag :div, class: 'clearfix' do %>
-					<%= o.input :deliver_to, label: 'Delivery Recipient', hint: 'Name of repair shop or receiving establishment' %>
+					<%= o.input :deliver_to, label: 'Delivery Recipient', hint: 'Name of repair shop or receiving establishment', required: true %>
 					<%= o.label 'Address', required: true %>
 					<%= content_tag :p, "Note: your original request was #{content_tag :span, @entry.city.name, class: 'label label-info'} <br> Charges may apply for farther areas".html_safe, id: 'address-note' %>
 				<% end %>
@@ -39,9 +39,9 @@
 
 			<%= content_tag :div, class: 'span3' do %>
 				<%= o.input :contact_person, label: 'Contact Person' %>
-				<%= o.input :phone %>
+				<%= o.input :phone, required: true %>
 				<%= o.input :fax %>
-				<%= o.input :instructions, label: 'Special Request or Instructions', input_html: { rows: 3 } %>
+				<%= o.input :instructions, as: :text, label: 'Special Request or Instructions', input_html: { rows: 2 } %>
 			<% end %>
 
 		<% end %>

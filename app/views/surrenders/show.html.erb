@@ -47,10 +47,10 @@
 
 <%= content_tag :p, 'Very truly yours,', class: 'signature-line' %>
 <div class="address signature-line">
-<%= content_tag :b, current_user.branch.approver.profile.to_s.upcase %>
-<%= content_tag :p, current_user.branch.approver.profile.rank %>
+<%= content_tag :p, current_user.branch.approver.profile.to_s.upcase %>
+<%= content_tag :em, current_user.branch.approver.profile.rank %>
 </div>
 <div class="row">
 	<%= content_tag :p, 'Authorized Retriever:', class: 'signature-line span12' %>
-	<%= content_tag :p, @surrender.retriever, class: 'retriever span2' %>
+	<%= content_tag :p, @surrender.retriever.upcase, class: 'retriever span2' %>
 </div>

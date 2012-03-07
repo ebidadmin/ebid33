@@ -15,7 +15,6 @@ class EntriesController < ApplicationController
 
   def show
     @entry = Entry.find(params[:id], include: [[:line_items => [:car_part, :bids, :order]], [:messages => [[:user => :roles], [:receiver => :roles]]]])
-    @q = CarPart.search(params[:q])
 
     if can? :access, :all
       @pvt_messages = @entry.messages.pvt
@@ -32,6 +31,14 @@ class EntriesController < ApplicationController
     @car_models = @car_variants = @cities = []
     2.times { @entry.photos.build }
     @entry.term_id = 4 # default credit term is 30 days
+    if params[:variant]
+      @saved_variant = CarVariant.find(params[:variant])
+      @entry.car_brand_id = @saved_variant.car_brand_id
+      @car_models = CarModel.where(car_brand_id: @entry.car_brand_id)
+      @entry.car_model_id = @saved_variant.car_model_id
+      @car_variants = CarVariant.where(car_model_id: @entry.car_model_id)
+      @entry.car_variant_id = @saved_variant.id
+    end
     render layout: 'layout2'
   end
 
@@ -53,7 +60,7 @@ class EntriesController < ApplicationController
       @entry.term_id = params[:entry][:term_id]
       # 2.times { @entry.photos.build }
       # flash[:error] = "Looks like you forgot to complete the required vehicle info.  Try again!"
-      render action: 'new'
+      render 'new'
     end
   end
 

@@ -196,7 +196,7 @@ class Entry < ActiveRecord::Base
   end
   
   def can_be_edited
-    created_at > 3.weeks.ago || decided.nil? || expired.nil?
+    decided.nil? || expired.nil? || created_at > 3.weeks.ago 
   end
   
   def can_online
@@ -239,7 +239,8 @@ class Entry < ActiveRecord::Base
   end
   
   def can_reactivate
-    expired && updated_at > 1.month.ago && line_items.collect(&:status).uniq.include?("Expired")
+    # expired && updated_at > 1.month.ago && line_items.collect(&:status).uniq.include?("Expired")
+   updated_at > 1.month.ago && line_items.collect(&:status).uniq.include?("Expired")
   end
   
   def has_order

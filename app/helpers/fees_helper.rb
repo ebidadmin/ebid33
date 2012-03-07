@@ -4,8 +4,8 @@ module FeesHelper
       "(#{regular_date(search_query[:created_at_gteq].to_date)} - #{regular_date(Date.today)})"
     elsif search_query.present? && search_query[:created_at_gteq].present?
       "(#{regular_date(search_query[:created_at_gteq].to_date)} - #{regular_date(search_query[:created_at_lteq].to_date)})"
-    elsif search_query.present? && search_query[:created_at_gteq].blank?
-      "#{regular_date(fees.last.created_at)} - #{regular_date(Date.today)}"
+    elsif search_query.present? && search_query[:created_at_gteq].blank? && fees.present?
+      "#{regular_date(fees.last.created_at)} - #{regular_date(Date.today)}" 
     else
       "(#{regular_date(Date.today.beginning_of_month)} - #{regular_date(Date.today)})"
     end

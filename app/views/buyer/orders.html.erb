@@ -66,6 +66,9 @@
 		<% end %>
 	  <%= f.label 'Seller' %>
 	  <%= f.collection_select :seller_company_id_matches, Company.where(primary_role: 3), :id, :nickname, include_blank: true %>
-	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+	  <%= content_tag :p do %>
+			<%= f.submit 'Search', class: 'btn btn-primary' %>
+			<%= refresh_button %>
+		<% end %>
 	<% end %>
 <% end %>

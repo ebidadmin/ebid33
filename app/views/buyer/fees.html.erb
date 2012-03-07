@@ -8,75 +8,79 @@
 	<%= display_seller_company %>
 <% end %>
 
-<%= content_tag :p, page_entries_info(@fees), class: 'muted' %>
+<% unless @all_fees.blank? %>
+	<%= content_tag :p, page_entries_info(@fees), class: 'muted' %>
 
-<%= content_tag :table, class: 'fees table table-condensed' do %>
-	<%= content_tag :thead do %>
-		<tr>
-			<%= content_tag :th, 'Vehicle' %>
-			<th>
-			<%= content_tag :div, 'Parts', class: 'part span3' %>
-			<%= content_tag :div, 'Lowest Bid', class: 'amount txtright' %>
-			<%= content_tag :div, 'Factors', class: 'factors txtcenter' %>
-			<%= content_tag :div, 'Fee', class: 'amount txtright' %>
-			<%= content_tag :div, '', class: 'amount txtright' %>
-			</th>
-		</tr>
-	<% end %>
-	
-	<% @fees.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_fees| %>
-		<%= content_tag :tr, class: 'well' do %>
-			<%= content_tag :td, colspan: 2 do %>
-				<%= content_tag :h5, regular_date(date, 'day') %>
-			<% end %>
+	<%= content_tag :table, class: 'fees table table-condensed' do %>
+		<%= content_tag :thead do %>
+			<tr>
+				<%= content_tag :th, 'Vehicle' %>
+				<th>
+				<%= content_tag :div, 'Parts', class: 'part span3' %>
+				<%= content_tag :div, 'Lowest Bid', class: 'amount txtright' %>
+				<%= content_tag :div, 'Factors', class: 'factors txtcenter' %>
+				<%= content_tag :div, 'Fee', class: 'amount txtright' %>
+				<%= content_tag :div, 'Sellers Share', class: 'amount txtright' %>
+				</th>
+			</tr>
 		<% end %>
 
-		<% grouped_fees.group_by(&:entry).each do |entry, fees| %>
-		<tr>
-			<%= content_tag :td, class: 'span2' do %>
-	      <%= content_tag :p, entry_link(entry) %>
-				<%= content_tag :span, entry.plate_no %>
-				<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
+		<% @fees.group_by{ |o| o.created_at.beginning_of_day }.each do |date, grouped_fees| %>
+			<%= content_tag :tr, class: 'well' do %>
+				<%= content_tag :td, colspan: 2 do %>
+					<%= content_tag :h5, regular_date(date, 'day') %>
+				<% end %>
 			<% end %>
 
-			<td>
-				<% for f in fees %>
-					<%= div_for f do %>
-						<%= content_tag :div, f.line_item.name, class: 'part span3' %>
-						<%= content_tag :div, class: 'amount txtright' do %>
-							<% if f.reversal? %>
-								<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
-							<% else %>
-								<%= content_tag :span, currency(f.bid_total), class: "" %>
-								<%= content_tag :span, f.bid_type[0], class: 'label' %>
+			<% grouped_fees.group_by(&:entry).each do |entry, fees| %>
+			<tr>
+				<%= content_tag :td, class: 'span2' do %>
+		      <%= content_tag :p, entry_link(entry) %>
+					<%= content_tag :span, entry.plate_no %>
+					<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
+				<% end %>
+
+				<td>
+					<% for f in fees %>
+						<%= div_for f do %>
+							<%= content_tag :div, f.line_item.name, class: 'part span3' %>
+							<%= content_tag :div, class: 'amount txtright' do %>
+								<% if f.reversal? %>
+									<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
+								<% else %>
+									<%= content_tag :span, currency(f.bid_total), class: "" %>
+									<%= content_tag :span, f.bid_type[0], class: 'label' %>
+								<% end %>
+							<% end %>
+							<%= content_tag :div, class: 'factors txtcenter small' do %>
+								<%= content_tag :em, time_in_words(f.bid_speed) if f.bid_speed %><br>
+								<%= content_tag :em, 'PR: ' + f.perf_ratio.to_s if f.perf_ratio %>
+							<% end %>
+							<%= content_tag :div, class: 'amount txtright' do %>
+								<%= content_tag :b, currency(f.fee), class: "#{'negative' if f.fee < 0}" if f.fee != 0 %>
+								<%= content_tag :p, percentage3(f.fee_rate), class: 'small' if f.fee_rate %>
+							<% end %>
+							<%= content_tag :div, class: 'amount txtright' do %>
+								<%= content_tag :b, currency(f.split_amount), class: "#{'negative' if f.fee < 0}" if f.fee != 0  %><br>
 							<% end %>
 						<% end %>
-						<%= content_tag :div, class: 'factors txtcenter small' do %>
-							<%= content_tag :em, time_in_words(f.bid_speed) if f.bid_speed %><br>
-							<%= content_tag :em, 'PR: ' + f.perf_ratio.to_s if f.perf_ratio %>
-						<% end %>
-						<%= content_tag :div, class: 'amount txtright' do %>
-							<%= content_tag :b, currency(f.fee), class: "#{'negative' if f.fee < 0}" if f.fee != 0 %>
-							<%= content_tag :p, percentage3(f.fee_rate), class: 'small' if f.fee_rate %>
-						<% end %>
-						<%= content_tag :div, class: 'amount txtright' do %>
-							<%= content_tag :b, currency(f.split_amount), class: "#{'negative' if f.fee < 0}" if f.fee != 0  %><br>
-						<% end %>
 					<% end %>
-				<% end %>
-			</td>
-		</tr>
+				</td>
+			</tr>
+			<% end %>
 		<% end %>
-	<% end %>
 
-	<%= content_tag :tr, class: 'total' do %>
-		<%= content_tag :td %>
-		<%= content_tag :td, class: 'txtright' do %>
-			<%= content_tag :div, '', class: 'part span3' %>
-			<%= content_tag :div, 'Sub-total', class: 'amount' %>
-			<%= content_tag :div, '', class: 'amount' %>
-			<%= content_tag :div, currency(@fees.collect(&:fee).sum), class: 'amount' %>
+		<%= content_tag :tr, class: 'total' do %>
+			<%= content_tag :td %>
+			<%= content_tag :td, class: 'txtright' do %>
+				<%= content_tag :div, '', class: 'part span3' %>
+				<%= content_tag :div, 'Sub-total', class: 'amount' %>
+				<%= content_tag :div, '', class: 'amount' %>
+				<%= content_tag :div, currency(@fees.collect(&:fee).sum), class: 'amount' %>
+				<%= content_tag :div, currency(@fees.collect(&:split_amount).sum), class: 'amount' %>
+			<% end %>
 		<% end %>
+
 	<% end %>
 	
 <% end %>
@@ -101,7 +105,6 @@
 			<%= link_with_icon('', print_fees_path(t: print_type(params[:t]), q: params[:q]), 'print') %>
 		<% end %>
 	<% end %>
-	<hr>
 <% end %>
 
 <%= render 'shared/datepicker2' %>

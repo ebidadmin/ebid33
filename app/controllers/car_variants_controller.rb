@@ -1,4 +1,6 @@
 class CarVariantsController < ApplicationController
+  layout 'layout2'
+
   def index
     @car_variants = CarVariant.includes(:car_brand, :car_model).paginate(page: params[:page], per_page: 20)
 
@@ -35,13 +37,22 @@ class CarVariantsController < ApplicationController
   # POST /car_variants
   # POST /car_variants.json
   def create
+    # raise params.to_yaml
     @car_variant = CarVariant.new(params[:car_variant])
 
     respond_to do |format|
       if @car_variant.save
-        format.html { redirect_to @car_variant, notice: 'Car variant was successfully created.' }
+        format.html do
+          flash[:success] = "Added new variant."
+          if can? :access, :all
+            redirect_to :back
+          else
+            redirect_to new_user_entry_path(current_user, variant: @car_variant )
+          end
+        end
         format.json { render json: @car_variant, status: :created, location: @car_variant }
       else
+        @car_models = CarModel.where(car_brand_id: @car_variant.car_brand_id)
         format.html { render action: "new" }
         format.json { render json: @car_variant.errors, status: :unprocessable_entity }
       end
