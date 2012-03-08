@@ -1,12 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, unless: :devise_controller?
   # enable_authorization :unless => :devise_controller? 
   before_filter :latest_messages 
   
   rescue_from CanCan::Unauthorized do |exception|
     flash[:error] = exception.message
-    redirect_to new_user_session_path#root_url
+    redirect_to root_url
   end
   
   private
@@ -20,12 +20,12 @@ class ApplicationController < ActionController::Base
       seller_entries_path(s: 'online') 
     else
       flash[:info] = "You have not been authorized to use E-Bid. Please contact the administrator at 892-5935." 
-      # root_path
+      root_path
     end
   end
 
   def after_sign_out_path_for(resource_or_scope)
-    new_user_session_path
+    root_path
   end
 
   def store_location

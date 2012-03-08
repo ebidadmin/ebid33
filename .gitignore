@@ -63,3 +63,4 @@ tmp/*
 # vim artifacts
 **.swp
 config/deploy.rb
+config/deploy/*

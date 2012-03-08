@@ -1,26 +1,13 @@
-<div class="jumbotron masthead">
-	<%= content_tag :h1, 'Welcome to E-Bid!', id: 'welcome-title' %>
-</div>
-	<div id="login" class="row">
-		<%= content_tag :div, class: 'span6 offset1' do %>
-			<%= image_tag '/assets/under_construction.gif' %>
-		<% end %>
+<% title 'Login' %>
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+		<%= f.label :username %>
+	  <%= f.text_field :username %>
 
-		<%= content_tag :div, class: 'span4' do %>
-			<fieldset>
-				<legend>Registered Users</legend>
-				<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-						<%= f.label :username %>
-					  <%= f.text_field :username %>
+		<%= f.label :password %>
+	  <%= f.password_field :password %><br>
 
-						<%= f.label :password %>
-					  <%= f.password_field :password %>
+  <%#= render :partial => 'remember' %>
 
-				  <%#= render :partial => 'remember' %>
-
-				  <%= f.submit "Sign in", class: 'btn btn-primary floatright' %>
-					<%#= render :partial => "devise/shared/links" %>
-				<% end %>
-			</fieldset>
-		<% end %>
-	</div>
+  <%= f.submit "Sign in &raquo;".html_safe, class: 'btn btn-primary btn-large' %>
+	<%#= render :partial => "devise/shared/links" %>
+<% end %>

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   # load_and_authorize_resource
+  skip_before_filter :authenticate_user!, only: [:new, :create]
   before_filter :check_admin_role, only: [:index, :destroy]
   
   def index

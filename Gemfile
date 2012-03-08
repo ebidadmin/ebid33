@@ -11,6 +11,9 @@ group :assets do
 	gem "client_side_validations"
 end
 gem 'jquery-rails'
+# if HOST_OS =~ /linux/i
+#   gem 'therubyracer', '>= 0.9.8'
+# end
 gem "rspec-rails", ">= 2.8.0.rc1", :group => [:development, :test]
 
 group :test do
@@ -23,6 +26,18 @@ group :test do
 end
 
 group :development do
+	# case HOST_OS
+	#   when /darwin/i
+	#     gem 'rb-fsevent'
+	#     gem 'growl'
+	#   when /linux/i
+	#     gem 'libnotify'
+	#     gem 'rb-inotify'
+	#   when /mswin|windows/i
+	#     gem 'rb-fchange'
+	#     gem 'win32console'
+	#     gem 'rb-notifu'
+	# end
 	gem "guard", ">= 0.6.2"
 	gem "guard-bundler", ">= 0.1.3"
 	gem "guard-rails", ">= 0.0.3"
@@ -32,6 +47,7 @@ group :development do
 	gem "rails-footnotes", ">= 3.7"
 	gem "nifty-generators"
 	gem "letter_opener"
+	gem "capistrano"
 end
 
 gem "devise", ">= 1.5.0"
@@ -51,4 +67,3 @@ gem "has_scope"
 gem "ancestry"
 gem "private_pub"
 gem "thin"
-gem "capistrano"

@@ -1,4 +1,5 @@
 class SessionsController < Devise::SessionsController
+  skip_before_filter :authenticate_user!, unless: :devise_controller?
 
   # GET /resource/sign_in
   def new

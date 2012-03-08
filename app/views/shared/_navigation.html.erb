@@ -25,7 +25,7 @@
 							<%= content_tag :li, link_to("Logout #{current_user.username.upcase}", destroy_user_session_path, :method=>'delete') %>
 						  <%= nav_link('Edit My Account', edit_user_path(current_user)) %>
 						<% else %>
-							<%= nav_link('Login', new_user_session_path) %>
+							<%#= nav_link('Login', new_user_session_path) %>
 						  <%= nav_link('Register', new_user_path) %>
 						<% end %>
 		      </ul>
