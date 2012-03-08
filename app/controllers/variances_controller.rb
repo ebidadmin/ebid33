@@ -1,4 +1,7 @@
 class VariancesController < ApplicationController
+  before_filter :check_admin_role, only: [:index]
+  before_filter :check_buyer_role
+  
   def index
     @variances = Variance.all
   end

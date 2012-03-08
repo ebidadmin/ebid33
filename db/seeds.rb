@@ -11,8 +11,8 @@
 #   
 # end
 
-# profiles = Profile.all
-# profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name, branch_id: p.company_id) } 
+profiles = Profile.all
+profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name, branch_id: p.company_id) } 
 # 
 # 
 # bwo = Bid.with_orders
@@ -25,11 +25,11 @@
 #   r.update_attribute(:relisted, r.online)
 # end
 # 
-orders = Order.all
+# orders = Order.all
 # orders.each { |o| o.update_attribute(:seller_company_id, o.seller.company.id) }
-ids = orders.map(&:entry_id).uniq
-entries = Entry.find(ids)
-entries.each { |e| e.update_attribute(:orders_count, e.orders.count) }
+# ids = orders.map(&:entry_id).uniq
+# entries = Entry.find(ids)
+# entries.each { |e| e.update_attribute(:orders_count, e.orders.count) }
 
 # entries = Entry.all
 # entries.each { |e| e.update_status }

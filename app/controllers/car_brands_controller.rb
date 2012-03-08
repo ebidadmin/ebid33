@@ -1,6 +1,6 @@
 class CarBrandsController < ApplicationController
-  # GET /car_brands
-  # GET /car_brands.json
+  before_filter :check_admin_role, except: :selected
+  
   def index
     @car_brands = CarBrand.scoped.includes(:car_origin)
 
@@ -10,8 +10,6 @@ class CarBrandsController < ApplicationController
     end
   end
 
-  # GET /car_brands/1
-  # GET /car_brands/1.json
   def show
     @car_brand = CarBrand.find(params[:id])
 
@@ -21,8 +19,6 @@ class CarBrandsController < ApplicationController
     end
   end
 
-  # GET /car_brands/new
-  # GET /car_brands/new.json
   def new
     @car_brand = CarBrand.new
 
@@ -32,13 +28,10 @@ class CarBrandsController < ApplicationController
     end
   end
 
-  # GET /car_brands/1/edit
   def edit
     @car_brand = CarBrand.find(params[:id])
   end
 
-  # POST /car_brands
-  # POST /car_brands.json
   def create
     @car_brand = CarBrand.new(params[:car_brand])
 
@@ -53,8 +46,6 @@ class CarBrandsController < ApplicationController
     end
   end
 
-  # PUT /car_brands/1
-  # PUT /car_brands/1.json
   def update
     @car_brand = CarBrand.find(params[:id])
 
@@ -69,8 +60,6 @@ class CarBrandsController < ApplicationController
     end
   end
 
-  # DELETE /car_brands/1
-  # DELETE /car_brands/1.json
   def destroy
     @car_brand = CarBrand.find(params[:id])
     @car_brand.destroy

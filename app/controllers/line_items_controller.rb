@@ -1,4 +1,6 @@
 class LineItemsController < ApplicationController
+  # before_filter :check_admin_role, only: [:index]
+  # before_filter :check_buyer_role, only: [:index]
   before_filter :initialize_cart, only: [:create, :add, :change]
 
   def index

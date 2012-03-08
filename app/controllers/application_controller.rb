@@ -1,25 +1,26 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :authenticate_user!
   # enable_authorization :unless => :devise_controller? 
   before_filter :latest_messages 
   
   rescue_from CanCan::Unauthorized do |exception|
     flash[:error] = exception.message
-    redirect_to root_url
+    redirect_to new_user_session_path#root_url
   end
   
   private
   
   def after_sign_in_path_for(resource_or_scope)
-    if current_user.role?(:admin)
+    if can? :access, :all #current_user.role?(:admin)
       entries_path(s: 'for-decision')
-    elsif current_user.role?(:buyer)
+    elsif can? :create, :entries #current_user.role?(:buyer)
       buyer_entries_path(s: 'for-decision')
-    elsif current_user.role?(:seller)
+    elsif can? :create, :bids #current_user.role?(:seller)
       seller_entries_path(s: 'online') 
     else
       flash[:info] = "You have not been authorized to use E-Bid. Please contact the administrator at 892-5935." 
-      root_path
+      # root_path
     end
   end
 
@@ -27,8 +28,35 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
-  private
+  def store_location
+    session[:return_to] = request.env["HTTP_REFERER"]
+  end
 
+  def redirect_back_or_default(default)
+    redirect_to(session[:return_to] || default)
+    session[:return_to] = nil
+  end
+  
+  def check_role(role) 
+    store_location
+	  unless current_user && current_user.role?(role) 
+	    flash[:error] = "Sorry. That page is not included in your access privileges." 
+	    redirect_back_or_default root_path#redirect_to root_path
+	  end 
+	end 
+
+	def check_admin_role 
+	  check_role('admin') 
+	end 
+
+	def check_buyer_role 
+	  check_role('buyer') 
+	end 
+
+	def check_seller_role 
+	  check_role('seller') 
+	end 
+	
   def initialize_cart 
     @cart = Cart.find(session[:cart_id]) 
     rescue ActiveRecord::RecordNotFound 
@@ -61,13 +89,13 @@ class ApplicationController < ActionController::Base
     if params[:q] && params[:q][:seller_company_id_matches].present?
       @seller_company = Company.find(params[:q][:seller_company_id_matches]).nickname
     else
-      @seller_company = 'all sellers'
-      # if can? :access, :all
-      #   @seller_company = 'all sellers'
-      # else
-      #   @seller_company = current_user.company.nickname
-      # end
-    end
+      # @seller_company = 'all sellers'
+      if can? :access, :all
+         @seller_company = 'all sellers'
+       else
+         @seller_company = current_user.company.nickname
+       end
+     end
   end
   
   def latest_messages

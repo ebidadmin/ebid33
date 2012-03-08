@@ -1,5 +1,6 @@
 class CartController < ApplicationController
   include ActionView::Helpers::TagHelper
+  before_filter :check_buyer_role
   before_filter :initialize_cart
 
   def add

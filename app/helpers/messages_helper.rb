@@ -35,7 +35,12 @@ module MessagesHelper
   def user_signature(message, current_user)
     sender = case message.user
     when current_user then content_tag :span, 'YOU said', class: 'label label-info'
-    else "#{message.user_type.titleize} ##{message.user_id} said"
+    else 
+      if message.user.id == 1
+        "ADMIN said"
+      else
+        "#{message.user_type.titleize} ##{message.user_id} said"
+      end
     end
     
     receiver = case message.receiver

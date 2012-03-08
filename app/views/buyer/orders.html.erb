@@ -29,7 +29,7 @@
 							<%= content_tag :span, pluralize(order.items_count, 'part'), class: 'small' %>
 							<%= content_tag :p, link_to("PO##{order.id}", order) %>
 							<% if order.messages.present? %>
-							<span class='highlight'>
+							<span class='highlight' rel='tooltip' title="<%= pluralize order.messages.size, 'message' %>">
 								<%= content_tag :i, '', class: 'icon-comment' %>
 								<%= order.messages.size %>
 							</span>
@@ -72,3 +72,5 @@
 		<% end %>
 	<% end %>
 <% end %>
+
+<%= render 'shared/tooltip_entries' %>

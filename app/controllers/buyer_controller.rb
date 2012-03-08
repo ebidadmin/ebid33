@@ -1,4 +1,5 @@
 class BuyerController < ApplicationController
+  before_filter :check_buyer_role
   before_filter :initialize_cart, only: [:show, :edit]
   before_filter :search_by_origin, only: [:entries, :orders]
   before_filter :search_by_branch, only: [:entries, :orders]

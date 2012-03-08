@@ -4,6 +4,7 @@
 		<% @global_messages.each do |m| %>
 			<%= content_tag :dt, class: "muted" do %>
 				<%= "#{m.user_type.titleize} ##{m.user_id} said" %>
+				<%= content_tag :span, regular_date(m.created_at), class: 'pull-right' %>
 			<% end %>
 			<%= content_tag :dd, class: "" do  %>
 				<%= shorten(m.message, 50) %><br>

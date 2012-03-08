@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  load_and_authorize_resource
+  # load_and_authorize_resource
+  before_filter :check_admin_role, only: [:index, :destroy]
   
   def index
     @users = User.includes(:profile, :company, :roles).order('updated_at DESC').paginate(page: params[:page], per_page: 20)
@@ -36,6 +37,7 @@ class UsersController < ApplicationController
   end
 
   def edit
+    store_location
     if current_user.role?('admin')
       @user = User.find(params[:id])
       @company_type = Role.find(1, 2, 3)
@@ -56,7 +58,7 @@ class UsersController < ApplicationController
     end
     if @user.update_attributes(params[:user])
       flash[:notice] = "Successfully updated user."
-      redirect_to @user
+      redirect_back_or_default :back #redirect_to @user
     else
       render :action => 'edit'
     end

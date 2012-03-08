@@ -1,6 +1,8 @@
 class BidsController < ApplicationController
-  load_and_authorize_resource
-
+  # load_and_authorize_resource
+  before_filter :check_admin_role, only: [:index]
+  before_filter :check_seller_role
+  
   def index
     # @bids = Bid.unscoped.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], :user).order('created_at DESC').paginate(page: params[:page], per_page: 30)
     @q = LineItem.with_bids.search(params[:q])

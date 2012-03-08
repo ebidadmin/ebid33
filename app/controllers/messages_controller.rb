@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
-  load_and_authorize_resource
+  # load_and_authorize_resource
+  before_filter :check_admin_role, only: [:index, :show]
   
   def index
     @messages = Message.includes(:entry, :user, :user_company, :receiver, :receiver_company).order('created_at DESC').paginate(page: params[:page], per_page: 25)

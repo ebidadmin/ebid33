@@ -11,11 +11,11 @@
 	      <%= link_to 'E-Bid', root_path, class: 'brand' %>
          <div class="nav-collapse">
  					<% if user_signed_in? %>
-						<% if current_user.role?(:admin) %>
+						<% if can? :access, :all #current_user.role?(:admin) %>
 							<%= render 'admin/nav' %>
-						<% elsif current_user.role?(:buyer) %>
+						<% elsif can? :create, :entries #current_user.role?(:buyer) %>
 							<%= render 'buyer/nav' %>
-						<% elsif current_user.role?(:seller) %>
+						<% elsif can? :create, :bids #current_user.role?(:seller) %>
 							<%= render 'seller/nav' %>
 						<% end %>
 					<% end %>

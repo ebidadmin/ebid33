@@ -1,4 +1,6 @@
 class BranchesController < ApplicationController
+  before_filter :check_admin_role
+  
   def index
     @branches = Branch.all
   end

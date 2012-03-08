@@ -1,4 +1,5 @@
 class SellerController < ApplicationController
+  before_filter :check_seller_role
   before_filter :search_by_origin, only: [:bids, :fees]
   
   def entries

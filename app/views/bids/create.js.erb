@@ -30,6 +30,6 @@ $("td .invalid").remove();
 	
 <% else %>
 
-	$("#bidding-message").html("<%= escape_javascript(render 'seller/invalid_bid_msg') %>").effect("highlight", {}, 5000);
-
+	$("#bidding-message").html("<%= escape_javascript(content_tag :p, 'You are trying to submit blank bids. Please try again.', class: 'label label-info') %>");
+	$("#bidding-message p").animate({padding: '15'}, 'fast', 'easeOutElastic')
 <% end %>

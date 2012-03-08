@@ -6,9 +6,11 @@ class Ability
     if user.role?(:admin)
       can :access, :all
     elsif user.role?(:powerbuyer)
-      can [:create, :update, :put_online, :relist], :entries
+      # can :access, :all
+      can [:access], :entries
       can [:create, :update, :read, :print], :orders
-      can [:create, :update], :users, id: user.id
+      can [:read, :create, :update], :users, id: user.id
+      can [:read], [:branches, :companies]
     elsif user.role?(:buyer)
       can :access, :home, :cart
       can :access, :users, id: user.id

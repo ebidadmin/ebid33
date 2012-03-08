@@ -1,4 +1,6 @@
 class FeesController < ApplicationController
+  before_filter :check_admin_role, except: :print
+  
   def index
     @q = Fee.find_type(params[:t]).filter_period(params[:q]).search(params[:q])
     @all_fees ||= @q.result

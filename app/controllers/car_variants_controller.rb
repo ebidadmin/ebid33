@@ -1,4 +1,6 @@
 class CarVariantsController < ApplicationController
+  before_filter :check_admin_role, except: [:new, :create]
+  
   layout 'layout2'
 
   def index
@@ -29,13 +31,10 @@ class CarVariantsController < ApplicationController
     end
   end
 
-  # GET /car_variants/1/edit
   def edit
     @car_variant = CarVariant.find(params[:id])
   end
 
-  # POST /car_variants
-  # POST /car_variants.json
   def create
     # raise params.to_yaml
     @car_variant = CarVariant.new(params[:car_variant])
@@ -59,8 +58,6 @@ class CarVariantsController < ApplicationController
     end
   end
 
-  # PUT /car_variants/1
-  # PUT /car_variants/1.json
   def update
     @car_variant = CarVariant.find(params[:id])
 
@@ -75,8 +72,6 @@ class CarVariantsController < ApplicationController
     end
   end
 
-  # DELETE /car_variants/1
-  # DELETE /car_variants/1.json
   def destroy
     @car_variant = CarVariant.find(params[:id])
     @car_variant.destroy

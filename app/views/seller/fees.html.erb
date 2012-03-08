@@ -2,7 +2,7 @@
 	<% title "Decline Fees" %>
 	<% subtitle "#{current_user.nickname}'s share #{period_covered_helper(@all_fees, params[:q])}" %>
 <% else %>
-	<% title "Market Fees of #{@seller_company}" %>
+	<% title "Market Fees of #{current_user.company.nickname}" %>
 	<% subtitle "for paid orders #{period_covered_helper(@all_fees, params[:q])}" %>
 <% end %>
 
