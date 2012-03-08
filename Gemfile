@@ -47,6 +47,7 @@ group :development do
 	gem "rails-footnotes", ">= 3.7"
 	gem "nifty-generators"
 	gem "letter_opener"
+	gem "capistrano"
 end
 
 gem "devise", ">= 1.5.0"
