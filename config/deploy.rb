@@ -21,6 +21,7 @@ role :app, "106.187.49.112"                   # This may be the same as your `We
 role :db,  "106.187.49.112", :primary => true # This is where Rails migrations will run
 
 set :rails_env, "production"
+set :normalize_asset_timestamps, false
 
 namespace :deploy do
   task :start do ; end
