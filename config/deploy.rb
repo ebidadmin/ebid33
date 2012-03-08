@@ -28,6 +28,16 @@ namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
+  namespace :assets do
+    task :precompile, :roles => :web, :except => { :no_release => true } do
+      from = source.next_revision(current_revision)
+      if capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
+        run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
+      else
+        logger.info "Skipping asset pre-compilation because there were no asset changes"
+      end
+    end
+  end
 end
 
 namespace :rvm do
@@ -36,4 +46,10 @@ namespace :rvm do
   end
 end
 
+desc "install the necessary prerequisites"
+task :bundle_install, :roles => :app do
+  run "cd #{release_path} && bundle install"
+end
+
 after "deploy", "rvm:trust_rvmrc"
+after "deploy:update_code", :bundle_install
