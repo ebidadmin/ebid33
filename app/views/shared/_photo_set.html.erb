@@ -8,7 +8,7 @@
 					<% if photo.processing? %>
 						<%= image_tag 'image_placeholder.png', alt: "Photo of #{@entry.plate_no}" %>
 					<% else %>
-						<%= link_to((image_tag photo.photo.url(:tiny), alt: "Photo of #{@entry.plate_no}"), photo.photo.url(:large), rel: "#{@entry.id}", title: 'Hello') %>
+						<%= link_to((image_tag photo.photo.url(:tiny), alt: "Photo of #{@entry.plate_no}"), photo.photo.url(:large), rel: "#{@entry.id}") %>
 					<% end %>
 				<% end %>
 			<% end %>
