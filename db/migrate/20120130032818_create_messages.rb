@@ -16,8 +16,8 @@ class CreateMessages < ActiveRecord::Migration
     end
     add_index :messages, :user_id
     add_index :messages, :user_company_id
-    add_index :messages, :reciever_id
-    add_index :messages, :reciever_company_id
+    add_index :messages, :receiver_id
+    add_index :messages, :receiver_company_id
     add_index :messages, :entry_id
     add_index :messages, :order_id
     add_index :messages, :ancestry
