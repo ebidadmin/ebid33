@@ -11,6 +11,8 @@ class Ability
       can [:create, :update, :read, :print], :orders
       can [:read, :create, :update], :users, id: user.id
       can [:read], [:branches, :companies]
+      can :access, [:car_brands, :car_models, :car_variants, :regions]
+      can :create, :car_variant
     elsif user.role?(:buyer)
       can :access, :home, :cart
       can :access, :users, id: user.id

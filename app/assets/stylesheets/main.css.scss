@@ -6,8 +6,8 @@
 	p { margin-bottom: 0px; }
 	tr:last-child  { border-bottom: 1px solid #DDD; }
 	tbody tr.label:hover td, tbody tr.label:hover th { background-color: transparent !important; }
-	p.label { font-size: 0.9em; font-weight: normal; /*margin-bottom:5px;*/ text-transform: none; }
-	.span3 p.label { text-transform: uppercase; }
+	p.label {  /*margin-bottom:5px;*/  }
+	.span3 p.label { font-weight: normal; font-size: 0.9em;  }
 	}
 .table tbody tr:hover td, .table tbody tr:hover th { background-color: white !important; }
 .floatright { float: right; margin-left: 5px;}
