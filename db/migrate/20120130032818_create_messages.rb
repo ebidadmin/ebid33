@@ -5,8 +5,8 @@ class CreateMessages < ActiveRecord::Migration
       t.string :user_type
       t.integer :alias
       t.integer :user_company_id
-      t.integer :reciever_id
-      t.integer :reciever_company_id
+      t.integer :receiver_id
+      t.integer :receiver_company_id
       t.integer :entry_id
       t.integer :order_id
       t.text :message
