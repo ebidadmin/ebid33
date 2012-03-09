@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><%= content_for?(:title) ? "E-Bid | #{yield(:title)}" : "E-Bid Inc." %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= csrf_meta_tags %>
+    <%= yield(:head) %>
+    <link href="/assets/favicon.ico" rel="shortcut icon">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+  </head>
+
+  <body>
+
+    <%= render 'shared/navigation' %>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Welcome to the new E-Bid!</h1>
+				<p>This is where businesses bid-and-buy auto parts.</p>
+	      <div class="row">
+	        <div class="span4">
+						<%= image_tag '/assets/under_construction.gif' %>
+	        </div>
+	        <div class="span4 offset2">
+	          <h2>Login here</h2>
+						<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+							<%= f.label :username %>
+						  <%= f.text_field :username %>
+							<%= f.label :password %>
+						  <%= f.password_field :password %><br>
+						  <%= f.submit "Sign in &raquo;".html_safe, class: 'btn btn-primary btn-large' %> or 
+							<%= link_to('Sign up here', new_user_path) %>
+						<% end %>
+	        </div>
+	      </div>
+       </div>
+	     <% flash.each do |name, msg| %>
+	       <%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
+	     <% end %>
+
+      <hr>
+
+      <footer>
+				<p><strong>Copyright &copy; 2006-<%= Time.now.year -%> E-Bid, Inc.</strong>   All rights reserved.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
