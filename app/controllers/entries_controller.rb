@@ -67,21 +67,23 @@ class EntriesController < ApplicationController
   end
 
   def edit
-    store_location #session['referer'] = request.env["HTTP_REFERER"]
+    session['referer'] = request.env["HTTP_REFERER"]
     @entry = Entry.find(params[:id])
     @car_models = CarModel.where(car_brand_id: @entry.car_brand_id)
     @car_variants = CarVariant.where(car_model_id: @entry.car_model_id)
     @entry.region = @entry.city.region_id
     @cities = City.where(region_id: @entry.region)
     @entry.photos.build if @entry.photos.nil?
+    render layout: 'layout2'
   end
 
   def update
     # raise params.to_yaml
     @entry = Entry.find(params[:id])
     if @entry.update_attributes(params[:entry])
-      redirect_back_or_default show_buyer_path(@entry), notice: "Successfully updated entry."
-      # redirect_to session['referer'], :notice  => "Successfully updated entry."
+      flash[:notice] = "Successfully updated entry."
+      # redirect_back_or_default(buyer_show_path(@entry))
+      redirect_to session['referer'], :notice  => "Successfully updated entry."
     else
       render 'edit'
     end

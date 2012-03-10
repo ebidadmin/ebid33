@@ -5,11 +5,11 @@
 		<ul class="unstyled">
 			<% @entry.photos.each do |photo| %>
 				<%= content_tag :li, class: "" do %>
-					<% if photo.processing? %>
-						<%= image_tag 'image_placeholder.png', alt: "Photo of #{@entry.plate_no}" %>
-					<% else %>
+					<%# if photo.processing? %>
+						<%#= image_tag 'image_placeholder.png', alt: "Photo of #{@entry.plate_no}" %>
+					<%# else %>
 						<%= link_to((image_tag photo.photo.url(:tiny), alt: "Photo of #{@entry.plate_no}"), photo.photo.url(:large), rel: "#{@entry.id}") %>
-					<% end %>
+					<%# end %>
 				<% end %>
 			<% end %>
 		</ul>	

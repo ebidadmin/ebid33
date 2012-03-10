@@ -1,4 +1,4 @@
-.new_entry {
+.new_entry, .edit_entry {
 	.clearfix { margin-bottom: 18px; overflow: hidden; }
 	#veh-year, #veh-brand, #veh-model, #veh-variant, #regions, #cities { clear: none; float: left; margin-right: 5px; }
 	legend { padding-bottom: 10px; }
@@ -7,10 +7,11 @@
 	}
 #vehicle-info { margin-bottom: 15px; overflow: hidden; }
 
-.photouploads { 
-	.clearfix, input { margin-bottom: 0; }
+#photouploads { 
+	input { margin-bottom: 0; }
 	label { display: none; }
-	.add_nested_fields { clear: both; float: right; margin-bottom: 15px; }
+	.fields { min-height: 40px; }
+	.add_nested_fields { clear: both; margin-bottom: 25px; }
 	}
 
 .photo-set { margin-bottom: 15px; overflow: auto;

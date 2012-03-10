@@ -13,6 +13,7 @@ GIT
 
 GEM
   remote: http://rubygems.org/
+  remote: http://gemcutter.org/
   specs:
     actionmailer (3.2.2)
       actionpack (= 3.2.2)
@@ -91,6 +92,8 @@ GEM
     delayed_job_active_record (0.3.2)
       activerecord (> 2.1.0)
       delayed_job (~> 3.0.0)
+    delayed_paperclip (2.4.5.1)
+      paperclip (>= 2.4.5)
     devise (2.0.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -183,7 +186,7 @@ GEM
     nifty-generators (0.4.6)
     nokogiri (1.5.0)
     orm_adapter (0.0.6)
-    paperclip (2.7.0)
+    paperclip (2.4.5)
       activerecord (>= 2.3.0)
       activesupport (>= 2.3.2)
       cocaine (>= 0.0.2)
@@ -306,6 +309,7 @@ DEPENDENCIES
   cucumber-rails (>= 1.2.0)
   database_cleaner (>= 0.7.0)
   delayed_job_active_record
+  delayed_paperclip
   devise (>= 1.5.0)
   factory_girl_rails (>= 1.4.0)
   guard (>= 0.6.2)
@@ -322,7 +326,7 @@ DEPENDENCIES
   mysql2
   nested_form!
   nifty-generators
-  paperclip (= 2.7.0)
+  paperclip (= 2.4.5)
   private_pub
   rails (= 3.2.2)
   rails-footnotes (>= 3.7)

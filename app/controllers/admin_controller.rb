@@ -39,7 +39,7 @@ class AdminController < ApplicationController
   end
   
   def send_payment_reminder
-    overdue_orders ||= Order.overdue.includes(:company) 
+    overdue_orders ||= Order.unscoped.overdue.includes(:company).order(:due_date)
     if overdue_orders.present?
       overdue_orders.group_by(&:company).each do |company, overdue|
         @powerbuyers = company.users.where(:id => Role.find_by_name('powerbuyer').users).opt_in.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }
@@ -47,7 +47,7 @@ class AdminController < ApplicationController
       end
     end
     
-    due_now_orders = Order.due_now.includes(:company) 
+    due_now_orders ||= Order.unscoped.due_now.includes(:company).order(:due_date)
     if due_now_orders.present?
       due_now_orders.group_by(&:company).each do |company, due_now|
         @powerbuyers = company.users.where(:id => Role.find_by_name('powerbuyer').users).opt_in.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }
@@ -58,7 +58,7 @@ class AdminController < ApplicationController
   end
   
   def delivery_reminder
-    late_deliveries = Order.find_status('for-delivery').where('confirmed <= ?', 3.days.ago)
+    late_deliveries = Order.unscoped.find_status('for-delivery').where('confirmed <= ?', 3.days.ago).order(:confirmed)
     if late_deliveries
       late_deliveries.group_by(&:seller_company).each do |company, ld|
         @sellers = company.users.includes(:profile).collect { |u| "#{u.profile} <#{u.email}>" }

@@ -1,6 +1,7 @@
 require 'rbconfig'
 HOST_OS = RbConfig::CONFIG['host_os']
 source 'http://rubygems.org'
+source "http://gemcutter.org"
 gem 'rails', '3.2.2'
 gem 'mysql2'
 group :assets do
@@ -55,7 +56,7 @@ gem "has_scope"
 gem "simple_form"
 gem "nested_form", :git => 'git://github.com/ryanb/nested_form.git'
 gem "cancan", :git => "git://github.com/ryanb/cancan.git", :branch => "2.0"
-gem "paperclip", '2.7.0'
+gem "paperclip", '2.4.5'
 gem "delayed_job_active_record"
 gem "will_paginate", "~> 3.0"
 gem "squeel"
@@ -67,3 +68,5 @@ gem "has_scope"
 gem "ancestry"
 gem "private_pub"
 gem "thin"
+gem "delayed_paperclip"
+

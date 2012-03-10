@@ -1,21 +1,23 @@
-<%= content_tag :fieldset, class: 'photouploads' do %>
+<%= content_tag :fieldset, id: 'photouploads' do %>
 	<%= content_tag :legend, 'Photos', data: { content: "First photo should always be the FULL VIEW of the vehicle. Please cooperate.  Thanks!", "original-title" => "Minimum: 2 photos" } %>
-	<%= f.simple_fields_for :photos do |photo|  %>
-		<% unless photo.object.new_record?  %>
-			<% if photo.object.processing == false %>
-				<%= image_tag photo.object.photo.url(:tiny), class: "span1" %>
-			<% else %>
-				<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				
+	<div id="" class="txtcenter">
+		<%= f.simple_fields_for :photos do |photo|  %>
+			<% unless photo.object.new_record?  %>
+				<% if photo.object.processing == false %>
+					<%= image_tag photo.object.photo.url(:tiny), class: "span1" %>
+				<% else %>
+					<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				
+				<% end %>
 			<% end %>
+
+			<%= photo.link_to_remove "x", class: 'close', rel: 'tooltip', data: {'original-title' => 'remove field'} %>
+			<%= photo.input :photo %>
 		<% end %>
-	
-		<%= photo.input :photo %>
-		<%= photo.link_to_remove "x", class: 'close', rel: 'tooltip', data: {'original-title' => 'remove field'} %>
-	<% end %>
-	<%= f.link_to_add "#{content_tag :i, '', class: 'icon-picture icon-white' } Add Another Photo".html_safe, :photos, class: 'btn btn-primary' %>
+		<%= f.link_to_add "#{content_tag :i, '', class: 'icon-picture icon-white' } Add Another Photo".html_safe, :photos, class: 'btn btn-info btn-large' %>
+	</div>
 <% end %>
 
-<%= render 'shared/tooltip_delete' %>
+<%#= render 'shared/tooltip_delete' %>
 <% content_for :javascripts do %>
 	<script type="text/javascript" charset="utf-8">
 		$('legend').popover({placement: 'bottom'}).popover('show');
