@@ -57,13 +57,13 @@ module OrdersHelper
     when 'For-Delivery' then 'Delivered'
     when 'Delivered' #then 'Paid'
       if can? :create, :orders
-        'Paid!' # buyer's tagging only ... for subsequent confirmation by seller
+        'Paid.' # buyer's tagging only ... for subsequent confirmation by seller
       else
         'Paid'
       end
     else nil
     end  
-    link_to("#{content_tag :i, '', class: 'icon-tag '} Tag as #{tag}".html_safe, change_status_order_path(order, cs: tag), confirm: 'Are you sure?', class: 'btn small') if tag
+    link_to("#{content_tag :i, '', class: 'icon-tag '} Tag as #{tag}".html_safe, change_status_order_path(order, cs: tag.html_safe), confirm: 'Are you sure?', class: 'btn small') if tag
   end
   
   def confirm_payment_link(order, user)

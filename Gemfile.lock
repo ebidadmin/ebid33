@@ -110,6 +110,8 @@ GEM
     erubis (2.7.0)
     escape_utils (0.2.4)
     eventmachine (0.12.10)
+    exception_notification (2.5.2)
+      actionmailer (>= 3.0.4)
     execjs (1.3.0)
       multi_json (~> 1.0)
     factory_girl (2.6.1)
@@ -311,6 +313,7 @@ DEPENDENCIES
   delayed_job_active_record
   delayed_paperclip
   devise (>= 1.5.0)
+  exception_notification
   factory_girl_rails (>= 1.4.0)
   guard (>= 0.6.2)
   guard-bundler (>= 0.1.3)

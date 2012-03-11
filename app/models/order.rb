@@ -106,11 +106,12 @@ class Order < ActiveRecord::Base
 	    self.update_attributes(status: 'Delivered', delivered: Date.today, due_date: Date.today + entry.term.name.days)
 	    flash = "Updated the status of the order to <strong>Delivered</strong>.<br>
       Please send your invoice to buyer asap so we can help you <strong>track the payment</strong>.".html_safe
-    when 'Paid!'
-      self.update_attributes(status: 'Paid', paid_temp: Date.today)
-      Notify.delay.payment_tagged(self, self.entry)#.deliver
-      flash = "Updated the status of the order to <strong>Paid</strong>.<br>
-      We will notify the seller to confirm your payment.".html_safe
+    when 'Paid.'
+      if self.update_attributes(status: 'Paid', paid_temp: Date.today)
+        Notify.delay.payment_tagged(self, self.entry)#.deliver
+        flash = "Updated the status of the order to <strong>Paid</strong>.<br>
+        We will notify the seller to confirm your payment.".html_safe
+      end
     when 'Paid'
       self.update_attributes(status: 'Paid', paid: Date.today)
       flash = "Updated the status of the order to <strong>Paid</strong>.<br>

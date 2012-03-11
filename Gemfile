@@ -69,4 +69,4 @@ gem "ancestry"
 gem "private_pub"
 gem "thin"
 gem "delayed_paperclip"
-
+gem 'exception_notification'

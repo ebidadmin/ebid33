@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   include ActionView::Helpers::TagHelper
-  load_and_authorize_resource
+  # load_and_authorize_resource
   
   def index
     @q = Order.search(params[:q])

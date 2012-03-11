@@ -1,6 +1,6 @@
 <%= content_tag :fieldset, id: 'photouploads' do %>
 	<%= content_tag :legend, 'Photos', data: { content: "First photo should always be the FULL VIEW of the vehicle. Please cooperate.  Thanks!", "original-title" => "Minimum: 2 photos" } %>
-	<div id="" class="txtcenter">
+	<div class="txtcenter">
 		<%= f.simple_fields_for :photos do |photo|  %>
 			<% unless photo.object.new_record?  %>
 				<% if photo.object.processing == false %>

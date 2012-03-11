@@ -7,8 +7,8 @@ class Ability
       can :access, :all
     elsif user.role?(:powerbuyer)
       # can :access, :all
-      can [:access], :entries
-      can [:create, :update, :read, :print], :orders
+      can :access, [:entries, :orders]
+      # can [:create, :update, :read, :print, :], :orders
       can [:read, :create, :update], :users, id: user.id
       can [:read], [:branches, :companies]
       can :access, [:car_brands, :car_models, :car_variants, :regions]
