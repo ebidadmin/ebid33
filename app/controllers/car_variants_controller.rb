@@ -4,7 +4,7 @@ class CarVariantsController < ApplicationController
   layout 'layout2'
 
   def index
-    @car_variants = CarVariant.includes(:car_brand, :car_model).paginate(page: params[:page], per_page: 20)
+    @car_variants = CarVariant.includes(:car_brand, :car_model, :entries).order(:car_brand_id).paginate(page: params[:page], per_page: 20)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -33,6 +33,7 @@ class CarVariantsController < ApplicationController
 
   def edit
     @car_variant = CarVariant.find(params[:id])
+    @car_models = CarModel.where(car_brand_id: @car_variant.car_brand_id)
   end
 
   def create

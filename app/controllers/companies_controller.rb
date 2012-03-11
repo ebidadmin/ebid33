@@ -1,5 +1,6 @@
 class CompaniesController < ApplicationController
   before_filter :check_admin_role, except: :selected
+  layout 'layout2'
   
   def index
     @companies = Company.all

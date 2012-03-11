@@ -1,35 +1,37 @@
-<p id="notice"><%= notice %></p>
+<h1>Car Variant</h1>
 
 <p>
-  <b>Car brand:</b>
+  <b>Car brand</b><br>
   <%= @car_variant.car_brand_id %>
 </p>
 
 <p>
-  <b>Car model:</b>
+  <b>Car model</b><br>
   <%= @car_variant.car_model_id %>
 </p>
 
 <p>
-  <b>Name:</b>
+  <b>Name</b><br>
   <%= @car_variant.name %>
 </p>
 
 <p>
-  <b>Start year:</b>
+  <b>Start year</b><br>
   <%= @car_variant.start_year %>
 </p>
 
 <p>
-  <b>End year:</b>
+  <b>End year</b><br>
   <%= @car_variant.end_year %>
 </p>
 
 <p>
-  <b>Creator:</b>
+  <b>Creator</b><br>
   <%= @car_variant.creator_id %>
 </p>
 
-
-<%= link_to 'Edit', edit_car_variant_path(@car_variant) %> |
-<%= link_to 'Back', car_variants_path %>
+<div class="form-actions">
+  <%= link_to 'Back', car_variants_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_car_variant_path(@car_variant), :class => 'btn' %>
+  <%= link_to 'Delete', car_variant_path(@car_variant), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

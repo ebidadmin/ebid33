@@ -1,8 +1,8 @@
 class CarBrandsController < ApplicationController
-  before_filter :check_admin_role, except: :selected
+  # before_filter :check_admin_role, except: :selected
   
   def index
-    @car_brands = CarBrand.scoped.includes(:car_origin)
+    @car_brands = CarBrand.includes(:car_origin, :entries)
 
     respond_to do |format|
       format.html # index.html.erb

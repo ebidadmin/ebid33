@@ -1,16 +1,17 @@
-<% title "Car Part" %>
+<h1>Car Part</h1>
 
 <p>
-  <strong>Name:</strong>
+  <b>Name</b><br>
   <%= @car_part.name %>
 </p>
+
 <p>
-  <strong>Creator:</strong>
+  <b>Creator</b><br>
   <%= @car_part.creator_id %>
 </p>
 
-<p>
-  <%= link_to "Edit", edit_car_part_path(@car_part) %> |
-  <%= link_to "Destroy", @car_part, :confirm => 'Are you sure?', :method => :delete %> |
-  <%= link_to "View All", car_parts_path %>
-</p>
+<div class="form-actions">
+  <%= link_to 'Back', car_parts_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_car_part_path(@car_part), :class => 'btn' %>
+  <%= link_to 'Delete', car_part_path(@car_part), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

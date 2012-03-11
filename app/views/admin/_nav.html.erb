@@ -11,7 +11,7 @@
 			<%= nav_link('With Orders', entries_path(s: 'ordered')) %>
 			<%= nav_link('Declined', entries_path(s: 'declined')) %>
 			<%= content_tag :li, '', class: 'divider' %>
-			<%= link_to('All Entries', entries_path(s: nil)) %>
+			<%= nav_link('All Entries', entries_path(s: nil)) %>
 		</ul>
 	<% end %>
 	<%= content_tag :li, class: "dropdown #{drop_active_cont?('orders')}" do %>
@@ -40,11 +40,17 @@
 	<%= nav_link('Messages', messages_path) %>
 	<%= nav_link('Users', users_path) %>
 	<%= content_tag :li, class: "dropdown #{drop_active?('entries')}" do %>
-		<%= drop_link 'Vehicles' %>
+		<%= drop_link 'Tables' %>
 		<ul class="dropdown-menu">
 			<%= nav_link('Brands', car_brands_path) %>
 			<%= nav_link('Models', car_models_path) %>
 			<%= nav_link('Variants', car_variants_path) %>
+			<%= nav_link('Parts', car_parts_path) %>
+			<%= content_tag :li, '', class: 'divider' %>
+			<%= nav_link('Companies', companies_path) %>
+			<%= nav_link('Branches', branches_path) %>
+			<%= content_tag :li, '', class: 'divider' %>
+			<%= nav_link('Ratings', ratings_path) %>
 		</ul>
 	<% end %>
 	<%= content_tag :li, class: "dropdown" do %>
@@ -53,6 +59,7 @@
 			<%= nav_link('Update Performance Ratios', update_ratios_path) %>
 			<%= nav_link('Expire Entries', expire_entries_path) %>
 			<%= nav_link('Tag Payments', tag_payments_path) %>
+			<%= content_tag :li, '', class: 'divider' %>
 			<%= nav_link('Send Payment Reminders', send_payment_reminder_path) %>
 			<%= nav_link('Send Delivery Reminders', delivery_reminder_path) %>
 		</ul>

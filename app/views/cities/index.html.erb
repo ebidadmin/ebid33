@@ -1,0 +1,28 @@
+<% title 'Cities' %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Region</th>
+      <th>Count</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @cities.each do |city| %>
+      <tr>
+        <td><%= city.id %></td>
+        <td><%= link_to city.name, city_path(city) %></td>
+        <td><%= city.region.name unless city.region_id.blank? %></td>
+        <td><%= city.entries.count %></td>
+        <td>
+          <%= link_to 'Edit', edit_city_path(city), :class => 'btn btn-mini' %>
+          <%= link_to 'Destroy', city_path(city), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @cities %>
+<%= link_to 'New', new_city_path, :class => 'btn btn-primary' %>

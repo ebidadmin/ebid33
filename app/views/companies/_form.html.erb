@@ -1,32 +1,59 @@
-<%= form_for @company do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :nickname %><br />
-    <%= f.text_field :nickname %>
-  </p>
-  <p>
-    <%= f.label :primary_role %><br />
-    <%= f.number_field :primary_role %>
-  </p>
-  <p>
-    <%= f.label :trial_start %><br />
-    <%= f.date_select :trial_start %>
-  </p>
-  <p>
-    <%= f.label :trial_end %><br />
-    <%= f.date_select :trial_end %>
-  </p>
-  <p>
-    <%= f.label :metering_date %><br />
-    <%= f.date_select :metering_date %>
-  </p>
-  <p>
-    <%= f.label :perf_ratio %><br />
-    <%= f.text_field :perf_ratio %>
-  </p>
-  <p><%= f.submit %></p>
+<%= form_for @company, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> Company</legend>
+
+    <div class="control-group">
+      <%= f.label :name, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :nickname, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :nickname, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :primary_role, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :primary_role, :class => 'number_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :trial_start, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.date_select :trial_start, :class => 'date_select' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :trial_end, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.date_select :trial_end, :class => 'date_select' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :metering_date, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.date_select :metering_date, :class => 'date_select' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :perf_ratio, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :perf_ratio, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', companies_path, :class => 'btn' %>
+    </div>
+  </fieldset>
 <% end %>

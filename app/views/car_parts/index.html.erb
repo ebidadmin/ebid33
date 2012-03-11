@@ -1,19 +1,30 @@
-<% title "Car Parts" %>
-
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Creator</th>
-  </tr>
-  <% for car_part in @car_parts %>
+<h1>Car Parts</h1>
+<table class="table table-striped">
+  <thead>
     <tr>
-      <td><%= car_part.name %></td>
-      <td><%= car_part.creator_id %></td>
-      <td><%= link_to "Show", car_part %></td>
-      <td><%= link_to "Edit", edit_car_part_path(car_part) %></td>
-      <td><%= link_to "Destroy", car_part, :confirm => 'Are you sure?', :method => :delete %></td>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Count</th>
+      <th>Created at</th>
+      <th>Actions</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @car_parts.each do |car_part| %>
+      <tr>
+        <td><%= car_part.id %></td>
+        <td><%= link_to car_part.name, car_part_path(car_part) %></td>
+        <td><%= car_part.line_items.count %></td>
+        <td><%= car_part.created_at %></td>
+        <td>
+          <%= link_to 'Edit', edit_car_part_path(car_part), :class => 'btn btn-mini' %>
+          <%= link_to 'Destroy', car_part_path(car_part), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<p><%= link_to "New Car Part", new_car_part_path %></p>
+<%= will_paginate @car_parts %>
+
+<%= link_to 'New', new_car_part_path, :class => 'btn btn-primary' %>

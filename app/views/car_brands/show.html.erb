@@ -1,15 +1,17 @@
-<p id="notice"><%= notice %></p>
+<h1>Car Brand</h1>
 
 <p>
-  <b>Car origin:</b>
+  <b>Car origin</b><br>
   <%= @car_brand.car_origin_id %>
 </p>
 
 <p>
-  <b>Name:</b>
+  <b>Name</b><br>
   <%= @car_brand.name %>
 </p>
 
-
-<%= link_to 'Edit', edit_car_brand_path(@car_brand) %> |
-<%= link_to 'Back', car_brands_path %>
+<div class="form-actions">
+  <%= link_to 'Back', car_brands_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_car_brand_path(@car_brand), :class => 'btn' %>
+  <%= link_to 'Delete', car_brand_path(@car_brand), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

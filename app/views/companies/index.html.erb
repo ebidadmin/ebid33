@@ -1,29 +1,36 @@
-<% title "Companies" %>
-
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Nickname</th>
-    <th>Primary Role</th>
-    <th>Trial Start</th>
-    <th>Trial End</th>
-    <th>Metering Date</th>
-    <th>Perf Ratio</th>
-  </tr>
-  <% for company in @companies %>
+<h1>Companys</h1>
+<table class="table table-striped">
+  <thead>
     <tr>
-      <td><%= company.name %></td>
-      <td><%= company.nickname %></td>
-      <td><%= company.primary_role %></td>
-      <td><%= company.trial_start %></td>
-      <td><%= company.trial_end %></td>
-      <td><%= company.metering_date %></td>
-      <td><%= company.perf_ratio %></td>
-      <td><%= link_to "Show", company %></td>
-      <td><%= link_to "Edit", edit_company_path(company) %></td>
-      <td><%= link_to "Destroy", company, :confirm => 'Are you sure?', :method => :delete %></td>
+      <th>ID</th>
+      <th>Name</th>
+		  <th>Nickname</th>
+		  <th>Primary Role</th>
+		  <th>Trial Start</th>
+		  <th>Trial End</th>
+		  <th>Metering Date</th>
+		  <th>Perf Ratio</th>
+      <th>Actions</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @companies.each do |company| %>
+      <tr>
+        <td><%= company.id %></td>
+        <td><%= link_to company.name, company_path(company) %></td>
+		    <td><%= company.nickname %></td>
+		    <td><%= company.primary_role %></td>
+		    <td><%= company.trial_start %></td>
+		    <td><%= company.trial_end %></td>
+		    <td><%= company.metering_date %></td>
+		    <td><%= company.perf_ratio %></td>
+        <td>
+          <%= link_to 'Edit', edit_company_path(company), :class => 'btn btn-mini' %>
+          <%= link_to 'Destroy', company_path(company), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<p><%= link_to "New Company", new_company_path %></p>
+<%= link_to 'New', new_company_path, :class => 'btn btn-primary' %>

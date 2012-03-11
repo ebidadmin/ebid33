@@ -1,25 +1,30 @@
-<% title "Car Models" %>
-
-<table>
-  <tr>
-    <th>Car Brand</th>
-    <th>Name</th>
-    <th>Creator</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% for car_model in @car_models %>
+<h1>Car Models</h1>
+<table class="table table-striped">
+  <thead>
     <tr>
-      <td><%= car_model.car_brand.name %></td>
-      <td><%= car_model.name %></td>
-      <td><%= car_model.creator_id %></td>
-      <td><%= link_to "Show", car_model %></td>
-      <td><%= link_to "Edit", edit_car_model_path(car_model) %></td>
-      <td><%= link_to "Destroy", car_model, :confirm => 'Are you sure?', :method => :delete %></td>
+      <th>ID</th>
+      <th>Car brand</th>
+      <th>Name</th>
+      <th>Count</th>
+      <th>Actions</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @car_models.each do |car_model| %>
+      <tr>
+        <td><%= car_model.id %></td>
+        <td><%= car_model.car_brand.name %></td>
+        <td><%= link_to car_model.name, car_model_path(car_model) %></td>
+        <td><%= car_model.entries.count %></td>
+        <td>
+          <%= link_to 'Edit', edit_car_model_path(car_model), :class => 'btn btn-mini' %>
+          <%= link_to 'Destroy', car_model_path(car_model), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
 <%= will_paginate @car_models %>
-<p><%= link_to "New Car Model", new_car_model_path %></p>
+
+<%= link_to 'New', new_car_model_path, :class => 'btn btn-primary' %>

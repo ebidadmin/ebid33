@@ -1,15 +1,13 @@
-<%= form_for(@car_brand) do |f| %>
-  <% if @car_brand.errors.any? %>
+<%= simple_form_for @car_brand, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> Car Brand</legend>
 
-  <div class="field">
-    <%= f.label :car_origin_id %><br />
-    <%= f.number_field :car_origin_id %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <%= f.association :car_origin %>
+    <%= f.input :name %>
+
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', car_brands_path, :class => 'btn' %>
+    </div>
+  </fieldset>
 <% end %>

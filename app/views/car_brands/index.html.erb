@@ -1,24 +1,28 @@
-<h1>Listing car_brands</h1>
-
-<table>
-  <tr>
-    <th>Car origin</th>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @car_brands.each do |car_brand| %>
-  <tr>
-    <td><%= car_brand.car_origin.name if car_brand.car_origin %></td>
-    <td><%= car_brand.name %></td>
-    <td><%= link_to 'Show', car_brand %></td>
-    <td><%= link_to 'Edit', edit_car_brand_path(car_brand) %></td>
-    <td><%= link_to 'Destroy', car_brand, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+<h1>Car Brands</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Origin</th>
+      <th>Name</th>
+      <th>Count</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @car_brands.each do |car_brand| %>
+      <tr>
+        <td><%= car_brand.id %></td>
+        <td><%= car_brand.car_origin.name if car_brand.car_origin.present? %></td>
+        <td><%= link_to car_brand.name, car_brand_path(car_brand) %></td>
+        <td><%= car_brand.entries.count %></td>
+        <td>
+          <%= link_to 'Edit', edit_car_brand_path(car_brand), :class => 'btn btn-mini' %>
+          <%= link_to 'Destroy', car_brand_path(car_brand), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<%#= will_paginate @car_brands %>
-<%= link_to 'New Car brand', new_car_brand_path %>
+<%= link_to 'New', new_car_brand_path, :class => 'btn btn-primary' %>

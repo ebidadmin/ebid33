@@ -43,8 +43,8 @@
 </ul>	
 </div>
 
-<p>
-  <%= link_to "Edit", edit_company_path(@company) %> |
-  <%= link_to "Destroy", @company, :confirm => 'Are you sure?', :method => :delete %> |
-  <%= link_to "View All", companies_path %>
-</p>
+<div class="form-actions">
+  <%= link_to 'Back', companies_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_company_path(@company), :class => 'btn' %>
+  <%= link_to 'Delete', company_path(@company), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

@@ -1,5 +1,7 @@
 Ebid33::Application.routes.draw do
 
+  resources :cities
+
   resources :surrenders
 
   resources :var_companies

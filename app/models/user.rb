@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   has_one :approver, through: :branch
   has_many :car_variants
   has_many :creators, through: :car_variants
+  has_many :cities
   
   delegate :address1, :address2, :city_name, to: :branch, allow_nil:true
   delegate :first_name, :shortname, :phone, :fax, :birthdate, to: :profile, allow_nil:true

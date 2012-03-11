@@ -1,6 +1,6 @@
 class CarPartsController < ApplicationController
   def index
-    @car_parts = CarPart.all
+    @car_parts = CarPart.includes(:line_items).page(params[:page]).per_page(20)
   end
 
   def show

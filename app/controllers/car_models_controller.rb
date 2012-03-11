@@ -1,8 +1,8 @@
 class CarModelsController < ApplicationController
-  before_filter :check_admin_role, except: :selected
+  # before_filter :check_admin_role, except: :selected
   
   def index
-    @car_models = CarModel.includes(:car_brand).paginate(page: params[:page], per_page: 20)
+    @car_models = CarModel.includes(:car_brand, :entries).page(params[:page]).per_page(20)
   end
 
   def show

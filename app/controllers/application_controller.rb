@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
   
   def latest_messages
     if user_signed_in?
-    @global_messages = Message.pvt.where(receiver_company_id: current_user.company).order('created_at DESC').limit(5)
+    @global_messages = Message.pvt.where(receiver_company_id: current_user.company).includes(:entry, :order).order('created_at DESC').limit(5)
     end
   end
   

@@ -1,0 +1,14 @@
+<%= simple_form_for @city, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> City</legend>
+
+    <%= f.input :name %>
+    <%= f.association :region, include_blank: true %>
+    <%= f.input :user_id, collection: Company.includes(:users), as: :grouped_select, group_label_method: :nickname, group_method: :users, label_method: :username, include_blank: true %>
+
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', cities_path, :class => 'btn' %>
+    </div>
+  </fieldset>
+<% end %>

@@ -1,0 +1,22 @@
+<h1>City</h1>
+
+<p>
+  <b>Name</b><br>
+  <%= @city.name %>
+</p>
+
+<p>
+  <b>Region</b><br>
+  <%= @city.region.name %>
+</p>
+
+<p>
+  <b>Creator</b><br>
+  <%= @city.creator_id %>
+</p>
+
+<div class="form-actions">
+  <%= link_to 'Back', cities_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_city_path(@city), :class => 'btn' %>
+  <%= link_to 'Delete', city_path(@city), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>
