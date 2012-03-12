@@ -10,7 +10,7 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = Order.find(params[:id])
+    @order = Order.find(params[:id], include: [:bids => [:line_item => :car_part]])
     @entry = @order.entry
     
     if current_user.role?(:admin)
@@ -119,9 +119,9 @@ class OrdersController < ApplicationController
     redirect_to :back
   end
   
-  def change_status # For seller to update status of Orders
+  def change_status # For tagging of Orders
     @order = Order.find(params[:id])
-    flash[:notice] = @order.change_status(params[:cs])
+    flash[:success] = @order.change_status(params[:cs])
     @order.update_associated_status(params[:cs])
     redirect_to @order#:back
   end

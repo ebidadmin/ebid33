@@ -28,7 +28,7 @@
 				<%= content_tag :td, class: 'span3' do %>
 					<%= content_tag :span, index + 1, class: 'label index'  %>
 					<%= content_tag :span, item.name %>
-					<%= content_tag :span, item.id %>
+					<%#= content_tag :span, item.id %>
 				<% end %>
 				<%= content_tag :td, (text_field_tag "items[#{item.id}][qty]", item.quantity, class: 'span1 txtcenter'), class: 'span1 center' %>
 				<%= content_tag :td, class: 'txtcenter', data: { content: "#{var_tooltip}", "original-title" => "#{var_title}" }, rel: "popover" do %>
@@ -48,7 +48,7 @@
 		<% end %>
 	</table>
 
-	<%= submit_tag 'Compute' %>	
+	<%= submit_tag 'Compute', class: 'btn btn-primary btn-large pull-right' %>	
 <% end %>
 
 <% content_for :javascripts do %>

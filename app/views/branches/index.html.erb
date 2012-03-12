@@ -1,29 +1,31 @@
-<% title "Branches" %>
+<% title 'Branches' %>
 
-<table>
-  <tr>
-    <th>Company</th>
-    <th>Name</th>
-    <th>Address1</th>
-    <th>Address2</th>
-    <th>Zip Code</th>
-    <th>City</th>
-    <th>Approver</th>
-  </tr>
-  <% for branch in @branches %>
+<table class="table table-striped">
+  <thead>
     <tr>
-      <td><%= branch.company_id %></td>
-      <td><%= branch.name %></td>
-      <td><%= branch.address1 %></td>
-      <td><%= branch.address2 %></td>
-      <td><%= branch.zip_code %></td>
-      <td><%= branch.city_id %></td>
-      <td><%= branch.approver_id %></td>
-      <td><%= link_to "Show", branch %></td>
-      <td><%= link_to "Edit", edit_branch_path(branch) %></td>
-      <td><%= link_to "Destroy", branch, :confirm => 'Are you sure?', :method => :delete %></td>
+      <th>ID</th>
+      <th>Company</th>
+      <th>Branch</th>
+		  <th>Address</th>
+		  <th>Approver</th>
+      <th>Actions</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @branches.each do |branch| %>
+      <tr>
+        <td><%= branch.id %></td>
+        <td><%= link_to branch.company.nickname, branch.company %></td>
+        <td><%= link_to branch.name, branch_path(branch) %></td>
+				<td><%= branch.address1 %><br><%= branch.address2 %><br><%= branch.city.name %></td>
+		    <td><%= branch.approver.profile if branch.approver.present? %></td>
+        <td>
+          <%= link_to 'Edit', edit_branch_path(branch), :class => 'btn btn-mini' %>
+          <%= link_to 'Destroy', branch_path(branch), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<p><%= link_to "New Branch", new_branch_path %></p>
+<%= link_to 'New', new_branch_path, :class => 'btn btn-primary' %>

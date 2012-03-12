@@ -50,7 +50,7 @@
 
 	<%= content_tag :div, class: 'well' do %>
 		<%= f.submit 'Submit Order', class: 'btn btn-success floatright' %> 
-		<%= link_to "Cancel", (current_page?(accept_bids_path) ? :back : @order), class: 'btn floatright' %>
+		<%= link_to "Cancel", :back, class: 'btn floatright' %>
 		<%= content_tag :p do %>
 			<%= content_tag :span, 'Important', class: 'label label-important' %>
 			Please ensure the correctness of your order above. In creating a PO,

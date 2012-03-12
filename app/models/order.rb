@@ -20,11 +20,8 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :messages
   has_many :fees
   
-  validates_presence_of :deliver_to, :address1, :phone, :ref_name
+  validates_presence_of :deliver_to, :address1, :phone#, :ref_name
 
-  # TAGS_FOR_INDEX = %w(new for-delivery delivered overdue paid closed cancelled)
-  
-  # default_scope includes(:user, :seller, :bids => [:line_item => :car_part]).order('created_at DESC')
   default_scope order('orders.created_at DESC')
 
   scope :recent, where(status: ['PO Released', 'New PO', 'For-Delivery'])
@@ -103,8 +100,8 @@ class Order < ActiveRecord::Base
 	def change_status(status)
 	  case status
 	  when 'Delivered'
-	    self.update_attributes(status: 'Delivered', delivered: Date.today, due_date: Date.today + entry.term.name.days)
-	    flash = "Updated the status of the order to <strong>Delivered</strong>.<br>
+	    update_attributes(status: 'Delivered', delivered: Date.today, due_date: Date.today + 2.days)
+      flash = "Updated the status of the order to <strong>Delivered</strong>.<br>
       Please send your invoice to buyer asap so we can help you <strong>track the payment</strong>.".html_safe
     when 'Paid.'
       if self.update_attributes(status: 'Paid', paid_temp: Date.today)

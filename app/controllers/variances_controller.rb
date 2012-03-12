@@ -15,7 +15,7 @@ class VariancesController < ApplicationController
     @variance = @entry.variances.new
     @var_companies = VarCompany.order(:name).collect { |vc| [vc.name, vc.id] }
     @available_discounts = Variance::DISCOUNTS.collect { |d| [d + '%', d ] }
-    # render layout: 'layout2'
+    render layout: 'layout2'
   end
 
   def create

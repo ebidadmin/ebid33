@@ -1,4 +1,8 @@
-<%= content_tag :option, 'Select Location', :value => nil  %>
-<% for city in @cities %>
-	<%= content_tag :option, city.name, :value => city.id  %>
+<% unless @cities.blank? %>
+	<%= content_tag :option, 'Select Location', :value => nil  %>
+	<% for city in @cities %>
+		<%= content_tag :option, city.name, :value => city.id  %>
+	<% end %>
+<% else %>
+	<%= content_tag :option, 'No cities listed', value: nil %>
 <% end %>

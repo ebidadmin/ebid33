@@ -22,7 +22,7 @@
 			<%= content_tag :th, 'Vehicle', class: 'vehicle' %>
 			<th>
 				<%= content_tag :div, 'Parts', class: 'part span3' %>
-				<%= content_tag :div, 'Lowest Bid', class: 'amount txtright' %>
+				<%= content_tag :div, (params[:t] == 'bf' ? 'Lowest Bid' : 'PO Amount'), class: 'amount txtright' %>
 				<%= content_tag :div, 'Speed', class: 'factors txtright' %>
 				<%= content_tag :div, 'Rate', class: 'factors txtcenter' %>
 				<%= content_tag :div, 'Fee', class: 'amount txtright' %>

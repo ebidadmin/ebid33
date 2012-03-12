@@ -4,7 +4,7 @@ module VariancesHelper
   end
   
   def var_tooltip
-    "Give #{content_tag :span, 'Base Price', class: 'highlight'}, NOT the discounted price. 
+    "Give #{content_tag :span, 'FULL Price', class: 'highlight'}, NOT the discounted price. 
     Don't forget the #{content_tag :span, 'correct QUANTITY', class: 'highlight'} also.".html_safe
   end
 end

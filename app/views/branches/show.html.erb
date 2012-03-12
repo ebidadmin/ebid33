@@ -1,36 +1,42 @@
-<% title "Branch" %>
+<h1>Branch</h1>
 
 <p>
-  <strong>Company:</strong>
+  <b>Company</b><br>
   <%= @branch.company_id %>
 </p>
+
 <p>
-  <strong>Name:</strong>
+  <b>Name</b><br>
   <%= @branch.name %>
 </p>
+
 <p>
-  <strong>Address1:</strong>
+  <b>Address1</b><br>
   <%= @branch.address1 %>
 </p>
+
 <p>
-  <strong>Address2:</strong>
+  <b>Address2</b><br>
   <%= @branch.address2 %>
 </p>
+
 <p>
-  <strong>Zip Code:</strong>
+  <b>Zip code</b><br>
   <%= @branch.zip_code %>
 </p>
+
 <p>
-  <strong>City:</strong>
+  <b>City</b><br>
   <%= @branch.city_id %>
 </p>
+
 <p>
-  <strong>Approver:</strong>
+  <b>Approver</b><br>
   <%= @branch.approver_id %>
 </p>
 
-<p>
-  <%= link_to "Edit", edit_branch_path(@branch) %> |
-  <%= link_to "Destroy", @branch, :confirm => 'Are you sure?', :method => :delete %> |
-  <%= link_to "View All", branches_path %>
-</p>
+<div class="form-actions">
+  <%= link_to 'Back', branches_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_branch_path(@branch), :class => 'btn' %>
+  <%= link_to 'Delete', branch_path(@branch), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

@@ -7,8 +7,9 @@ class Ability
       can :access, :all
     elsif user.role?(:powerbuyer)
       # can :access, :all
-      can :access, [:entries, :orders]
-      # can [:create, :update, :read, :print, :], :orders
+      can :access, :entries
+      can :accept, :bids
+      can [:create, :update, :read, :print, :change_status, :cancel, :confirm_cancel, :change_status], :orders
       can [:read, :create, :update], :users, id: user.id
       can [:read], [:branches, :companies]
       can :access, [:car_brands, :car_models, :car_variants, :regions]
@@ -18,7 +19,8 @@ class Ability
       can :access, :users, id: user.id
       cannot :search, :users
       can [:create, :update, :put_online, :relist], :entries
-      can [:create, :update, :read, :print], :orders, user_id: user.id
+      can :accept, :bids
+      can [:create, :update, :read, :print, :change_status, :cancel, :confirm_cancel, :change_status], :orders, user_id: user.id
       can :access, [:car_brands, :car_models, :car_variants, :regions]
       can :access, :messages, user_id: user.id
       can :read, :fees
@@ -26,7 +28,7 @@ class Ability
     elsif user.role?(:seller)
       can :access, [:home, :bids]
       can :read, :entries
-      can [:read, :accept], :orders
+      can [:read, :accept, :change_status], :orders
       can :confirm_payment, :orders
       can :access, :messages
       can :access, :users, id: user.id

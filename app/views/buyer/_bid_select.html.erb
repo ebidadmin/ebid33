@@ -14,7 +14,7 @@
 				<% unless lo_bid.cancelled? && lo_next.present? && lo_bid.id != lo_next.id  %>
 					<%= fields_for 'bids[]', item do |f| %>
 						<%= content_tag :p, class: "#{lo_bid.status_color_for_buyer}" do %>
-							<%= f.radio_button 'id', lo_bid.id if item.can_be_ordered %>
+							<%= f.radio_button 'id', lo_bid.id if item.can_be_ordered && !lo_bid.cancelled? %>
 							<%= content_tag :b, currency(lo_bid.amount), class: 'bid-amount' %>
 							<%= content_tag :em, 'L' %>
 						<% end %>
