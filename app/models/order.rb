@@ -100,7 +100,7 @@ class Order < ActiveRecord::Base
 	def change_status(status)
 	  case status
 	  when 'Delivered'
-	    update_attributes(status: 'Delivered', delivered: Date.today, due_date: Date.today + 2.days)
+	    update_attributes(status: 'Delivered', delivered: Date.today, due_date: Date.today + entry.term.name.days)
       flash = "Updated the status of the order to <strong>Delivered</strong>.<br>
       Please send your invoice to buyer asap so we can help you <strong>track the payment</strong>.".html_safe
     when 'Paid.'

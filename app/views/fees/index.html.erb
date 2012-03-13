@@ -110,6 +110,8 @@
 		<%= content_tag :h3, 'Search Fees' %>
 	  <%= f.label 'Plate No.' %>
 	  <%= f.text_field :entry_plate_no_cont, class: 'span2' %>
+	  <%= f.label 'Order No.' %>
+	  <%= f.text_field :order_id_matches, class: 'span2' %>
 	  <%= f.label 'Buyer' %>
 	  <%= f.collection_select :buyer_company_id_matches, Company.where(primary_role: 2), :id, :nickname, include_blank: true %>
 	  <%= f.label 'Seller' %>

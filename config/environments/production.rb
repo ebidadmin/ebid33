@@ -79,4 +79,6 @@ Ebid33::Application.configure do
   config.middleware.use ExceptionNotifier,
     sender_address: 'noreply@ebid.com.ph',
     exception_recipients: 'cymarquez@ebid.com.ph'
+  
+  Paperclip.options[:command_path] = "/usr/bin/"
 end

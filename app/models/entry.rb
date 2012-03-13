@@ -42,7 +42,7 @@ class Entry < ActiveRecord::Base
   scope :declined, where(status: ['Declined-IP', 'Declined-All'])
   scope :for_seller, where{(status.not_like '%New%') & (status.not_like '%Edited%') & (status.not_like '%Removed%')} #where('entries.status NOT LIKE ?', ['New', 'Edited', 'Removed'])
   
-  validates_presence_of :ref_no, :year_model, :car_brand, :car_brand_id, :car_model_id, 
+  validates_presence_of :year_model, :car_brand, :car_brand_id, :car_model_id, 
   :plate_no, :serial_no, :motor_no, :date_of_loss, :city_id, :term_id
   validates_associated :photos, :orders
   

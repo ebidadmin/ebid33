@@ -58,7 +58,7 @@ class Fee < ActiveRecord::Base
     if status == 'Paid' || status == 'Closed' # Market Fees
       f.fee_type = 'Ordered'
       f.order_id = order if order
-      f.created_at = bid.paid if bid.paid
+      # f.created_at = bid.paid if bid.paid
       f.order_paid = f.order.paid.to_date
       ratio = f.seller_company.perf_ratio
       if ratio < 70
@@ -72,10 +72,10 @@ class Fee < ActiveRecord::Base
       f.perf_ratio = ratio
     else                                      # Decline Fees
      if bid.expired
-        f.created_at = bid.expired
+        # f.created_at = bid.expired
         f.fee_type = 'Expired'
       else
-        f.created_at = bid.declined
+        # f.created_at = bid.declined
         f.fee_type = 'Declined'
       end
       ratio = f.buyer_company.perf_ratio

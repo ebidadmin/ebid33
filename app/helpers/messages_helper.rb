@@ -57,12 +57,12 @@ module MessagesHelper
       btns = button_for('Admin', entry, order) + (button_for('Buyer', entry, order) if entry.user != current_user) + (button_for('Seller', entry, order) if order.present? && order.seller != current_user)
       btns.html_safe + (content_tag :b, 'Send Private Message for ...', class: 'small')
     else
-    	link_to('Send Public Message', show_fields_messages_path(msg_for: "public", open_tag: true, entry: entry, order: order), class: 'btn small', remote: true) 
+    	link_to('Send Public Message', show_fields_messages_path(msg_for: "public", open_tag: true, entry: entry, order: order), class: 'btn btn-mini btn-primary', remote: true) 
     end
   end
   
   def button_for(recipient, entry, order=nil)
-  	link_to("#{recipient}", show_fields_messages_path(msg_for: "#{recipient.downcase}", open_tag: false, entry: entry, order: order), class: 'btn small', remote: true) 
+  	link_to("#{recipient}", show_fields_messages_path(msg_for: "#{recipient.downcase}", open_tag: false, entry: entry, order: order), class: 'btn btn-mini btn-primary', remote: true) 
   end
   
   def m_entry_link(entry, id)
