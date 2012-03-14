@@ -4,6 +4,7 @@ source 'http://rubygems.org'
 source "http://gemcutter.org"
 gem 'rails', '3.2.2'
 gem 'mysql2'
+
 group :assets do
 	gem 'sass-rails',   '~> 3.2.3'
 	gem 'coffee-rails', '~> 3.2.1'
@@ -11,10 +12,8 @@ group :assets do
 	gem "twitter-bootstrap-rails"
 	gem "client_side_validations"
 end
+
 gem 'jquery-rails'
-# if HOST_OS =~ /linux/i
-#   gem 'therubyracer', '>= 0.9.8'
-# end
 gem "rspec-rails", ">= 2.8.0.rc1", :group => [:development, :test]
 
 group :test do
@@ -64,9 +63,9 @@ gem "tire"
 # gem 'elastic_searchable'
 # gem 'rd_searchlogic', :require => 'searchlogic', :git => 'git://github.com/railsdog/searchlogic.git'
 gem "ransack"#, :git => "git://github.com/ernie/ransack.git"
-gem "has_scope"
 gem "ancestry"
 gem "private_pub"
 gem "thin"
 gem "delayed_paperclip"
 gem 'exception_notification'
+gem 'therubyracer', :group => :production
