@@ -23,7 +23,7 @@
 
 		<%= content_tag :div, class: 'span4' do %>
 			<%= f.input :ref_no, label: "What's your PO Number?" %>
-			<%= f.input :ref_name, label: "Who is the Insured?" %>
+			<%= f.input :ref_name, label: "Who is the Insured?", required: true %>
 			<%= f.fields_for :entry do |e| %>
 				<%= e.input :ref_no, label: "Is this the correct Claim No.?", hint: 'Make sure this is accurate' %>
 			<% end %>

@@ -10,15 +10,20 @@ class OrdersController < ApplicationController
   end
 
   def show
+    store_location
     @order = Order.find(params[:id], include: [:bids => [:line_item => :car_part]])
     @entry = @order.entry
-    
-    if current_user.role?(:admin)
-      @pvt_messages = @order.messages.pvt
-    else              
-      @pvt_messages = @order.messages.pvt.restricted(current_user.company)
+    if can? :access, :all || @order.company_id == current_user.company.id || @order.seller_company_id == current_user.company.id
+      if can? :access, :all
+        @pvt_messages = @order.messages.pvt
+      else              
+        @pvt_messages = @order.messages.pvt.restricted(current_user.company)
+      end
+      render layout: 'layout2'
+    else
+      flash[:error] = "You are not authorized to view that page."
+      redirect_back_or_default(edit_user_path(current_user))
     end
-    render layout: 'layout2'
   end
 
   def print
@@ -52,7 +57,6 @@ class OrdersController < ApplicationController
       if current_user.orders << @order
         bids.each { |bid| bid.process_order(@order, winning_bids.fetch(bid.id.to_s)[0].to_i) }
       end
-      # @orders << @order
       @orders << @order
     end 
 

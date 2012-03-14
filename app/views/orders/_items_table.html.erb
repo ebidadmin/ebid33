@@ -31,7 +31,7 @@
 		<%= content_tag :tr, class: 'total' do %>
 			<%= content_tag :td, total_label_helper(bids, params[:action]), colspan: 5, class: 'txtright' %>
 			<%= content_tag :td, total_amount_helper(bids, params[:action]), class: 'span3 txtright' %>
-			<%=  content_tag :td, '', class: '' %>
+			<%= content_tag :td, '', class: '' %>
 		<% end %>
 	<% end %>
 

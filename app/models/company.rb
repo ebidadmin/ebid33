@@ -6,7 +6,7 @@ class Company < ActiveRecord::Base
   
   has_many :profiles
   has_many :users, through: :profiles
-  has_many :branches#, through: :profiles
+  has_many :branches, :dependent => :destroy#, through: :profiles
   has_many :friendships, :dependent => :destroy
   has_many :friends, :through => :friendships
   has_many :entries

@@ -3,10 +3,10 @@
 	<div class="txtcenter">
 		<%= f.simple_fields_for :photos do |photo|  %>
 			<% unless photo.object.new_record?  %>
-				<% if photo.object.processing == false %>
+				<% if photo.object.photo_processing == false %>
 					<%= image_tag photo.object.photo.url(:tiny), class: "span1" %>
 				<% else %>
-					<%= image_tag 'image_placeholder.png', class: "thumbnail", :alt => "Photo of #{@entry.plate_no}" %>				
+					<%= image_tag 'image_placeholder.png', class: "span1", :alt => "Photo of #{@entry.plate_no}" %>				
 				<% end %>
 			<% end %>
 

@@ -39,7 +39,7 @@ module BidsHelper
   end
   
   def total_label_helper(bids, action)
-    if action == 'cancel' || action == 'edit'
+    if action == 'cancel' #|| action == 'edit'
       "For Cancellation (#{pluralize bids.count, 'part'})"
     else
       "Total (#{pluralize bids.count, 'part'})"

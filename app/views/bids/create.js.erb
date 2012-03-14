@@ -32,4 +32,6 @@ $("td .invalid").remove();
 
 	$("#bidding-message").html("<%= escape_javascript(content_tag :p, 'You are trying to submit blank bids. Please try again.', class: 'label label-info') %>");
 	$("#bidding-message p").animate({padding: '15'}, 'fast', 'easeOutElastic')
+	$('html, body').animate({ scrollTop: 0 }, 0);
+
 <% end %>

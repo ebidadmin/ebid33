@@ -5,21 +5,22 @@
 		<ul class="unstyled">
 			<% @entry.photos.each do |photo| %>
 				<%= content_tag :li, class: "" do %>
-					<%# if photo.processing? %>
-						<%#= image_tag 'image_placeholder.png', alt: "Photo of #{@entry.plate_no}" %>
-					<%# else %>
-						<%= link_to((image_tag photo.photo.url(:tiny), alt: "Photo of #{@entry.plate_no}"), photo.photo.url(:large), rel: "#{@entry.id}") %>
-					<%# end %>
+					<% if photo.photo_processing? %>
+						<%= image_tag 'image_placeholder.png', alt: "Photo of #{@entry.plate_no}" %>
+					<% else %>
+						<%= link_to((image_tag photo.photo.url(:tiny), alt: "Photo of #{@entry.plate_no}"), photo.photo.url(:large), rel: "#{@entry.id}", class: 'photo') %>
+					<% end %>
 				<% end %>
 			<% end %>
 		</ul>	
 	<% else %>
-		<%= content_tag :em, 'No photos submitted.' %>
+		<%= content_tag :em, 'No photos submitted.' %> 
+		<%= link_with_icon('Upload Photos', edit_entry_path(@entry), 'pencil', 'btn-info', true) %>
 	<% end %>
 </div>
 
 <% content_for :javascripts do %>
-	<%= javascript_include_tag 'fancybox/jquery.mousewheel-3.0.4.pack.js' %>
+	<%#= javascript_include_tag 'fancybox/jquery.mousewheel-3.0.4.pack.js' %>
 	<%#= javascript_include_tag 'fancybox/jquery.fancybox-1.3.4.pack.js' %>
-	<% stylesheet 'fancybox/jquery.fancybox-1.3.4.css' %>
+	<%# stylesheet 'fancybox/jquery.fancybox-1.3.4.css' %>
 <% end %>

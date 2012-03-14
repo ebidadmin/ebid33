@@ -9,7 +9,7 @@ class Photo < ActiveRecord::Base
     
   validates_attachment_presence :photo, message: "You must upload at least 2 photos."
   validates_attachment_content_type :photo, 
-  :content_type => ['image/jpeg', 'image/pjpeg', 
+  :content_type => ['image/jpeg', 'image/pjpeg', 'image/JPG',
                                    'image/jpg', 'image/png'], message: "Acceptable photo formats are jpg, jpeg, or png."
 
   process_in_background :photo

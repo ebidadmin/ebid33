@@ -36,7 +36,7 @@ class SellerController < ApplicationController
     @all_orders ||= @q.result.find_status(params[:s]).by_this_seller(current_user.company)
     @orders = @all_orders.includes([:entry => [:car_brand, :car_model, :user]], :company, :messages).page(params[:page]).per_page(10)
  
-    @buyer_company = Company.find(params[:q][:company_id_matches]).nickname if params[:q]
+    @buyer_company = Company.find(params[:q][:company_id_matches]).nickname if params[:q] && params[:q][:company_id_matches].present?
   end
   
   def fees

@@ -48,7 +48,7 @@ class EntriesController < ApplicationController
     # raise params.to_yaml
     @entry = current_user.entries.build(params[:entry])
     if current_user.company.entries << @entry
-      flash[:notice] = "Successfully created entry. Next step is to search and add parts."
+      flash[:success] = "Successfully created entry. Next step is to search and add parts."
       if current_user.role?(:buyer)
         redirect_to buyer_show_path(@entry)
       else
@@ -82,9 +82,19 @@ class EntriesController < ApplicationController
     @entry = Entry.find(params[:id])
     if @entry.update_attributes(params[:entry])
       flash[:notice] = "Successfully updated entry."
-      # redirect_back_or_default(buyer_show_path(@entry))
-      redirect_to session['referer'], :notice  => "Successfully updated entry."
+      # redirect_to session['referer'], :notice  => "Successfully updated entry."
+      flash[:success] = "Successfully created entry. Next step is to search and add parts."
+      if current_user.role?(:buyer)
+        redirect_to buyer_show_path(@entry)
+      else
+        redirect_to @entry
+      end
     else
+      @car_models = CarModel.where(car_brand_id: @entry.car_brand_id)
+      @car_variants = CarVariant.where(car_model_id: @entry.car_model_id)
+      @entry.region = @entry.city.region_id
+      @cities = City.where(region_id: @entry.region)
+      @entry.photos.build if @entry.photos.nil?
       render 'edit'
     end
   end

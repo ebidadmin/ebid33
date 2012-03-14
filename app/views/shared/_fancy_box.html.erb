@@ -1,8 +1,10 @@
 
 <% content_for :javascripts do %>
+	<% stylesheet 'fancybox/jquery.fancybox-1.3.4.css' %>
 	<%= javascript_include_tag 'fancybox/jquery.fancybox-1.3.4.pack.js' %>
+	<%= javascript_include_tag 'fancybox/jquery.mousewheel-3.0.4.pack.js' %>
 	<script type="text/javascript" charset="utf-8">
-	$('.photo-set a').fancybox({
+	$('.photo-set a.photo').fancybox({
 		'transitionIn'		: 'elastic',
 		'transitionOut'		: 'elastic',
 		'titlePosition' 	: 'over',

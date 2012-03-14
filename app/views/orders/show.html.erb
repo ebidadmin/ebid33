@@ -36,7 +36,7 @@
 			<% if @order.confirmed %>
 				<%= dl_helper 'PO Confirmed', long_date(@order.confirmed) %>
 			<% else %>
-				<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...') %>
+				<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...', class: 'label label-info') %>
 			<% end %>
 			<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
 			<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>

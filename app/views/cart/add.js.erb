@@ -2,3 +2,4 @@ $("div#search-results").html("<%= escape_javascript(render 'cart/cart_rules') %>
 $("div#parts-list").html("<%= escape_javascript(render 'cart/cart') %>");
 $("div#parts-list tr#<%= @item.id %>").effect("highlight", {}, 4000);
 $(".search-query").val('');
+$('html, body').animate({ scrollTop: 0 }, 0);
