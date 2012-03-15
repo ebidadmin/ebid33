@@ -3,8 +3,8 @@
 
 <div class="row">
 	<div id="parts-list" class="span6">
-		<% unless @entry.line_items.blank? %>
-		<%= render 'cart/cart' %>
+		<% unless @entry.line_items.blank? && @cart.cart_items.blank? %>
+			<%= render 'cart/cart' %>
 		<% else %>
 			<%= render 'cart/cart_rules' %>
 		<% end %>
