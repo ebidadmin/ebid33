@@ -28,13 +28,41 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
+				<div id="myCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            <div class="item active">
+							<%= image_tag 'under_construction.gif' %>
+              <div class="carousel-caption">
+                <h4>First Thumbnail label</h4>
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              </div>
+            </div>
+            <div class="item">
+							<%= image_tag 'hero.jpg' %>
+              <div class="carousel-caption">
+                <h4>Second Thumbnail label</h4>
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              </div>
+            </div>
+            <div class="item">
+							<%= image_tag 'ebidlogo.jpg' %>
+              <div class="carousel-caption">
+                <h4>Third Thumbnail label</h4>
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+              </div>
+            </div>
+          </div>
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+        </div>
+        
         <h1>Welcome to the new E-Bid!</h1>
 				<p>This is where businesses bid-and-buy auto parts.</p>
 	      <div class="row">
 	        <div class="span4">
-						<%= image_tag '/assets/under_construction.gif' %>
+						<%#= image_tag '/assets/under_construction.gif' %>
 	        </div>
-	        <div class="span4 offset2">
+	        <div class="span4 offset6">
 	          <h2>Login here</h2>
 						<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
 							<%= f.label :username %>
@@ -56,7 +84,10 @@
       <footer>
 				<p><strong>Copyright &copy; 2006-<%= Time.now.year -%> E-Bid, Inc.</strong>   All rights reserved.</p>
       </footer>
-
+			<%= javascript_include_tag 'application' %>
+			<script stype="text/javascript" charset="utf-8">
+				$('.carousel').carousel();
+			</script>
     </div> <!-- /container -->
 
   </body>
