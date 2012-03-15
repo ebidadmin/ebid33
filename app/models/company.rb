@@ -23,7 +23,8 @@ class Company < ActiveRecord::Base
   RATIO_DATE = Time.now.beginning_of_year #'2011-04-16'.to_datetime #
   
   def compute_buyer_ratio
-    line_items ||= LineItem.with_bids.where(entry_id: self.entries).where('line_items.created_at >= ?', RATIO_DATE)
+    es = self.entries.where('entries.created_at >= ?', RATIO_DATE)
+    line_items ||= LineItem.with_bids.where(entry_id: es)
     if line_items.count > 0
       parts_ordered = line_items.where('order_id IS NOT NULL').count
       self.perf_ratio = (BigDecimal("#{parts_ordered}")/BigDecimal("#{line_items.count}")).to_f * 100
