@@ -19,11 +19,7 @@ $(function() {
 		$('div#veh-variant select').html('<option>Select Variant</option>')
 		$.ajax({
 			type: 'get',
-			url: '/car_brands/' + parseInt(brand_id) + '/selected',
-			success: function(html) {
-				$('div#veh-model select').html(html);
-			},
-			complete: function() { $('span.loading').remove(); }
+			url: '/car_brands/' + parseInt(brand_id) + '/selected'
 		});
 	});
 	$('div#veh-model select').change(function() {
@@ -31,11 +27,7 @@ $(function() {
 		$('div#veh-variant select').after(loading)
 		$.ajax({
 			type: 'get',
-			url: '/car_models/' + parseInt(model_id) + '/selected',
-			success: function(html) {
-				$('div#veh-variant select').html(html);
-			},
-			complete: function() { $('span.loading').remove(); }
+			url: '/car_models/' + parseInt(model_id) + '/selected'
 		});
 	});
 	$('div#regions select').change(function() { 
@@ -43,11 +35,7 @@ $(function() {
 		$('div#cities select').after(loading)
 		$.ajax({
 			type: 'get',
-			url: '/regions/' + parseInt(region_id) + '/selected',
-			success: function(html) {
-				$('div#cities select').html(html);
-			},
-			complete: function() { $('span.loading').remove(); }
+			url: '/regions/' + parseInt(region_id) + '/selected'
 		});
 	});
 	$('div#companies select').change(function() { 

@@ -18,7 +18,6 @@ class Notify < ActionMailer::Base
     mail(
       to: "#{entry.user.shortname} <#{entry.user.email}>", 
       subject: "Bids Submitted #{entry.model_name}", 
-      bcc: "Chris Marquez <cymarquez@ebid.com.ph>"
       )
   end
   
@@ -74,8 +73,18 @@ class Notify < ActionMailer::Base
   def new_message(entry, message)
     @entry = entry
     @message = message
-    
-    #TODO
+    unless message.receiver.blank?
+      mail(
+        to: "#{message.receiver.profile} <#{message.receiver.email}>", 
+        subject: "You have a PM for #{entry.model_name}", 
+        bcc: ["Chris Marquez <cymarquez@ebid.com.ph>"]
+        )
+    else
+      mail(
+        to: "Chris Marquez <cymarquez@ebid.com.ph>", 
+        subject: "Public Message for #{entry.model_name}" 
+        )
+    end
   end
   
   def cancelled_order(order, message)

@@ -27,7 +27,7 @@ class MessagesController < ApplicationController
         if current_user.messages << @message
           format.html { redirect_to session['referer'], :notice => "Successfully created message."; session['referer'] = nil }
           format.js { flash.now[:notice] = "Message sent." }
-          # Notify.new_message(@entry, @message).deliver
+          Notify.delay.new_message(@entry, @message)#.deliver
         else
           format.html { render :action => 'new' }
           format.js { flash.now[:notice] = "Message was not sent. Try again!" }

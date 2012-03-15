@@ -79,7 +79,7 @@
 		<%=  content_tag :th, 'Unit Price', class: 'txtright' %>
 		<%=  content_tag :th, 'Cost', class: 'txtright' %>
 	<% end %>
-	<% @order.bids.each_with_index do |bid, index| %>
+	<% @order.bids.not_cancelled.each_with_index do |bid, index| %>
 		<%= content_tag :tr, class: "#{'cancelled' if bid.cancelled?}" do %>
 			<%=  content_tag :td, "#{content_tag :b, index + 1, class: 'label'}".html_safe, class: 'span1' %>
 			<%=  content_tag :td, class: 'span4' do %>

@@ -43,6 +43,6 @@ class CarModelsController < ApplicationController
 
   def selected
     @car_variants = CarVariant.where(car_model_id: params[:id]).order(:name)
-    render :partial => 'car_models/selected' 
+    # render :partial => 'car_models/selected' 
   end
 end

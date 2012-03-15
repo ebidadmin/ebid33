@@ -1,0 +1,18 @@
+<%= @message.open_tag? ? "PUBLIC" : "PRIVATE" %> Message for <%= @message.receiver.first_name unless @message.receiver.blank? %>:
+
+******** ******** ******** ******** 
+
+<%= @message.message.html_safe %>
+	
+******** ******** ******** ******** 
+
+<%= @entry.model_name %>
+(<%= @entry.plate_no %>)
+
+<% if @message.receiver && @message.receiver.role?('admin') %>
+View it here:	<%= entry_url(@entry) %>
+<% elsif @message.receiver && @message.receiver.role?('seller') %>
+View it here:	<%= seller_show_url(@entry) %>
+<% else %>
+View it here:	<%= buyer_show_url(@entry) %>
+<% end %>

@@ -74,7 +74,7 @@ Ebid33::Application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default :charset => "utf-8"
-  Mail.register_interceptor(MailInterceptor)
+  # Mail.register_interceptor(MailInterceptor)
 
   config.middleware.use ExceptionNotifier,
     sender_address: 'noreply@ebid.com.ph',
