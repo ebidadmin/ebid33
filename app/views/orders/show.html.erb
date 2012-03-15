@@ -32,11 +32,12 @@
 	<%= content_tag :div, class: 'status-box span5 offset1' do %>
 		<%= content_tag :h3, "#{@order.company.nickname}'s PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
 		<dl>
+			<%= dl_helper 'Approved by', "#{@order.branch.approver.shortname}, #{content_tag :em, @order.branch.approver.rank_name}"  %>
 			<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
 			<% if @order.confirmed %>
 				<%= dl_helper 'PO Confirmed', long_date(@order.confirmed) %>
 			<% else %>
-				<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...', class: 'label label-info') %>
+				<%= dl_helper 'PO Confirmed', (content_tag :em, 'Waiting for seller to accept the order ...', class: 'highlight') %>
 			<% end %>
 			<%= dl_helper 'Delivered', regular_date(@order.delivered, 'day') + "<br> (#{pluralize @order.delivery_time, 'day'} from confirmation)" if @order.delivered %>
 			<%= dl_helper 'Payment Due', regular_date(@order.due_date), 'due-date' if @order.due_date %>

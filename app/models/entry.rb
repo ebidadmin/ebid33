@@ -52,7 +52,7 @@ class Entry < ActiveRecord::Base
   STATUS_TAGS = %w(New Online Additional Relisted For-Decision Ordered-IP Ordered-All Ordered-Declined Declined-IP Declined-All) 
   # TAGS_FOR_INDEX = %w(new online for-decision ordered declined)
   TAGS_FOR_SIDEBAR = %w(online relisted bid_until decided expired)
-  MIN_BIDDING_TIME = 5.minutes
+  MIN_BIDDING_TIME = 3.hours #5.minutes
   DAYS_TO_EXPIRY = 3.days
   
   def model_name
@@ -182,9 +182,9 @@ class Entry < ActiveRecord::Base
       end
 	  else
       deadline = bid_until + DAYS_TO_EXPIRY 
-      if Time.now >= deadline && expired.blank?
+      if Date.today >= deadline && expired.blank?
         line_items.each { |item| item.expire unless item.cannot_be_expired }
-        if update_attributes(:chargeable_expiry => true, :expired => Time.now)
+        if update_attributes(chargeable_expiry: true, expired: Time.now)
           update_status #unless orders.exists?
         end
       end

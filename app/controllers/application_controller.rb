@@ -6,7 +6,17 @@ class ApplicationController < ActionController::Base
   
   rescue_from CanCan::Unauthorized do |exception|
     flash[:error] = exception.message
-    redirect_to root_url
+    if user_signed_in?
+      if can? :access, :all # admin
+        redirect_to entries_path(s: 'for-decision')
+      elsif can? :create, :entries # buyer
+        redirect_to buyer_entries_path(s: 'for-decision')
+      elsif can? :create, :bids # seller
+        redirect_to seller_entries_path(s: 'online') 
+      end
+    else
+      redirect_to root_url
+    end
   end
   
   private
@@ -40,8 +50,14 @@ class ApplicationController < ActionController::Base
   def check_role(role) 
     store_location
 	  unless current_user && current_user.role?(role) 
-	    flash[:error] = "Sorry. That page is not included in your access privileges." 
-	    redirect_back_or_default root_path#redirect_to root_path
+	    flash[:error] = "Sorry. You are not authorized for that page or action." 
+      if can? :access, :all # admin
+        redirect_back_or_default entries_path(s: 'for-decision')
+      elsif can? :create, :entries # buyer
+        redirect_back_or_default buyer_entries_path(s: 'for-decision')
+      elsif can? :create, :bids # seller
+        redirect_back_or_default seller_entries_path(s: 'online') 
+      end
 	  end 
 	end 
 
@@ -100,7 +116,7 @@ class ApplicationController < ActionController::Base
   
   def latest_messages
     if user_signed_in?
-    @global_messages = Message.pvt.where(receiver_company_id: current_user.company).includes(:entry, :order).order('created_at DESC').limit(5)
+      @global_messages = Message.pvt.where(receiver_company_id: current_user.company).includes(:entry, :order).order('created_at DESC').limit(5)
     end
   end
   

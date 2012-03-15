@@ -59,7 +59,7 @@ class LineItemsController < ApplicationController
   
   def add
     @entry = Entry.find(params[:id], include: :line_items)
-    @car_parts = CarPart.order(:name).page(params[:page]).per_page(32)
+    # @car_parts = CarPart.order(:name).page(params[:page]).per_page(32)
     
     render layout: 'layout2'
   end

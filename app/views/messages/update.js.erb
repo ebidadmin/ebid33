@@ -4,3 +4,4 @@ $("div.msg-form").html("<%= escape_javascript(content_tag :h3, flash[:notice], c
 <% else %>
 	$("div.messages #private").replaceWith("<%= escape_javascript(render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private') %>");
 <% end %>
+$(".spinner").hide();

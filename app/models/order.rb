@@ -74,17 +74,16 @@ class Order < ActiveRecord::Base
     end
   end
   
-  def populate(user, ip, bidder, bids, new_qty = nil)
-    # bids.each { |bid| bid.process_order(self, new_qty.fetch(bid.id.to_s)[0].to_i }
+  def populate(user, ip, bidder, bids, new_qty)
     self.company_id = user.company.id
     self.buyer_ip = ip
     self.seller_id = bidder.id
     self.seller_company_id = bidder.company.id
-    self.order_total = bids.collect(&:total).sum 
     self.items_count = self.items_count + bids.count
-    # if user.orders << self
-    # end
-    
+    if user.orders << self
+      bids.each { |bid| bid.process_order(self, new_qty.fetch(bid.id.to_s)[0].to_i) }
+      self.update_attribute(:order_total, bids.collect(&:total).sum) 
+    end
   end
   
   # Updates line_items & bids to status = For Delivery, Delivered, or Paid

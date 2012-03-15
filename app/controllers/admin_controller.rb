@@ -20,7 +20,7 @@ class AdminController < ApplicationController
       @entry.expire(1)
       flash[:success] = "Expired #{@entry.id}."
     else
-      @entries = Entry.for_decision.unexpired.includes(:line_items => :bids).order(:created_at)#.limit(5)
+      @entries = Entry.unscoped.for_decision.unexpired.includes(:line_items => :bids).order(:created_at)#.limit(5)
       @entries.each do |entry|
         entry.expire
       end
@@ -34,7 +34,7 @@ class AdminController < ApplicationController
     @orders.each do |order|
       order.tag_payment #if order.paid_temp.to_datetime <= Order::TAG_AS_PAID # proceed only if tagged by buyer more than 3 days ago
     end
-    flash[:success] = "Tagged #{pluralize @orders.count, 'orders'}."
+    flash[:success] = "Tagged #{pluralize @orders.count, 'order'}."
     redirect_to :back
   end
   

@@ -33,3 +33,10 @@
 		<%= content_tag :small, 'Please check your spelling OR try another keyword.' %>
 	<% end %>
 <% end %>
+
+<div class="well txtcenter">
+	<%= content_tag :b, "Please SEARCH the parts thoroughly. Don't be lazy!" %>
+	<%= content_tag :p, 'Add new parts only as a LAST RESORT to avoid duplication.' %>
+	<%= link_to 'Add New Part', new_car_part_path(id: @entry), class: 'btn', rel: 'tooltip', data: {'original-title' => 'Please SEARCH the parts thoroughly. Add new parts only as a LAST RESORT to avoid duplication.'} %>
+</div>
+

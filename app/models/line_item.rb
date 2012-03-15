@@ -44,7 +44,8 @@ class LineItem < ActiveRecord::Base
 	
 	def expire
     if bids.present? #WITH BIDS
-      lowest_bid = bids.unscoped.for_decision.not_cancelled.last
+      # lowest_bid = bids.for_decision.not_cancelled.last
+      lowest_bid = bids.not_cancelled.last
       lowest_bid.expire
       self.update_attribute(:status, "Expired")
     else #WITHOUT BIDS

@@ -2,7 +2,7 @@ $("td .invalid").remove();
 
 <% unless @new_bids.blank? && @existing_bids.blank? %>
 
-	$("#bidding-message .invalid").fadeOut();
+	$("#bidding-message .invalid").remove();
 	
 	<% @new_bids.group_by(&:line_item).each do |line_item, bids| %>
 		<% bids.each do |bid| %>
@@ -30,8 +30,9 @@ $("td .invalid").remove();
 	
 <% else %>
 
-	$("#bidding-message").html("<%= escape_javascript(content_tag :p, 'You are trying to submit blank bids. Please try again.', class: 'label label-info') %>");
+	$("#bidding-message").html("<%= escape_javascript(content_tag :p, 'You are trying to submit blank bids. Please try again.', class: 'invalid label label-info') %>");
 	$("#bidding-message p").animate({padding: '15'}, 'fast', 'easeOutElastic')
 	$('html, body').animate({ scrollTop: 0 }, 0);
 
 <% end %>
+$(".spinner").hide();

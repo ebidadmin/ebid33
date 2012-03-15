@@ -1,6 +1,9 @@
 class OrdersController < ApplicationController
   include ActionView::Helpers::TagHelper
   # load_and_authorize_resource
+  before_filter :check_admin_role, only: [:index, :destroy]
+  before_filter :check_seller_role, only: [:accept]
+  before_filter :check_buyer_role, only: [:create, :edit, :update]
   
   def index
     @q = Order.search(params[:q])
@@ -12,8 +15,8 @@ class OrdersController < ApplicationController
   def show
     store_location
     @order = Order.find(params[:id], include: [:bids => [:line_item => :car_part]])
-    @entry = @order.entry
-    if can? :access, :all || @order.company_id == current_user.company.id || @order.seller_company_id == current_user.company.id
+    if can?(:access, :all) || @order.company_id == current_user.company.id || @order.seller_company_id == current_user.company.id
+      @entry = @order.entry
       if can? :access, :all
         @pvt_messages = @order.messages.pvt
       else              
@@ -21,7 +24,7 @@ class OrdersController < ApplicationController
       end
       render layout: 'layout2'
     else
-      flash[:error] = "You are not authorized to view that page."
+      flash[:error] = "Sorry. You are not authorized to view that page."
       redirect_back_or_default(edit_user_path(current_user))
     end
   end
@@ -51,12 +54,11 @@ class OrdersController < ApplicationController
 
     # Create a unique PO per seller
     @bids.group_by(&:user).each do |bidder, bids|
-      # @order = current_user.orders.build(params[:order])
       @order = @entry.orders.build(params[:entry][:order])
-      @order.populate(current_user, request.remote_ip, bidder, bids) ### check this, total does not match updated bids
-      if current_user.orders << @order
-        bids.each { |bid| bid.process_order(@order, winning_bids.fetch(bid.id.to_s)[0].to_i) }
-      end
+      @order.populate(current_user, request.remote_ip, bidder, bids, winning_bids) 
+      # if current_user.orders << @order
+      #   bids.each { |bid| bid.process_order(@order, winning_bids.fetch(bid.id.to_s)[0].to_i) }
+      # end
       @orders << @order
     end 
 

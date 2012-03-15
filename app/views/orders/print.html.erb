@@ -32,6 +32,7 @@
 	<%= content_tag :div, class: 'status-box span4' do %>
 		<%= content_tag :h3, "#{@order.company.nickname}'s PO # #{@order.ref_no? ? @order.ref_no : (content_tag :small, 'not provided')}".html_safe  %>
 		<dl>
+			<%= dl_helper 'Approved by', "#{@order.branch.approver.shortname}, #{content_tag :em, @order.branch.approver.rank_name}"  %>
 			<%= dl_helper 'PO Date', long_date(@order.created_at)  %>
 			<% if @order.confirmed %>
 				<%= dl_helper 'PO Accepted', long_date(@order.confirmed) %>

@@ -69,6 +69,9 @@ $(function() {
 		$.getScript(this.href);
 		return false;
 	});
+	$('input.btn').live("click", function() {
+	    $(".spinner").toggle();
+	});
 	
 	// $('div#cart-search').hide();
 	// function autosaveForm() {

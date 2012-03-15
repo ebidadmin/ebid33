@@ -32,5 +32,8 @@
 	    <%= javascript_include_tag "application" %>
 			<%= yield(:javascripts) %>
 		</div>
+		<div class="spinner" style="display:none" >
+			<%= image_tag 'ajax-loader.gif', width: 150, height: 150  %>
+		</div>
   </body>
 </html>

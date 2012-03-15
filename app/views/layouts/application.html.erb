@@ -24,6 +24,7 @@
      <% flash.each do |name, msg| %>
        <%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
      <% end %>
+
 			<div class="row">
 				<div class="span9">
 					<div class="page-header">
@@ -33,8 +34,7 @@
 						<% end %>
 					</div>
 			      <%= yield %>
-				</div> <!-- end of span9 -->
-	
+				</div>
 				<div class="span3">
 			    	<div class="well sidebar">
 						<%= yield(:sidebar) %>
@@ -44,15 +44,19 @@
 					<% if current_user %>
 						<%= render 'layouts/chatbox' %>
 					<% end %>
-				</div> <!-- end of span3 -->
+				</div>
 			</div>
-    </div> <!--! end of .container -->
+			
+    </div>
     <footer>
 			<%= Rails.env %>
     </footer>
 		<div id="javascripts">
 	    <%= javascript_include_tag "application" %>
 			<%= yield(:javascripts) %>
+		</div>
+		<div class="spinner" style="display:none" >
+			<%= image_tag 'ajax-loader.gif', width: 150, height: 150  %>
 		</div>
   </body>
 </html>

@@ -25,7 +25,7 @@
 			<%= f.input :ref_no, label: "What's your PO Number?" %>
 			<%= f.input :ref_name, label: "Who is the Insured?", required: true %>
 			<%= f.fields_for :entry do |e| %>
-				<%= e.input :ref_no, label: "Is this the correct Claim No.?", hint: 'Make sure this is accurate' %>
+				<%= e.input :ref_no, label: "Is this the correct Claim No.?", hint: 'Make sure this is accurate', required: true %>
 			<% end %>
 		<% end %>
 
@@ -35,8 +35,8 @@
 				<%= f.label 'Address', required: true %>
 				<%= content_tag :p, "Note: your original request was #{content_tag :span, @entry.city.name, class: 'label label-info'} <br> Charges may apply for farther areas".html_safe, id: 'address-note' %>
 			<% end %>
-			<%= f.input :address1, label: 'Bldg, number, street', required: true %>
-			<%= f.input :address2, label: "Baranggay/district, city or province".html_safe, required: true %>
+			<%= f.input :address1, label: 'Bldg or number + street', required: true %>
+			<%= f.input :address2, label: "Baranggay or district + city or province".html_safe, required: true %>
 		<% end %>
 
 		<%= content_tag :div, class: 'span3' do %>
@@ -50,7 +50,7 @@
 	<% end %>
 
 	<%= content_tag :div, class: 'well' do %>
-		<%= f.button :submit, class: 'btn btn-success floatright' %> 
+		<%= f.submit 'Update Order', class: 'btn btn-success floatright' %> 
 		<%= link_to "Cancel", (current_page?(accept_bids_path) ? :back : @order), class: 'btn floatright' %>
 		<%= content_tag :p do %>
 			<%= content_tag :span, 'Important', class: 'label label-important' %>

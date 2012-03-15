@@ -21,6 +21,10 @@ class Profile < ActiveRecord::Base
     [first_name[0], last_name].join(" ")
   end
   
+  def rank_name
+    self.rank.name
+  end
+  
   private
   def strip_blanks
     self.first_name = self.first_name.strip.titleize

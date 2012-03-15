@@ -29,9 +29,10 @@ class User < ActiveRecord::Base
   has_many :car_variants
   has_many :creators, through: :car_variants
   has_many :cities
+  # has_many :creators, through: :car_parts
   
   delegate :address1, :address2, :city_name, to: :branch, allow_nil:true
-  delegate :first_name, :shortname, :phone, :fax, :birthdate, to: :profile, allow_nil:true
+  delegate :first_name, :shortname, :phone, :fax, :birthdate, :rank_name, to: :profile, allow_nil:true
   delegate :nickname, to: :company
   
   # default_scope #includes(:profile => [:company, :branch])

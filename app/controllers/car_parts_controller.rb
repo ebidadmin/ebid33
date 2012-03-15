@@ -8,14 +8,21 @@ class CarPartsController < ApplicationController
   end
 
   def new
-    @car_part = CarPart.new
+    store_location
+    @car_part = CarPart.new(creator_id: current_user.id)
   end
 
   def create
+    initialize_cart
     @car_part = CarPart.new(params[:car_part])
+    @car_part.creator_id = current_user.id
     if @car_part.save
-      redirect_to @car_part, :notice => "Successfully created car part."
+      @cart.add(@car_part.id)
+      @entry = Entry.find(params[:entry])
+      flash[:success] = "Successfully created car part."
+      redirect_back_or_default(add_line_items_path(id: params[:entry]))
     else
+      params[:id] = params[:entry]
       render :action => 'new'
     end
   end
