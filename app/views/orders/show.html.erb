@@ -85,8 +85,8 @@
 		<% if can?(:accept, :orders) && !@order.seller_confirmation? %>
 			<%= link_to_accept(@order) %>
 			<% content_for :javascripts do %>
-				<%= javascript_include_tag 'bootstrap-tooltip' %>
-				<%= javascript_include_tag 'bootstrap-popover' %>
+				<%#= javascript_include_tag 'bootstrap-tooltip' %>
+				<%#= javascript_include_tag 'bootstrap-popover' %>
 				<script type="text/javascript" charset="utf-8">
 					$('a.accept').popover({placement: 'top'}).popover('show');
 				</script>
