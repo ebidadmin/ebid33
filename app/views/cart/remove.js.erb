@@ -3,3 +3,4 @@ $("div#parts-list tr#<%= @item.id %>").fadeOut();
 <% if @cart.cart_items.empty? %>
 	$('.clear').remove();
 <% end %>
+$(".spinner").hide();

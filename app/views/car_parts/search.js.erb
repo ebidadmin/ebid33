@@ -1,3 +1,4 @@
 $("div#search-results").html("<%= escape_javascript(image_tag 'loading.gif') %>");
 $("div#search-results").html("<%= escape_javascript(render 'car_parts/search_results') %>").show();
+$(".spinner").hide();
 
