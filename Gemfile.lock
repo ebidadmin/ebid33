@@ -48,6 +48,8 @@ GEM
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
     builder (3.0.0)
+    business_time (0.4.0)
+      activesupport (>= 2.0.0)
     capistrano (2.11.2)
       highline
       net-scp (>= 1.0.0)
@@ -282,9 +284,9 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
-    twitter-bootstrap-rails (2.0.4)
+    twitter-bootstrap-rails (2.0.3)
       actionpack (>= 3.1)
-      less-rails (~> 2.1.8)
+      less-rails (~> 2.1.6)
       railties (>= 3.1)
     tzinfo (0.3.32)
     uglifier (1.2.3)
@@ -302,6 +304,7 @@ PLATFORMS
 
 DEPENDENCIES
   ancestry
+  business_time
   cancan!
   capistrano
   capybara (>= 1.1.2)
@@ -340,6 +343,6 @@ DEPENDENCIES
   therubyracer
   thin
   tire
-  twitter-bootstrap-rails
+  twitter-bootstrap-rails (= 2.0.3)
   uglifier (>= 1.0.3)
   will_paginate (~> 3.0)

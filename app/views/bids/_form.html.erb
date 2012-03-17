@@ -1,39 +1,55 @@
-<%= simple_form_for @bid, :validate => true do |f| %>
-	<%= f.input :id, :disabled => true %>
-	<%= f.association :user, :collection => Role.find(3).users.map { |u| [u.username, u.id] } %>
-	<%= f.input :entry_id %>
-	<%= f.input :line_item_id %>
-	<%= f.input :amount %>
-	<%= f.input :quantity %>
-	<%= f.input :total, :disabled => true %>
-	<%= f.input :bid_type %>
-	<%= f.input :status, collection: Bid::STATUS_TAGS %>
-	<%= f.association :car_brand %>
-	<%= f.input :bid_speed %>
-	<%= f.input :created_at do %>
-	  <%= f.text_field :created_at, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
-	<% end %>
-	<%= f.input :updated_at do %>
-	  <%= f.text_field :updated_at, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
-	<% end %>
-	<%= f.input :ordered do %>
-	  <%= f.text_field :ordered, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
-	<% end %>
-	<%= f.input :order_id %>
-	<%= f.input :delivered do %>
-	  <%= f.text_field :delivered, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
-	<% end %>
-	<%= f.input :paid do %>
-	  <%= f.text_field :paid, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
-	<% end %>
-	<%= f.input :declined do %>
-	  <%= f.text_field :declined, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
-	<% end %>
-	<%= f.input :expired do %>
-	  <%= f.text_field :expired, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
-	<% end %>
-	<div class='well'>
-	  <%= f.button :submit, class: 'btn large primary'  %>
+<% subtitle @bid.id if @bid.id %>
+<%= simple_form_for @bid do |f| %>
+	<div class="row">
+		<div class="span3">
+			<%= f.association :user, :collection => Role.find(3).users.map { |u| [u.username, u.id] } %>
+			<%= f.input :entry_id %>
+			<%= f.input :line_item_id %>
+			<%= f.input :order_id %>
+		</div>
+		<div class="span3">
+			<%= f.input :amount %>
+			<%= f.input :quantity %>
+			<%= f.input :bid_type %>
+			<%= f.input :status, collection: Bid::STATUS_TAGS %>
+		</div>
+		<div class="span3">
+			<%= f.association :car_brand %>
+			<%= f.input :bid_speed %>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="span3">
+			<%= f.input :created_at do %>
+			  <%= f.text_field :created_at, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
+			<% end %>
+			<%= f.input :updated_at do %>
+			  <%= f.text_field :updated_at, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
+			<% end %>
+		</div>
+		<div class="span3">
+			<%= f.input :ordered do %>
+			  <%= f.text_field :ordered, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
+			<% end %>
+			<%= f.input :delivered do %>
+			  <%= f.text_field :delivered, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
+			<% end %>
+			<%= f.input :paid do %>
+			  <%= f.text_field :paid, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
+			<% end %>
+		</div>
+		<div class="span3">
+			<%= f.input :declined do %>
+			  <%= f.text_field :declined, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
+			<% end %>
+			<%= f.input :expired do %>
+			  <%= f.text_field :expired, :class => 'datepicker', :size => 25, :placeholder => 'Click to select date' %>
+			<% end %>
+		</div>
+	</div>
+	<div class='well txtcenter'>
+	  <%= f.button :submit, class: 'btn btn-large btn-primary'  %>
 		<%= link_to "Show", @bid, class: 'btn' %>
 	  <%= link_to "View All", bids_path, class: 'btn' %>
 	</div>

@@ -45,7 +45,7 @@
 				<%= content_tag :td, class: 'span2 center' do %>
 		  		<%= content_tag :p, (link_to "View Info", user), class: 'small' %>
 		  		<%= content_tag :p, (link_to "Edit", edit_user_path(user)), class: 'small' %>
-					<%= content_tag :p, (link_to "Delete", user, :confirm => 'Are you sure? WARNING: This will remove all entries and bids related to this user.', :method => :delete), class: 'small'  %>
+					<%= content_tag :p, (link_to "Delete", user, :confirm => 'Are you sure? WARNING: This will remove all entries and bids related to this user.', :method => :delete), class: 'small' unless user == current_user %>
 				<% end %>
 			<% end %>
 			<% end %>

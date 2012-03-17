@@ -25,14 +25,13 @@ class CompaniesController < ApplicationController
   end
 
   def edit
-    store_location
     @company = Company.find(params[:id])
   end
 
   def update
     @company = Company.find(params[:id])
     if @company.update_attributes(params[:company])
-      redirect_back_or_default(companies_path)
+      redirect_to companies_path
     else
       render :action => 'edit'
     end

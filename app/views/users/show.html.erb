@@ -1,10 +1,36 @@
-<% title "User" %>
+<% title "Account Info" -%>
 
-<p>
-  <strong>Username:</strong>
-  <%= @user.username %>
-</p>
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
+<div class="first profile">
+	<% unless @user.profile.nil? %>
+	<h2>
+		User Profile 
+		<em><%= link_to '(edit profile)', edit_user_path(@user) %></em>
+	</h2>
+	<ul>		
+	  <li><span>Company:</span><%= link_to "#{@profile.company.name} (view details)", @profile.company if @profile.company -%></li>
+	  <li><span>Name:</span><%=h @profile -%></li>
+	  <li><span>Position:</span><%=h @profile.rank.name -%></li>
+	  <li><span>Phone:</span><%=h @profile.phone -%></li>
+	  <li><span>Fax:</span><%=h @profile.fax -%></li>
+	  <li><span>Birthdate:</span><%=h @profile.birthdate.to_s(:long) if @profile.birthdate -%></li>
+	</ul>
+	<% else %>
+	<h2>No user details yet. <%= link_to "(Create)", new_user_profile_path(@user) %></h2>
+	<% end %>
+
+</div>
+
+<div class="second usage">
+	<h2>
+		Login History
+	</h2>
+	<ul>
+		<li><span>Username:</span><%=h @user.username %> <em><%= link_to "(change username/password)", edit_user_path(@user) -%></em></li>
+		<li><span>Email:</span><%=h @user.email %> <em><%= link_to "(change)", edit_user_path(@user) -%></em></li>
+		<li><span>Login count:</span> <%=h @user.sign_in_count -%></li>
+		<li>
+			<span>Enabled?</span>
+			<%= @user.enabled? ? 'Yes' : 'No' -%>
+		</li>
+	</ul>
+</div>	

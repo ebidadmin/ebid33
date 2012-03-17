@@ -67,4 +67,11 @@ class AdminController < ApplicationController
     end
     redirect_to :back, :notice => "Sent delivery reminders to Sellers for #{pluralize late_deliveries.count, 'order'}"
   end
+
+  def delfees
+    fees = Fee.where(id: 15294..16332)
+    bids.delete_all
+    flash[:success] = "Deleted fees"
+    redirect_to :back
+  end
 end

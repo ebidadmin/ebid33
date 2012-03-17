@@ -14,6 +14,7 @@
 			<%= content_tag :li, link_to('All Entries', entries_path) %>
 		</ul>
 	<% end %>
+	<%= nav_link('Bids', bids_path) %>
 	<%= content_tag :li, class: "dropdown #{drop_active_cont?('orders')}" do %>
 		<%= drop_link 'Orders' %>
 		<ul class="dropdown-menu">
@@ -29,7 +30,6 @@
 			<%= nav_link('Cancelled', orders_path(s: 'cancelled')) %>
 		</ul>
 	<% end %>
-	<%= nav_link('Bids', bids_path) %>
 	<%= content_tag :li, class: "dropdown #{drop_active_cont?('fees')}" do %>
 		<%= drop_link 'Fees' %>
 		<ul class="dropdown-menu">
@@ -37,11 +37,12 @@
 			<%= nav_link('Decline Fees', fees_path(t: 'bf')) %>
 		</ul>
 	<% end %>
-	<%= nav_link('Messages', messages_path) %>
-	<%= nav_link('Users', users_path) %>
 	<%= content_tag :li, class: "dropdown #{drop_active?('entries')}" do %>
 		<%= drop_link 'Tables' %>
 		<ul class="dropdown-menu">
+			<%= nav_link('Messages', messages_path) %>
+			<%= nav_link('Users', users_path) %>
+			<%= content_tag :li, '', class: 'divider' %>
 			<%= nav_link('Brands', car_brands_path) %>
 			<%= nav_link('Models', car_models_path) %>
 			<%= nav_link('Variants', car_variants_path) %>
@@ -63,6 +64,7 @@
 			<%= content_tag :li, '', class: 'divider' %>
 			<%= nav_link('Send Payment Reminders', send_payment_reminder_path) %>
 			<%= nav_link('Send Delivery Reminders', delivery_reminder_path) %>
+			<%= nav_link('Special', delbids_path) %>
 		</ul>
 	<% end %>
 </ul>
