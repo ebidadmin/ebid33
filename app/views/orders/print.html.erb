@@ -94,8 +94,8 @@
 	<% end %>
 
 	<%= content_tag :tr, class: 'total' do %>
-		<%= content_tag :td, total_label_helper(@order.bids.not_cancelled, params[:action]), colspan: 5, class: 'txtright' %>
-		<%= content_tag :td, total_amount_helper(@order.bids.not_cancelled, params[:action]), class: 'span2 txtright' %>
+		<%= content_tag :td, total_label_helper(@order), colspan: 5, class: 'txtright' %>
+		<%= content_tag :td, total_amount_helper(@order), class: 'span2 txtright' %>
 	<% end %>
 <% end %>
 

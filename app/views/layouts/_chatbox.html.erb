@@ -1,8 +1,8 @@
 <div id="recent-messages" class="">
-	<%= content_tag :h6, 'Latest Messages for You' %>
+	<%= content_tag :h4, 'Latest Messages for You' %>
 	<%= content_tag :dl do %>
 		<% @global_messages.each do |m| %>
-			<%= content_tag :dt, class: "muted" do %>
+			<%= content_tag :dt, class: "" do %>
 				<%= "#{m.user_type.titleize} ##{m.user_id} said" %>
 				<%= content_tag :span, regular_date(m.created_at), class: 'pull-right' %>
 			<% end %>

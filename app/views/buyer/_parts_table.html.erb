@@ -12,7 +12,7 @@
 							<%= content_tag :span, item.name %>
 							<%= "<br> #{content_tag :code, 'Specs: ' + item.specs, class: 'small'}".html_safe if item.specs.present? %>
 							<%= content_tag :div, class: 'stats small' do %>
-								<%= content_tag :span, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %>
+								<%= content_tag :b, pluralize(item.bids.collect(&:user_id).uniq.count, 'bidder') %>
 								<%= content_tag :span, "| Fastest: #{time_in_words(item.bids.minimum(:bid_speed))}" if item.bids.present? %>
 				 			<% end %>
 						<% end %>
@@ -20,6 +20,9 @@
 						<%= content_tag :td, class: 'span9 txtcenter' do %>
 							<% if item.is_online %>
 								<%= content_tag :em, 'Bidding session is ongoing.', class: 'small' %>
+								<% if item.is_rebidding %>
+									<%= content_tag :p, (item.bids.online.blank? ? 'No new bids' : 'New bids submitted') %>
+								<% end %>
 							<% else %>
 								<%= render 'buyer/bid_select', item: item, f: f %>
 							<% end %>
@@ -59,7 +62,6 @@
 			<%= content_tag :span, '', class: 'caret' %>
 		<% end %>
 		<ul class="dropdown-menu">
-			<%#= nav_link('Parts Surrender', surrender_parts_path(@entry)) %>
 			<%= nav_link('Parts Surrender', new_surrender_path(id: @entry)) %>
 			<%= nav_link('Compute Variance', new_entry_variance_path(@entry)) %>
 			<%= nav_link('Show Variance', variance_path(id: @entry)) %>

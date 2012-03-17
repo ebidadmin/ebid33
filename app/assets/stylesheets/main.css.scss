@@ -8,9 +8,11 @@
 	tr:last-child  { border-bottom: 1px solid #DDD; }
 	tbody tr.label:hover td, tbody tr.label:hover th { background-color: transparent !important; }
 	p.label {  /*margin-bottom:5px;*/  }
-	.span3 p.label { font-weight: normal; font-size: 0.9em;  }
+	.span3 p.label { font-size: 0.9em;  }
 	}
-.table tbody tr:hover td, .table tbody tr:hover th { background-color: white !important; }
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: transparent !important;
+}
 .floatright { float: right; margin-left: 5px;}
 .floatleft { float: left; margin-right: 5px; }
 .txtcenter { text-align: center !important; }

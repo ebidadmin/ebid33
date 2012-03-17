@@ -57,3 +57,16 @@
 	<%= link_to "New User", new_user_path, class: 'btn success' %>
 </div>
 
+<% content_for :sidebar do %>
+	<%= content_tag :h3, 'Search Entries' %>
+	<%= search_form_for @q, url: request.path, class: 'search' do |f| %>
+	  <%= f.label 'Username' %>
+	  <%= f.text_field :username_cont, class: 'span2' %>
+		<%= f.label 'Company' %>
+	  <%= f.select :profile_company_id_eq, Company.all.collect {|c| [ c.nickname, c.id ] }, { :include_blank => true } %>
+	  <%= content_tag :p do %>
+			<%= f.submit 'Search', class: 'btn btn-primary' %>
+			<%= refresh_button %>
+		<% end %>
+	<% end %>
+<% end %>

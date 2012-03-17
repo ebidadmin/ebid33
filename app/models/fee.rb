@@ -58,7 +58,7 @@ class Fee < ActiveRecord::Base
     if status == 'Paid' || status == 'Closed' # Market Fees
       f.fee_type = 'Ordered'
       f.order_id = order if order
-      # f.created_at = bid.paid if bid.paid
+      f.created_at = bid.paid if bid.paid
       f.order_paid = f.order.paid.to_date
       ratio = f.seller_company.perf_ratio
       if ratio < 70

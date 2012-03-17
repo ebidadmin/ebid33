@@ -3,7 +3,8 @@ class MessagesController < ApplicationController
   before_filter :check_admin_role, only: [:index, :show]
   
   def index
-    @messages = Message.includes(:entry, :user, :user_company, :receiver, :receiver_company).order('created_at DESC').paginate(page: params[:page], per_page: 25)
+    @messages = Message.includes(:entry, :user, :user_company, :receiver, :receiver_company, :order).order('created_at DESC').paginate(page: params[:page], per_page: 25)
+    render layout: 'layout2'
   end
 
   def show

@@ -22,6 +22,7 @@ class Bid < ActiveRecord::Base
   # scope :cancelled, where('bids.status LIKE ?', "%Cancelled%") 
   scope :online, where(status: ['New', 'Submitted', 'Updated'])
   scope :for_decision, where(status: 'For-Decision')
+  scope :cancelled, where('bids.status LIKE ?', "%Cancelled%") 
   scope :not_cancelled, where('bids.status NOT LIKE ?', "%Cancelled%") 
   scope :with_orders, where('bids.order_id IS NOT NULL')
   
@@ -43,7 +44,7 @@ class Bid < ActiveRecord::Base
   end  
 
   def compute_bid_speed
-    if entry.status == 'Relisted' || entry.status == 'Additional'
+    if entry.status == 'Relisted' || entry.status == 'Additional' || entry.status == 'Re-bidding'
       bid_speed = (Time.now - entry.relisted).to_i
     else
       bid_speed = (Time.now - entry.online).to_i
@@ -110,7 +111,7 @@ class Bid < ActiveRecord::Base
   end
 
   def online? # used in Seller#Show to allow deletion of bids
-    status == 'Submitted' || status == 'New' ||status == 'Updated' 
+    status == 'Submitted' || status == 'New' || status == 'Updated' || status == 'Re-bidding'
   end
   
   def expired?

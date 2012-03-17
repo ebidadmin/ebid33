@@ -12,5 +12,4 @@ class CarVariant < ActiveRecord::Base
   
   validates_presence_of :car_brand_id, :car_model_id, :name
   
-  
 end

@@ -37,7 +37,7 @@ module EntriesHelper
   
   def entry_status_helper(entry, klass=nil)
     content_tag :p, class: "label #{entry.status_color} #{klass}" do
-      "#{entry.show_status}#{'<br> (with cancellation)' if entry.bids.collect(&:status).include?('Cancelled')}".html_safe
+      "#{entry.show_status}#{'<br> (with cancellation)' if !entry.is_online && entry.bids.cancelled.present? }".html_safe
     end
   end
   

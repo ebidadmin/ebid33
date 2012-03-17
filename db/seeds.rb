@@ -14,10 +14,13 @@
 # profiles = Profile.all
 # profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name, branch_id: p.company_id) } 
 # 
-bwo = Bid.with_orders
-bwo.each do |b|
-  b.line_item.update_attribute(:order_id, b.order_id)
-end
+# bwo = Bid.with_orders
+# bwo.each do |b|
+#   b.line_item.update_attribute(:order_id, b.order_id)
+# end
+
+bids = Bid.cancelled
+bids.each { |b| b.update_attribute(:status, 'Cancelled') }
 
 # rel = Entry.where(status: ['Additional', 'Relisted'], relisted: nil)
 # rel.each do |r|
@@ -33,6 +36,6 @@ end
 # entries = Entry.all
 # entries.each { |e| e.update_status }
 
-LineItem.find_each do |li|
-  LineItem.reset_counters li.id, :bids
-end
+# LineItem.find_each do |li|
+#   LineItem.reset_counters li.id, :bids
+# end

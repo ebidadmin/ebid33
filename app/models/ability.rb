@@ -11,6 +11,7 @@ class Ability
       can :accept, :bids
       can [:create, :update, :read, :print, :change_status, :cancel, :confirm_cancel, :change_status], :orders
       can [:read, :create, :update], :users, id: user.id
+      can :search, :users
       can [:read], [:branches, :companies]
       can :access, [:car_brands, :car_models, :car_variants, :regions]
       can :create, :car_variant

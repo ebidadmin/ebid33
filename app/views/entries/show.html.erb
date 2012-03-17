@@ -6,7 +6,7 @@
 	<%= render 'shared/sidebar_dates' %>
 <% end %>
 
-<%= render 'shared/photo_set' %>
+<%#= render 'shared/photo_set' %>
 
 <div id="parts-list">
 	<% if @entry.line_items.size > 0 %>
@@ -22,7 +22,7 @@
 				<%= content_tag :th, 'Surp', class: 'span2 txtcenter' %>
 				<%= content_tag :th, 'Status', class: 'span3 txtcenter', rowspan: 2 %>
 			<% end %>
-			<% @entry.line_items.order('status DESC').each_with_index do |item, index| %>
+			<% @line_items.each_with_index do |item, index| %>
 			<%= content_tag :tr, id: "#{item.id}" do %>
 				<%= content_tag :td, class: 'span4' do %>
 					<%= content_tag :span, index + 1, class: 'label index'  %>
@@ -79,7 +79,8 @@
 			<%= link_with_icon('Preview', print_entry_path(@entry), 'print') %>
 			<%= link_to "Expire", expire_entries_path(id: @entry), class: 'btn' %>
 		</div>
-		<%= link_to "Put Online", put_online_entry_path(@entry), class: 'btn btn-success floatright'  %>
+		<%= link_to "Put Online", put_online_entry_path(@entry), class: 'btn btn-success floatright' unless @entry.is_online %>
+		<%= link_to "Re-Bid", rebid_entry_path(@entry), confirm: 'Are you sure?', class: 'btn btn-success floatright' unless @entry.is_online  %>
 		<%= link_to 'Reveal Bids', reveal_entry_path(@entry), class: 'btn btn-success floatright', confirm: 'Are you sure? You will no longer receive bids if you do this.'  %>
 		<%= submit_tag "Submit Bids", class: 'btn btn-primary floatright' if @entry.is_online %>
 	</div>

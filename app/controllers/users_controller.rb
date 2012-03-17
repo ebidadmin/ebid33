@@ -4,7 +4,8 @@ class UsersController < ApplicationController
   before_filter :check_admin_role, only: [:index, :destroy]
   
   def index
-    @users = User.includes(:profile, :company, :roles).order('updated_at DESC').paginate(page: params[:page], per_page: 20)
+    @q = User.search(params[:q])
+    @users = @q.result.includes(:profile, :company, :roles).order('updated_at DESC').page(params[:page]).per_page(20)
   end
 
   def show

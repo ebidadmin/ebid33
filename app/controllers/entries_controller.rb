@@ -16,8 +16,9 @@ class EntriesController < ApplicationController
   end
 
   def show
-    @entry = Entry.find(params[:id], include: [[:line_items => [:car_part, :bids, :order]], [:messages => [[:user => :roles], [:receiver => :roles]]]])
-
+    @entry = Entry.find(params[:id], include: [:messages => [[:user => :roles], [:receiver => :roles]]])
+    @line_items = @entry.line_items.includes(:car_part, :bids, :order).order('status DESC')
+    
     if can? :access, :all
       @pvt_messages = @entry.messages.pvt
     else
@@ -134,6 +135,12 @@ class EntriesController < ApplicationController
     else
       flash[:warning] = "Sorry, there no bids to reveal."
     end 
+    redirect_to :back
+  end
+  
+  def rebid
+    @entry = Entry.find(params[:id])
+    flash[:success] = @entry.rebid
     redirect_to :back
   end
   

@@ -31,13 +31,9 @@ class BidsController < ApplicationController
         @line_item = LineItem.find(line_item)
         @existing_bid = Bid.find_by_user_id_and_line_item_id_and_bid_type(current_user.company.users, line_item, bid[0])
         if @existing_bid.nil? 
-          @new_bid = Bid.populate(current_user, @entry, @line_item, bid[1], bid[0])
-          @new_bids << @new_bid 
-          @valid_bids << @new_bid if @new_bid.valid?
+          create_new_bid(bid)
         else
-          @existing_bid.repopulate(current_user, bid[1], @line_item.quantity)
-          @existing_bids << @existing_bid 
-          @valid_bids << @existing_bid if @existing_bid.valid?
+          @existing_bid.cancelled? ? create_new_bid(bid) : update_bid(bid)
         end
       end
     end
@@ -90,4 +86,17 @@ class BidsController < ApplicationController
     end
   end
   
+  private
+  
+  def create_new_bid(bid)
+    @new_bid = Bid.populate(current_user, @entry, @line_item, bid[1], bid[0])
+    @new_bids << @new_bid 
+    @valid_bids << @new_bid if @new_bid.valid?
+  end
+  
+  def update_bid(bid)
+    @existing_bid.repopulate(current_user, bid[1], @line_item.quantity)
+    @existing_bids << @existing_bid 
+    @valid_bids << @existing_bid if @existing_bid.valid?
+  end
 end

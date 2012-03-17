@@ -4,18 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? "E-Bid | #{yield(:title)}" : "E-Bid Inc." %></title>
     <meta name="description" content="">
     <meta name="author" content="">
+    <title><%= content_for?(:title) ? "E-Bid | #{yield(:title)}" : "E-Bid Inc." %></title>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+			<%= javascript_include_tag 'html5shiv.js' %>
     <![endif]-->
 
     <%= stylesheet_link_tag "application", media: "all" %>
-    <%= csrf_meta_tags %>
     <%= yield(:head) %>
+    <%= csrf_meta_tags %>
     <link href="/assets/favicon.ico" rel="shortcut icon">
   </head>
   <body class="<%= params[:controller] %>">
@@ -47,10 +47,11 @@
 				</div>
 			</div>
 			
+			<hr>
+			<footer>
+				<p><strong>Copyright &copy; 2006-<%= Time.now.year -%> E-Bid, Inc.</strong>   All rights reserved.</p>
+	    </footer>
     </div>
-    <footer>
-			<%= Rails.env %>
-    </footer>
 		<div id="javascripts">
 	    <%= javascript_include_tag "application" %>
 			<%= yield(:javascripts) %>

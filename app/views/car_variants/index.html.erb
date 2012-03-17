@@ -1,5 +1,12 @@
 <% title 'Car Variants' %>
 
+	<%= search_form_for @q, url: request.path, html: {class: 'well form-inline'} do |f| %>
+	  <%= content_tag :b, 'Brand' %>
+	  <%= f.collection_select :car_brand_id_matches, @brands, :id, :name, include_blank: true %>
+		<%= f.submit 'Search', class: 'btn btn-primary' %>
+		<%= refresh_button %>
+	<% end %>
+
 <table class="table">
   <thead>
     <tr>

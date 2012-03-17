@@ -1,32 +1,28 @@
 <%= simple_form_for @message do |f| %>
   <%= f.error_messages %>
-	<%= f.input :message, input_html: { rows: 2, class: 'span12' } %>
-	<%= f.input :open_tag, as: :radio, label: 'Public Message' %>
+	<%= f.input :message, input_html: { rows: 2, class: 'span9' } %>
 	<fieldset>
 		<div class="row">
-			<div class="span6">
+			<div class="span3">
 				<%= f.input :user do %>
-				  <%= f.grouped_collection_select :user_id,  @company_users, :users, :name, :id, :username, {:include_blank => true} %>
+				  <%= f.grouped_collection_select :user_id,  @company_users, :users, :nickname, :id, :username, {:include_blank => true} %>
 				<% end %>
 				<%=  f.input :user_company do %>
-				  <%= f.grouped_collection_select :user_company_id,  @company_type, :companies, :name, :id, :name, {:include_blank => true} %>
+				  <%= f.grouped_collection_select :user_company_id,  @company_type, :companies, :name, :id, :nickname, {:include_blank => true} %>
 				<% end %>
 				<%= f.input :user_type, :collection => ['admin', 'buyer', 'seller'] %>
 			</div>
-			<div class="span6">
-				<%= f.input :reciever do %>
-				  <%= f.grouped_collection_select :reciever_id,  @company_users, :users, :name, :id, :username, {:include_blank => true} %>
+			<div class="span3">
+				<%= f.input :receiver do %>
+				  <%= f.grouped_collection_select :receiver_id,  @company_users, :users, :nickname, :id, :username, {:include_blank => true} %>
 				<% end %>
-				<%=  f.input :reciever_company do %>
-				  <%= f.grouped_collection_select :reciever_company_id,  @company_type, :companies, :name, :id, :name, {:include_blank => true} %>
+				<%=  f.input :receiver_company do %>
+				  <%= f.grouped_collection_select :receiver_company_id,  @company_type, :companies, :name, :id, :nickname, {:include_blank => true} %>
 				<% end %>
+				<%= f.input :open_tag, as: :radio, label: 'Public Message' %>
 			</div>
-		</div>
-		<div class="row">
-			<div class="span6">
+			<div class="span3">
 				<%= f.input :entry_id %>
-			</div>
-			<div class="span6">
 				<%= f.input :order_id %>
 			</div>
 		</div>

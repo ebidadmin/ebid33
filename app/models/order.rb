@@ -36,6 +36,7 @@ class Order < ActiveRecord::Base
   scope :overdue, delivered.where('orders.due_date < ?', Date.today).payment_pending
   scope :due_now, delivered.where(due_date: Date.today .. 1.week.from_now.to_date).payment_pending
   
+  TAGS_FOR_EDIT = ['Pending', 'New PO', 'For-Delivery', 'Delivered', 'Paid', 'Closed', 'Cancelled']
   DAYS_B4_PAYMNT_TAG = Date.today #1.day.ago.to_date
   scope :payment_taggable, where('paid_temp <= ?', DAYS_B4_PAYMNT_TAG)
   
@@ -157,8 +158,8 @@ class Order < ActiveRecord::Base
     due_date.present? && paid.nil?
   end
 
-  def can_be_cancelled(user, action)
-    if user.id == 1 || action == 'cancel'
+  def can_be_cancelled(user)
+    if user.id == 1 
       true
     else
       status == 'New PO' || status == 'PO Released' || status == 'For-Delivery'

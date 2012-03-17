@@ -1,9 +1,10 @@
 .messages { //overflow: hidden;
+	#private, #public { }
 	h3 { clear: both; /*float: left;*/ margin-bottom: 10px; }
 	h6 { clear: both; margin-bottom: 20px;  }
 	.msg-buttons {  
 		b, a { float: right; margin-right: 5px;}
-		b { margin-right: 15px;}
+		b { margin-top: 10px; margin-right: 15px; }
 		}
 	dt, dd { margin-bottom: 10px; }
 	/*dd { width: 589px; }*/
@@ -21,7 +22,7 @@
 	textarea { width: 930px; }
 	}
 
-#recent-messages { padding: 19px; border: 4px solid rgba(0, 0, 0, 0.05);
+#recent-messages { padding: 19px; border: 8px solid #CCC;
 	dt, dd { float: none; width: 100%; margin-left: 0; }
 	dt { border-bottom: 1px solid #CCC; margin-bottom: 2px; padding-bottom: 2px; }
 	dd { margin-bottom: 10px; }

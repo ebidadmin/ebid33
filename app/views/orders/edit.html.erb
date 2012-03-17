@@ -1,5 +1,37 @@
 <% title "Edit Order" %>
-<%= render 'order_form' %>
+<% subtitle "#{@entry.model_name} #{@entry.variant}" %>
 
+<%= simple_form_for @order do |f|  %>
 
+	<%= hidden_field_tag :entry_id, @entry.id %>
+
+	<%= render 'order_form', f: f %>
+
+	<%= content_tag :div, class: 'well' do %>
+		<%= f.submit 'Update Order', class: 'btn btn-success floatright' %> 
+		<%= link_to "Cancel", (current_page?(accept_bids_path) ? :back : @order), class: 'btn floatright' %>
+		<%= content_tag :p do %>
+			<%= content_tag :span, 'Important', class: 'label label-important' %>
+			Please ensure the correctness of your order above. In creating a PO,
+			<%= content_tag :b, "you agree that you are responsible for making sure that the recipient accepts the delivery." %>
+		<% end %>
+	<% end %>
+	
+	<% if can? :access, :all %>
+		<fieldset>
+			<legend>Miscellaneous</legend>
+			<%= f.input :status, collection: Order::TAGS_FOR_EDIT, include_blank: true %>
+			<%= f.input :items_count %>
+			<%= f.input :order_total %>
+			<%= f.input :seller_confirmation, as: :radio %>
+			<%= f.input :confirmed, include_blank: true %>
+			<%= f.input :delivered, include_blank: true %>
+			<%= f.input :due_date, include_blank: true %>
+			<%= f.input :paid_temp, include_blank: true %>
+			<%= f.input :paid, include_blank: true %>
+			<%= f.input :cancelled, include_blank: true %>
+		</fieldset>
+	<% end %>
+	
+<% end %>
 

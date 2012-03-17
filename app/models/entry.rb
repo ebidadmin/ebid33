@@ -36,7 +36,7 @@ class Entry < ActiveRecord::Base
   scope :unexpired, where(:expired => nil)
   scope :expired, where('expired IS NOT NULL')
 
-  scope :online, where(status: ['Online', 'Relisted', 'Additional']).order('bid_until DESC')
+  scope :online, where(status: ['Online', 'Relisted', 'Additional', 'Re-bidding']).order('bid_until DESC')
   scope :for_decision, where(status: ['For-Decision', 'Ordered-IP', 'Declined-IP'])
   scope :with_orders, where('entries.status LIKE ?', "%Ordered%") 
   scope :declined, where(status: ['Declined-IP', 'Declined-All'])
@@ -113,7 +113,7 @@ class Entry < ActiveRecord::Base
       end
     else
       line_items.update_all(:status => status)
-      bids.update_all(:status => status) if bids.present?
+      bids.not_cancelled.update_all(:status => status) if bids.present?
     end
 	end
 	
@@ -191,6 +191,13 @@ class Entry < ActiveRecord::Base
 	  end
 	end
 	
+	def rebid
+    if self.update_attributes(status: 'Re-bidding', bid_until: 3.days.from_now, relisted: Time.now, relist_count: self.relist_count += 1, chargeable_expiry: nil, expired: nil)
+	    line_items.update_all(status: 'Re-bidding', relisted: Time.now)
+      bids.not_cancelled.update_all(status: 'Re-bidding') if bids.present?
+	  end
+	end
+	
 	def newly_created? 
     status == 'New' || status == 'Edited'
   end
@@ -204,14 +211,10 @@ class Entry < ActiveRecord::Base
   end
   
 	def is_online
-	  status == 'Online' || status == 'Additional' || status == 'Relisted'  
+	  status == 'Online' || status == 'Additional' || status == 'Relisted' || status == 'Re-bidding' 
 	end
 	
 	def can_reveal
-    # ready_for_reveal = case status
-    # when 'Relisted', 'Additional' then Time.now > relisted + MIN_BIDDING_TIME
-    # when 'Online' then Time.now > online + MIN_BIDDING_TIME
-    # end
     if relisted.present?
       ready_for_reveal = Time.now > relisted + MIN_BIDDING_TIME
     elsif online.present?
@@ -271,7 +274,7 @@ class Entry < ActiveRecord::Base
     case status
     when 'New' then created_at
     when 'Online' then online
-    when 'Additional', 'Relisted' then relisted
+    when 'Additional', 'Relisted', 'Re-bidding' then relisted
     # when 'For-Decision' then decided
     else updated_at
     end
@@ -279,10 +282,10 @@ class Entry < ActiveRecord::Base
   
 	def status_color
     case status
-    when 'Online', 'Additional', 'Relisted' then 'label-cool'
+    when 'Online', 'Additional', 'Relisted' then 'label-info'
     when 'For-Decision' then 'label-highlight'
     when 'Ordered-Declined', 'Ordered-IP', 'Ordered-All' then 'label-success'
-    when 'Declined-IP', 'Declined-All' then 'label-warning'
+    when 'Declined-IP', 'Declined-All', 'Re-bidding' then 'label-warning'
     else nil
     end
   end

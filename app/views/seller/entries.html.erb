@@ -37,7 +37,7 @@
 				<%= content_tag :td, class: 'span2' do %>
 					<%= content_tag :p, link_to((pluralize entry.line_items.size, "item"), seller_show_path(entry)) %>
 				<% end %>
-				<%= content_tag :td, class: 'span3' do %>
+				<%= content_tag :td, class: "span3#{' highlight' if entry.is_online && entry.bids.by_user(current_user.company.users).blank?}" do %>
 					<%= content_tag :p, supplier_bid_rate(entry, entry.bids.by_user(current_user.company.users)) %>
 		      <%= content_tag :p, "Online: #{entry.online.strftime('%R')}", class: 'small muted' if entry.online %>
 		      <%= content_tag :p, "Deadline: #{regular_date(entry.bid_until)}", class: 'small muted' if entry.bid_until && entry.is_online %>

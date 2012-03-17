@@ -46,7 +46,6 @@ class OrdersController < ApplicationController
   end
 
   def create
-    # raise params.to_yaml
     @orders = Array.new
     @entry = Entry.find(params[:id])
     winning_bids = params[:bids]
@@ -89,6 +88,7 @@ class OrdersController < ApplicationController
   end
 
   def update
+    # raise params.to_yaml
     @order = Order.find(params[:id])
     winning_bids = params[:bids]
     @bids ||= Bid.find(winning_bids.collect { |k,v| k })

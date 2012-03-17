@@ -19,6 +19,7 @@ Ebid33::Application.routes.draw do
       get :reveal
       get :relist
       get :reactivate
+      get :rebid
       get :print
     end
     resources :variances

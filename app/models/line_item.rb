@@ -58,7 +58,11 @@ class LineItem < ActiveRecord::Base
   end
   
 	def is_online
-	  status == 'Online' || status == 'Relisted' || status == 'Additional'
+	  status == 'Online' || status == 'Relisted' || status == 'Additional' || status == 'Re-bidding'
+	end
+	
+	def is_rebidding
+	  status == 'Re-bidding'
 	end
 	
 	def can_be_ordered
@@ -79,7 +83,7 @@ class LineItem < ActiveRecord::Base
 
   def status_color
     case status
-    when 'Online', 'Additional', 'Relisted' then 'label-cool'
+    when 'Online', 'Additional', 'Relisted', 'Re-bidding' then 'label-info'
     when 'For-Decision' then 'highlight'
     when 'New PO', 'PO Released', 'For-Delivery', 'Delivered', 'Paid!', 'Paid', 'Closed' then 'label-success'
     when 'Expired', 'Declined' then 'label-warning'

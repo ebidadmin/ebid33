@@ -4,7 +4,9 @@ class CarVariantsController < ApplicationController
   layout 'layout2'
 
   def index
-    @car_variants = CarVariant.includes(:car_brand, :car_model, :entries).order(:car_brand_id).paginate(page: params[:page], per_page: 20)
+    @brands = CarBrand.all
+    @q = CarVariant.search(params[:q])
+    @car_variants = @q.result.includes(:car_brand, :car_model, :entries).order(:car_brand_id).paginate(page: params[:page], per_page: 20)
 
     respond_to do |format|
       format.html # index.html.erb

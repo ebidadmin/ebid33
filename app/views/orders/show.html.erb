@@ -85,8 +85,6 @@
 		<% if can?(:accept, :orders) && !@order.seller_confirmation? %>
 			<%= link_to_accept(@order) %>
 			<% content_for :javascripts do %>
-				<%#= javascript_include_tag 'bootstrap-tooltip' %>
-				<%#= javascript_include_tag 'bootstrap-popover' %>
 				<script type="text/javascript" charset="utf-8">
 					$('a.accept').popover({placement: 'top'}).popover('show');
 				</script>
@@ -94,7 +92,7 @@
 		<% end %>
 
 
-		<% if @order.can_be_cancelled(current_user, params[:action]) %>
+		<% if @order.can_be_cancelled(current_user) %>
 			<%= content_tag :div, id: 'order-cancel-box', class: 'pull-right' do %>
 				<%= content_tag :span, 'Use the checkboxes to select.' %> 
 				<%= submit_tag 'Cancel Items', class: 'btn' %>

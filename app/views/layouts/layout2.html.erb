@@ -1,33 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
     <meta name="description" content="">
     <meta name="author" content="">
+    <title><%= content_for?(:title) ? "E-Bid | #{yield(:title)}" : "E-Bid Inc." %></title>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+			<%= javascript_include_tag 'html5shiv.js' %>
+    <![endif]-->
+
     <%= stylesheet_link_tag "application", media: "all" %>
-    <%= csrf_meta_tags %>
     <%= yield(:head) %>
+    <%= csrf_meta_tags %>
+    <link href="/assets/favicon.ico" rel="shortcut icon">
   </head>
   <body class="<%= params[:controller] %>">
-        <%= render 'shared/navigation' %>
+		<%= render 'shared/navigation' %>
     <div class="container">
-	     <% flash.each do |name, msg| %>
-	       <%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
-	     <% end %>
-				<!-- <div class="row">
-					<div class="span12"> -->
-						<div class="page-header">
-							<%= content_tag :h1, yield(:title) + ' '  + yield(:subtitle) %>
-						</div>
-		        <%= yield %>
-					<!-- </div>  --><!-- end of span16 -->
-				<!-- </div> -->
-    </div> <!--! end of .container -->
-      <footer>
-      </footer>
+			<% flash.each do |name, msg| %>
+				<%= content_tag :div, msg, class: "alert alert-block alert-#{name}" if msg.is_a?(String) %>
+			<% end %>
+			<div class="page-header">
+				<%= content_tag :h1, yield(:title) + ' '  + yield(:subtitle) %>
+			</div>
+			<%= yield %>
+    </div>
+    <footer>
+    </footer>
 		<div id="javascripts">
 	    <%= javascript_include_tag "application" %>
 			<%= yield(:javascripts) %>
