@@ -27,7 +27,11 @@
 			<%= content_tag :th, 'Vehicle' %>
 			<th>
 			<%= content_tag :div, 'Parts', class: 'part span3' %>
-			<%= content_tag :div, 'Lowest Bid', class: 'amount txtright' %>
+			<% if params[:t] == 'bf' %>
+				<%= content_tag :div, 'Lowest Bid', class: 'amount txtright' %>
+			<% else %>
+				<%= content_tag :div, 'PO Amount', class: 'amount txtright' %>
+			<% end %>
 			<%= content_tag :div, 'Factors', class: 'factors txtcenter' %>
 			<%= content_tag :div, 'Fee', class: 'amount txtright' %>
 			<% if params[:t] == 'bf' %>
@@ -62,8 +66,9 @@
 							<% if f.reversal? %>
 								<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
 							<% else %>
-								<%= content_tag :span, currency(f.bid_total), class: "" %>
+								<%= content_tag :span, currency(f.bid_total) %>
 								<%= content_tag :code, f.bid_type[0].upcase %>
+								<%= content_tag :p, "Paid: #{regular_date(f.order_paid)}", class: "small" if f.order_paid %>
 							<% end %>
 						<% end %>
 						<%= content_tag :div, class: 'factors txtcenter small' do %>

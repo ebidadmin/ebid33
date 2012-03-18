@@ -69,9 +69,17 @@ class AdminController < ApplicationController
   end
 
   def delfees
-    fees = Fee.where(id: 15294..16332)
-    bids.delete_all
-    flash[:success] = "Deleted fees"
+    orders = Order.paid.includes(:bids)
+    orders.each do |o|
+      o.bids.not_cancelled.each { |bid| Fee.compute(bid, 'Paid', o.id) if bid.fees.for_order.blank?  }
+    end
+    @entries = Entry.expired.where('expired >= ?', Date.today.beginning_of_month).includes(:line_items => :bids)
+    count = @entries.count
+    @entries.each do |entry|
+      entry.line_items.each { |item| item.expire unless item.order_id.present? || item.cancelled }
+      entry.update_attribute(:expired, Time.now)
+    end 
+    flash[:success] = "Done! "
     redirect_to :back
   end
 end

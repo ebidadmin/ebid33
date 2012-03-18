@@ -25,7 +25,7 @@ module ApplicationHelper
     case requirement
     when 'long' then date.strftime('%d %b %Y')
     when 'day' then date.strftime("%d %b %Y, %a")
-    else date.strftime("%d %b %Y")
+    else date.strftime("%d %b '%y")
     end
   end
 

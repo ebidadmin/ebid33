@@ -65,8 +65,9 @@
 								<% if f.reversal? %>
 									<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
 								<% else %>
-									<%= content_tag :span, currency(f.bid_total), class: "" %>
+									<%= content_tag :span, currency(f.bid_total) %>
 									<%= content_tag :code, f.bid_type[0].upcase %>
+									<%= content_tag :p, "Paid: #{regular_date(f.order_paid)}", class: "small" %>
 								<% end %>
 							<% end %>
 							<%= content_tag :div, class: 'factors txtcenter small' do %>

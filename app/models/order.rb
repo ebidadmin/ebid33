@@ -51,6 +51,10 @@ class Order < ActiveRecord::Base
       unscoped.overdue.order(:delivered)
     elsif status == 'cancelled'
       cancelled
+    elsif status == 'paid.'
+      where(status: 'Paid').payment_pending
+    elsif status == 'paid'
+      paid
     elsif status.present?
       where(status: status.titleize)
     else

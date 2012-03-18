@@ -69,7 +69,7 @@ class Entry < ActiveRecord::Base
     when 'online' then online.active
     when 'for-decision' then for_decision.unexpired.order('decided DESC')
     when 'ordered' then with_orders
-    when 'declined' then declined
+    when 'declined' then unscoped.declined.where('expired >= ?', Date.today.beginning_of_month).order('expired DESC', 'created_at DESC')
     when 'all' then for_seller
     else scoped
     end
