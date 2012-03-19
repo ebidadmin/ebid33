@@ -5,6 +5,7 @@
 		<ul class="dropdown-menu">
 			<%= nav_link('Create', new_user_entry_path(current_user)) %>
 			<%= nav_link('Drafts', entries_path(s: 'new')) %>
+			<%= content_tag :li, '', class: 'divider' %>
 			<%= nav_link('Online', entries_path(s: 'online')) %>
 			<%= nav_link('For Decision', entries_path(s: 'for-decision')) %>
 			<%= content_tag :li, '', class: 'divider' %>

@@ -58,7 +58,7 @@
 </div>
 
 <% content_for :sidebar do %>
-	<%= content_tag :h3, 'Search Entries' %>
+	<%= content_tag :h3, 'Search Users' %>
 	<%= search_form_for @q, url: request.path, class: 'search' do |f| %>
 	  <%= f.label 'Username' %>
 	  <%= f.text_field :username_cont, class: 'span2' %>

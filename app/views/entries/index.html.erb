@@ -34,6 +34,10 @@
 						</span>
 						<% end %><br>
 						<%= content_tag :em, entry.user.username, class: 'small'  %>
+						<p>
+							<%= link_to 'edit', edit_entry_path(entry) %>
+							<%= link_to 'delete', entry, method: :delete, confirm: 'Are you sure?' %>
+						</p>
 					<% end %>
 					<%= content_tag :td, class: 'span4' do %>
 						<%= content_tag :p, entry.ref_no, class: 'small' %>
