@@ -14,18 +14,19 @@
 # profiles = Profile.all
 # profiles.each { |p| p.update_attributes(first_name: p.first_name, last_name: p.last_name, branch_id: p.company_id) } 
 # 
-bwo = Bid.with_orders
+bwo = Bid.with_orders.not_cancelled
 bwo.each do |b|
   b.line_item.update_attribute(:order_id, b.order_id)
+  # b.line_item.update_attribute(:status, b.status)
 end
 
 # bids = Bid.cancelled
 # bids.each { |b| b.update_attribute(:status, 'Cancelled') }
 # 
-# rel = Entry.where(status: ['Additional', 'Relisted'], relisted: nil)
-# rel.each do |r|
-#   r.update_attribute(:relisted, r.online)
-# end
+rel = Entry.where(status: ['Additional', 'Relisted'], relisted: nil)
+rel.each do |r|
+  r.update_attribute(:relisted, r.online)
+end
 # 
 # orders = Order.all
 # orders.each { |o| o.update_attribute(:seller_company_id, o.seller.company.id) }

@@ -70,6 +70,7 @@ class Entry < ActiveRecord::Base
     when 'for-decision' then for_decision.unexpired.order('decided DESC')
     when 'ordered' then with_orders
     when 'declined' then unscoped.declined.where('expired >= ?', Date.today.beginning_of_month).order('expired DESC', 'created_at DESC')
+    when 'expired' then unscoped.with_orders.where('expired >= ?', Date.today.beginning_of_month).order('expired DESC', 'created_at DESC')
     when 'all' then for_seller
     else scoped
     end
@@ -177,9 +178,11 @@ class Entry < ActiveRecord::Base
 	def expire(force=nil)
 	  if force
       line_items.each { |item| item.expire unless item.cannot_be_expired }
-      if update_attributes(:chargeable_expiry => true, :expired => Time.now)
-        update_status #unless orders.exists?
-      end
+      # if update_attributes(:chargeable_expiry => true, :expired => Time.now)
+      #   update_status #unless orders.exists?
+      # end
+      update_attributes(:chargeable_expiry => true, :expired => Time.now)
+      update_status unless orders.exists?
 	  else
       deadline = bid_until + DAYS_TO_EXPIRY 
       if Date.today >= deadline && expired.blank?

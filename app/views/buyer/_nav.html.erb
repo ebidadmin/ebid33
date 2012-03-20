@@ -24,7 +24,7 @@
 			<%= nav_link('Delivered: Within Term', buyer_orders_path(s: 'delivered')) %>
 			<%= nav_link('Delivered: Overdue', buyer_orders_path(s: 'overdue')) %>
 			<%= content_tag :li, '', class: 'divider' %>
-			<%= nav_link('Paid: Unonfirmed', buyer_orders_path(s: 'paid.')) %>
+			<%= nav_link('Paid: Unconfirmed', buyer_orders_path(s: 'unconfirmed')) %>
 			<%= nav_link('Paid: Confirmed', buyer_orders_path(s: 'paid')) %>
 			<%= nav_link('Closed', buyer_orders_path(s: 'closed')) %>
 			<%= content_tag :li, '', class: 'divider' %>

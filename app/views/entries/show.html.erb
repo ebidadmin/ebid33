@@ -6,10 +6,9 @@
 	<%= render 'shared/sidebar_dates' %>
 <% end %>
 
-<%#= render 'shared/photo_set' %>
+<%= render 'shared/photo_set' %>
 
 <div id="parts-list">
-	<% if @entry.line_items.size > 0 %>
 
 	<div id="bidding-message" class="txtcenter"></div>
 
@@ -62,7 +61,7 @@
 			<% end %>
 			<ul class="dropdown-menu">
 				<%= nav_link 'Edit Entry', edit_entry_path(@entry) %>
-				<%= nav_link 'Edit or Add Parts', add_line_items_path(id: @entry), remote: true %>
+				<%= nav_link 'Edit or Add Parts', add_line_items_path(id: @entry) %>
 			</ul>
 		</div>
 		<div class="btn-group">
@@ -85,21 +84,14 @@
 		<%= submit_tag "Submit Bids", class: 'btn btn-primary floatright' if @entry.is_online %>
 	</div>
 	<% end %>
-		<hr>
-		<%= content_tag :div, class: 'entry messages' do %>
-			<%= content_tag :div, '', class: 'msg-form' %>
-			<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' %>
-			<%= render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public' %>
-		<% end %>
 
-	<% else %>
-	
-	<%= content_tag :div, '', id: 'search-results', class: 'row' %>
-	<%= render 'cart/search_form' %>
-	<%= render 'cart/cart_rules' %>
-
-
+	<hr>
+	<%= content_tag :div, class: 'entry messages' do %>
+		<%= content_tag :div, '', class: 'msg-form' %>
+		<%= render 'messages/msg_set', messages: @pvt_messages, msg_type: 'Private' %>
+		<%= render 'messages/msg_set', messages: @pub_messages, msg_type: 'Public' %>
 	<% end %>
+
 </div>
 
 <%= render 'shared/fancy_box' %>

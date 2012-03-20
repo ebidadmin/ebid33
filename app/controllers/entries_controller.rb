@@ -17,14 +17,13 @@ class EntriesController < ApplicationController
 
   def show
     @entry = Entry.find(params[:id], include: [:messages => [[:user => :roles], [:receiver => :roles]]])
-    @line_items = @entry.line_items.includes(:car_part, :bids, :order).order('status DESC')
-    
-    if can? :access, :all
+    if @entry.line_items.present?
+      @line_items = @entry.line_items.includes(:car_part, :bids, :order).order('status DESC')
       @pvt_messages = @entry.messages.pvt
+      @pub_messages = @entry.messages.pub
     else
-      @pvt_messages = @entry.messages.pvt.restricted(current_user.company)
+      redirect_to add_line_items_path(id: @entry)
     end
-    @pub_messages = @entry.messages.pub
   end
 
   # print sheet

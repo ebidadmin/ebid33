@@ -5,8 +5,8 @@ class AdminController < ApplicationController
     for company in Company.all
       if company.primary_role == 2 # buyer
         company.compute_buyer_ratio
-      elsif company.primary_role == 3 # seller
-        company.compute_seller_ratio
+      # elsif company.primary_role == 3 # seller
+      #   company.compute_seller_ratio
       end
       company.save!
     end
@@ -74,12 +74,44 @@ class AdminController < ApplicationController
       o.bids.not_cancelled.each { |bid| Fee.compute(bid, 'Paid', o.id) if bid.fees.for_order.blank?  }
     end
     @entries = Entry.expired.where('expired >= ?', Date.today.beginning_of_month).includes(:line_items => :bids)
-    count = @entries.count
     @entries.each do |entry|
-      entry.line_items.each { |item| item.expire unless item.order_id.present? || item.cancelled }
-      entry.update_attribute(:expired, Time.now)
-    end 
-    flash[:success] = "Done! "
+      entry.line_items.each do |item| 
+        if item.bids
+          if item.order
+            item.update_attribute(:status, item.order.status) unless item.cancelled
+            item.bids.not_cancelled.group_by(&:bid_type).each do |t, bids|
+              lo = bids[-1]
+              others = bids[0..-2]
+              if lo.order
+                lo.update_attribute(:status, item.order.status)
+              else
+                lo.update_attributes(status: 'Dropped', declined: nil, expired: nil)
+              end
+              others.each { |b| b.update_attributes(status: "Lose", declined: nil, expired: nil) } if others.present?
+            end
+          elsif item.declined_or_expired
+            item.update_attribute(:status, "Expired")
+            lowest_bid ||= item.bids.not_cancelled.last
+            lowest_bid.update_attributes(status: "Declined", declined: Time.now, expired: Time.now)
+            Fee.compute(lowest_bid, "Declined") if lowest_bid.fees.for_decline.blank?
+          
+            item.bids.not_cancelled.group_by(&:bid_type).each do |t, bids|
+              lo = bids[-1]
+              others = bids[0..-2]
+              if lo.id != lowest_bid.id
+                lo.update_attributes(status: "Dropped", ordered: nil, order_id: nil, delivered: nil, paid: nil, declined: nil)
+              end
+              others.each { |b| b.update_attributes(status: "Lose", ordered: nil, order_id: nil, delivered: nil, paid: nil, declined: nil) } if others.present?
+            end
+          
+          end
+        else
+          item.update_attribute(:status, "No Bids") 
+        end
+      end
+      entry.update_status
+    end
+    flash[:success] = "Done!"
     redirect_to :back
   end
 end

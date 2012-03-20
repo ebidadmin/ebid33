@@ -25,6 +25,19 @@
 	  <%= f.collection_select :company_id_matches, Company.where(primary_role: 2), :id, :nickname, include_blank: true %>
 	  <%= f.label 'Seller' %>
 	  <%= f.collection_select :seller_company_id_matches, Company.where(primary_role: 3), :id, :nickname, include_blank: true %>
-	  <%= content_tag :p, (f.submit 'Search', class: 'btn primary') %>
+		<%= f.label 'Status' %>
+	  <%= f.select :status_matches, options_for_select(Order::TAGS_FOR_EDIT.map { |s| [s, s]}), include_blank: true %>
+	  <%= f.label 'Period Covered' %>
+		<%= content_tag :p do %>
+			<%= f.text_field :created_at_gteq, id: 'start', class: 'span1 small' %> -
+			<%= f.text_field :created_at_lteq, id: 'end', class: 'span1 small' %>
+		<% end %>
+	  <%= content_tag :p do %>
+			<%= f.submit 'Search', class: 'btn btn-primary' %>
+			<%= refresh_button %>
+			<%#= link_with_icon('', print_fees_path(t: print_type(params[:t]), q: params[:q]), 'print') %>
+		<% end %>
 	<% end %>
 <% end %>
+
+<%= render 'shared/datepicker2' %>

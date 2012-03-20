@@ -88,8 +88,8 @@ class Fee < ActiveRecord::Base
       elsif ratio >= 50
         f.fee_rate = 0
       end
-      f.fee = f.bid_total * (f.fee_rate.to_f/100)
-      f.split_amount = f.fee/2 
+      f.fee = (f.bid_total * (f.fee_rate.to_f/100)).round(2)
+      f.split_amount = (f.fee/2).round(2) 
       f.perf_ratio = ratio
     end
     f.save

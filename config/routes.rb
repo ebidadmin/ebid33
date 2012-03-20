@@ -109,7 +109,7 @@ Ebid33::Application.routes.draw do
     get 'tag_payments' => 'admin#tag_payments', as: :tag_payments
     get 'send_payment_reminder' => 'admin#send_payment_reminder', as: :send_payment_reminder
     get 'delivery_reminder' => 'admin#delivery_reminder', as: :delivery_reminder
-    get 'delfees' => 'admin#delfees', as: :delfees
+    get 'fix' => 'admin#fix', as: :fix
   end
 
   # match 'fees/:t' => 'fees#index', as: :fees

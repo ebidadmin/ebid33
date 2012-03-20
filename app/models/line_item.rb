@@ -4,8 +4,8 @@ class LineItem < ActiveRecord::Base
   belongs_to :order
   has_many :bids, dependent: :destroy
   has_many :fees
-  has_one :variance, dependent: :destroy
-  has_one :surrender_item, dependent: :destroy
+  has_one :variance#, dependent: :destroy
+  has_one :surrender_item#, dependent: :destroy
   
   # default_scope includes(:car_part, :bids)
 
@@ -44,9 +44,9 @@ class LineItem < ActiveRecord::Base
 	
 	def expire
     if bids.present? #WITH BIDS
-      # lowest_bid = bids.for_decision.not_cancelled.last
-      lowest_bid = bids.not_cancelled.last
-      lowest_bid.expire
+      lowest_bid = bids.for_decision.not_cancelled.last
+      # lowest_bid = bids.not_cancelled.last
+      lowest_bid.expire if lowest_bid
       self.update_attribute(:status, "Expired")
     else #WITHOUT BIDS
       update_attribute(:status, "No Bids")

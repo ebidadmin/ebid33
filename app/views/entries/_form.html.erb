@@ -31,14 +31,14 @@
 
 <%= render 'entries/attach_photos', f: f %>
 
-<%= render 'misc_details', f: f  %>
-<%#= render 'edit_parts_list', f: f %>
 <%= f.error :base %>
 <div class="well">
   <%= f.button :submit, class: 'btn-primary floatright'  %>
 	<%= link_to "Cancel", :back, class: 'btn', type: 'reset' %>
 	<%= link_with_icon "", new_user_entry_path(current_user), 'refresh' %>
 </div>
+
+<%= render 'misc_details', f: f  %>
 
 <% content_for :javascripts do %>
 	<% stylesheet 'blitzer/jquery-ui-1.8.6.custom' %>
