@@ -1,4 +1,5 @@
 class VariancesController < ApplicationController
+  skip_before_filter :latest_messages 
   before_filter :check_admin_role, only: [:index]
   before_filter :check_buyer_role
   
@@ -8,6 +9,7 @@ class VariancesController < ApplicationController
 
   def show
     @entry = Entry.find(params[:id])
+    render layout: 'layout2'
   end
 
   def new
@@ -19,7 +21,7 @@ class VariancesController < ApplicationController
   end
 
   def create
-    # raise params.to_yaml
+    raise params.to_yaml
     @entry = Entry.find(params[:entry_id])
     @variances = Array.new
     canvasses = params[:items]
@@ -29,7 +31,7 @@ class VariancesController < ApplicationController
       @entry.variances << @variance
     end
     respond_to do |format|
-      format.html { redirect_to @entry; flash[:success] = "Generated comparative evaluation." }
+      format.html { redirect_to variance_path(id: @entry); flash[:success] = "Generated comparative evaluation." }
       format.js
     end
     

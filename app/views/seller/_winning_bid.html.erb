@@ -1,0 +1,9 @@
+<% if !item.is_online %>
+	<% lo_bid = bids.last %>
+	<% if lo_bid != own_bid  %>
+		<%= content_tag :code, class: "small" do %>
+			<%= content_tag :span, currency(lo_bid.amount), class: " #{' cancelled' if lo_bid.cancelled?}" %>
+			<%= content_tag :em, 'winner' %>
+		<% end %>
+	<% end %>
+<% end %>

@@ -1,14 +1,14 @@
-<%= content_tag :h2, 'Generate Comparative Evaluation' %>
+<%= content_tag :h2, 'Generate Comparative Pricing Analysis' %>
 
-<%= form_tag entry_variances_path(entry_id: @entry), method: :post, remote: true do %>
+<%= form_tag entry_variances_path(entry_id: @entry), method: :post do %>
 	<div class="well">
 		<div id="" class="row">
 			<div class="span3">
-				<%= content_tag :label, 'Source of Canvass' %>
+				<%= content_tag :p, 'Source of Canvass', class: 'strong' %>
 				<%= select_tag(:var_company, options_for_select(@var_companies), prompt: 'Choose Source/Shop' ) %>
 			</div>
 			<div class="span2">
-				<%= content_tag :label, 'Discount' %>
+				<%= content_tag :p, 'Discount' %>
 				<%= select_tag(:discount, options_for_select(@available_discounts), include_blank: true ) %>
 			</div>
 		</div>
@@ -19,9 +19,9 @@
 			<%= content_tag :th, 'Qty', class: 'txtcenter' %>
 			<%= content_tag :th, class: 'txtcenter' do %>
 				<%= content_tag :p, 'Your Canvass' %>
-				<%= content_tag :b, 'Unit Price', class: 'label label-important' %>
+				<%= content_tag :b, 'Full Unit Price', class: 'label label-important' %>
 			<% end %>
-			<%= content_tag :th, 'Type', class: 'txtcenter' %>
+			<%= content_tag :th, 'Canvass Type', class: 'txtcenter' %>
 		</thead>
 		<% @entry.line_items.each_with_index do |item, index| %>
 			<tr>

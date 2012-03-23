@@ -20,7 +20,8 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :messages
   has_many :fees
   
-  validates_presence_of :deliver_to, :address1, :phone#, :ref_name
+  validates_presence_of :deliver_to, :address1, :phone
+  validates_presence_of :ref_name, if: :latest_order
 
   default_scope order('orders.created_at DESC')
 
@@ -191,6 +192,10 @@ class Order < ActiveRecord::Base
     self.sum(:order_total)
   end
     
+  def latest_order
+    new_record?
+  end
+  
   private
 
   def clean_up_details

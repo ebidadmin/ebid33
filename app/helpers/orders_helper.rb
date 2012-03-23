@@ -77,11 +77,11 @@ module OrdersHelper
   end
   
   def link_to_entry_helper(entry)
-		if can? :create, :entries                                                       
-      # link_to "Review Entry & Photos",  buyer_show_path(@entry), class: 'btn btn-info'
+    if can? :access, :all
+		  link_with_icon "Review Entry/Photos", @entry, 'folder-open', 'btn-info', true 
+		elsif can? :create, :entries                                                       
 		  link_with_icon "Review Entry/Photos", buyer_show_path(@entry), 'folder-open', 'btn-info', true 
 		else                                                                             
-      # link_to "Review Entry & Photos", seller_show_path(@entry), class: 'btn btn-info' 
 		  link_with_icon "Review Entry/Photos", seller_show_path(@entry), 'folder-open', 'btn-info', true 
 		end
   end

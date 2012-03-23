@@ -29,8 +29,12 @@
 			</div>
 			<%= yield %>
     </div>
-    <footer>
-    </footer>
+    <div class="container">
+			<hr>
+			<footer>
+				<p><strong>Copyright &copy; 2006-<%= Time.now.year -%> E-Bid, Inc.</strong>   All rights reserved.</p>
+	    </footer>
+		</div>
 		<div id="javascripts">
 	    <%= javascript_include_tag "application" %>
 			<%= yield(:javascripts) %>

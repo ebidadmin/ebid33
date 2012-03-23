@@ -4,7 +4,7 @@
 		<%= content_tag :th, 'Qty', class: 'txtcenter' %>
 		<%= content_tag :th, class: 'txtcenter' do %>
 			<%= content_tag :p, 'Your Canvass' %>
-			<%= content_tag :b, 'Unit Price', class: 'label label-important' %>
+			<%= content_tag :b, 'Net Price', class: 'label label-important' %>
 		<% end %>
 		<%= content_tag :th, 'E-Bid', class: 'txtcenter' %>
 		<%= content_tag :th, 'Variance', class: 'txtcenter' %>
@@ -14,7 +14,7 @@
 			<%= content_tag :td, class: 'span3' do %>
 				<%= content_tag :span, index + 1, class: 'label index'  %>
 				<%= content_tag :span, item.name %>
-				<%= content_tag :span, item.id %>
+				<%= content_tag :span, item.id if can? :access, :all %>
 			<% end %>
 			<%= content_tag :td, item.quantity, class: 'span1 txtcenter' %>
 			<%= content_tag :td, (currency(item.variance.var_total) if  item.variance), class: 'span2 txtright padrt' %>

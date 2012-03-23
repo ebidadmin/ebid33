@@ -19,7 +19,6 @@ class BidsController < ApplicationController
   end
 
   def create
-    # raise params.to_yaml
     @entry = Entry.find(params[:entry_id])
     @new_bids = Array.new
     @valid_bids = Array.new
@@ -48,15 +47,16 @@ class BidsController < ApplicationController
   end
 
   def edit
-    session['referer'] = request.env["HTTP_REFERER"]
+    store_location
     @bid = Bid.find(params[:id])
   end
 
   def update
     @bid = Bid.find(params[:id])
+    @bid.total = (params[:bid][:amount].to_f * params[:bid][:quantity].to_i)
     if @bid.update_attributes(params[:bid])
-      redirect_to session['referer'], :notice => 'Bid successfully updated.'
-      session['referer'] = nil
+      flash[:success] = "Bid updated."
+      redirect_back_or_default :back
     else
       render :action => 'edit'
     end

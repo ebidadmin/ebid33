@@ -43,11 +43,7 @@ $(function() {
 		$('div#branches select').after(loading)
 		$.ajax({
 			type: 'get',
-			url: '/companies/' + parseInt(company_id) + '/selected',
-			success: function(html) {
-				$('div#branches select').html(html);
-			},
-			complete: function() { $('span.loading').remove(); }
+			url: '/companies/' + parseInt(company_id) + '/selected'
 		});
 	});
 	$('div.fields').addClass('well');

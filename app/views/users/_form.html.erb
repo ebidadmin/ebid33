@@ -1,6 +1,7 @@
 <% subtitle "Fields marked with #{content_tag :b, 'asterisks (*)'} are required".html_safe %>
 
-<%= simple_form_for @user, :validate => true do |f| %>
+<%= simple_form_for @user do |f| %>
+	<%= f.error_notification %>
   <%= f.simple_fields_for :profile do |profile| %>
 
 	<fieldset>
@@ -63,7 +64,6 @@
 <% end %>
 
 <%= content_for :javascripts do %>
-	<%= javascript_include_tag 'rails.validations' %>
 	<%= stylesheet_link_tag 'blitzer/jquery-ui-1.8.6.custom' %>
 	<script type="text/javascript" charset="utf-8">
 	$(function() {

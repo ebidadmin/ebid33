@@ -1,6 +1,9 @@
 <% title @entry.model_name %>
 <% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
 
+<%= content_tag :h2, 'Comparative Pricing Analysis' %>
+<%= content_tag :p, 'Source' %>
+<%= content_tag :p, 'Discount Applied' %>
 <div id="variance-table">
 	<%= render 'results' %>
 </div>

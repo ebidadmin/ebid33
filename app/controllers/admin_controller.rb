@@ -68,7 +68,7 @@ class AdminController < ApplicationController
     redirect_to :back, :notice => "Sent delivery reminders to Sellers for #{pluralize late_deliveries.count, 'order'}"
   end
 
-  def delfees
+  def fix
     orders = Order.paid.includes(:bids)
     orders.each do |o|
       o.bids.not_cancelled.each { |bid| Fee.compute(bid, 'Paid', o.id) if bid.fees.for_order.blank?  }

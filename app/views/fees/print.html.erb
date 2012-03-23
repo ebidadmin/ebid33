@@ -9,11 +9,11 @@
 <%= content_tag :p, "Period covered #{period_covered_helper(@all_fees, params[:q])}" %>
 
 <%= content_tag :h3, class: 'row' do %>
-	<%= content_tag :span, ph_currency(@all_fees.total_fee), class: 'span2' %>
+	<%= content_tag :span, "Total: #{ph_currency(@all_fees.total_fee)}", class: 'span3' %>
 	<%#= content_tag :small, "Base: #{currency(@all_fees.base_fee)}", class: 'span2' %>
 	<%#= content_tag :small, "VAT: #{currency(@all_fees.vat)}", class: 'span2' %>
-	<%= content_tag :small, "#{pluralize(@fees.count, 'part')} for #{pluralize(@fees.collect(&:entry_id).uniq.count, 'vehicle')}", class: 'span4' %>
-	<%= content_tag :span, "For #{@seller_company}: #{currency(@all_fees.supplier_share)}", class: 'span4' if params[:t] == 'bf' %>
+	<%= content_tag :pre, "#{pluralize(@fees.count, 'part')} for #{pluralize(@fees.collect(&:entry_id).uniq.count, 'vehicle')}", class: 'pull-left' %>
+	<%= content_tag :small, "#{@seller_company.upcase}' share: #{currency(@all_fees.supplier_share)}", class: 'pull-right' if params[:t] == 'bf' %>
 <% end %>
 <hr>
 <%= content_tag :table, class: 'table table-condensed' do %>

@@ -63,6 +63,7 @@
 	      <%= content_tag :p, entry_link(entry) %>
 				<%= content_tag :span, entry.plate_no %>
 				<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
+			  <%= content_tag :p, "#{fees.count} of #{pluralize entry.line_items.size, 'item'}" %> 	
 			<% end %>
 
 			<td>

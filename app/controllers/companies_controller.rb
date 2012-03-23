@@ -1,4 +1,5 @@
 class CompaniesController < ApplicationController
+  skip_before_filter :authenticate_user!, only: :selected
   before_filter :check_admin_role, except: :selected
   layout 'layout2'
   
@@ -45,7 +46,7 @@ class CompaniesController < ApplicationController
   
   def selected
     @branches = Branch.where(company_id: params[:id]).order(:name)
-    render :partial => 'companies/selected'
+    # render :partial => 'companies/selected'
   end
   
 end

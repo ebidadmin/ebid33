@@ -99,10 +99,11 @@ class OrdersController < ApplicationController
         bid.update_attributes(quantity: qty, total: bid.amount * qty) if bid.quantity != qty
       end
       @order.update_attribute(:order_total, @bids.collect(&:total).sum)
-      redirect_to @order, :notice  => "Successfully updated order."
+      flash[:success] = "Successfully updated order."
+      redirect_to @order
     else
-      flash[:warning] = "Failed to update PO. #{content_tag :strong, 'Please make sure you input the required information'}."
-      redirect_to :back #render :action => 'edit'
+      flash[:error] = "Failed to update PO. #{content_tag :strong, 'Please make sure you input the required information'}.".html_safe
+      redirect_to :back
     end
   end
 

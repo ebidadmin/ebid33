@@ -10,7 +10,7 @@ class Variance < ActiveRecord::Base
   belongs_to :line_item
   belongs_to :bid
   
-  validates_presence_of :var_base
+  validates_presence_of :var_base, :var_company
   validates_numericality_of :var_base
   validates_numericality_of :qty
   
