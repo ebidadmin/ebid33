@@ -3,8 +3,8 @@
 		<%= content_tag :th, 'Parts' %>
 		<%= content_tag :th, 'Qty', class: 'txtcenter' %>
 		<%= content_tag :th, class: 'txtcenter' do %>
-			<%= content_tag :p, 'Your Canvass' %>
-			<%= content_tag :b, 'Net Price', class: 'label label-important' %>
+			<%= content_tag :p, @variance.var_company.name %>
+			<%= content_tag :b, 'Net of Discount', class: 'label label-important' %>
 		<% end %>
 		<%= content_tag :th, 'E-Bid', class: 'txtcenter' %>
 		<%= content_tag :th, 'Variance', class: 'txtcenter' %>
@@ -17,9 +17,15 @@
 				<%= content_tag :span, item.id if can? :access, :all %>
 			<% end %>
 			<%= content_tag :td, item.quantity, class: 'span1 txtcenter' %>
-			<%= content_tag :td, (currency(item.variance.var_total) if  item.variance), class: 'span2 txtright padrt' %>
-			<%= content_tag :td, (currency(item.variance.total) if  item.variance), class: 'span2 txtright padrt' %>
-			<%= content_tag :td, (currency(item.variance.variance) if  item.variance), class: 'span2 txtright padrt' %>
+			<%= content_tag :td, class: 'span2 txtright padrt' do %>
+				<%= currency(item.var_item.var_total) if  item.var_item %>
+				<%= content_tag :code, item.var_item.var_type[0..3] if  item.var_item %>
+			<% end %>
+			<%= content_tag :td, class: 'span2 txtright padrt' do %>
+				<%= currency(item.var_item.total) if  item.var_item %>
+				<%= content_tag :code, item.var_item.bid_type[0..3] if  item.var_item %>
+			<% end %>
+			<%= content_tag :td, (currency(item.var_item.var_net) if  item.var_item), class: 'span2 txtright padrt' %>
 		</tr>
 	<% end %>
 </table>

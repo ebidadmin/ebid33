@@ -1,20 +1,18 @@
 class Variance < ActiveRecord::Base
-  attr_accessible :user_id, :company_id, :seller_company_id, :entry_id, :line_item_id, :bid_id, 
-  :amount, :qty, :total, :var_type, :bid_type, :var_amt, :var_total, :discount, :var_base, 
-  :variance, :var_company
+  attr_accessible :user_id, :company_id, :entry_id, :var_company_id, :var_items_attributes
+  attr_accessor :discount
   
   belongs_to :user
   belongs_to :company
-  belongs_to :seller_company, class_name: "Company", foreign_key: "seller_company_id"
   belongs_to :entry
-  belongs_to :line_item
-  belongs_to :bid
+  belongs_to :var_company
+  has_many :var_items, dependent: :destroy
+  accepts_nested_attributes_for :var_items, allow_destroy: true, reject_if: lambda { |vi| ( vi[:var_base].blank?) }
   
-  validates_presence_of :var_base, :var_company
-  validates_numericality_of :var_base
-  validates_numericality_of :qty
+  # validates_presence_of :var_company
   
-  DISCOUNTS = %w(5 10 15 20 25 30)
+  DISCOUNTS = %w(5 10 15 20 25 30 35 40)
+  TYPES = %w(original replacement surplus)
   
   def self.populate(user, var_company, discount, line_item, vars)
     v = user.variances.build
@@ -41,6 +39,11 @@ class Variance < ActiveRecord::Base
       v.variance = v.var_total - v.total
     end
     v
+  end
+  
+  def colonize(user, discount)
+    self.company_id = user.profile.company_id
+    self.var_items.each { |vi| vi.populate(discount) }
   end
   
 end

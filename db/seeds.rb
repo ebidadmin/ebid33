@@ -34,9 +34,13 @@ end
 # entries = Entry.find(ids)
 # entries.each { |e| e.update_attribute(:orders_count, e.orders.count) }
 
-# entries = Entry.all
-# entries.each { |e| e.update_status }
+# Photo.find_each(batch_size: 500) { |p| p.photo.reprocess! }
 
 LineItem.find_each do |li|
   LineItem.reset_counters li.id, :bids
 end
+
+User.find_each do |u|
+  User.reset_counters u.id, :entries
+end
+

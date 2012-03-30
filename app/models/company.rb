@@ -17,8 +17,8 @@ class Company < ActiveRecord::Base
   has_many :receiver_companies, through: :messages
   has_many :buyer_companies, through: :fees
   has_many :seller_companies, through: :fees
-  has_many :variances, dependent: :destroy
-  has_many :seller_companies, through: :variances
+  has_many :var_items, dependent: :destroy
+  has_many :seller_companies, through: :var_items
   
   RATIO_DATE = Time.now.beginning_of_year #'2011-04-16'.to_datetime #
   

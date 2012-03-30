@@ -10,7 +10,7 @@ class Bid < ActiveRecord::Base
   belongs_to :order
   
   has_many :fees
-  has_one :variance, dependent: :destroy
+  has_one :var_item, dependent: :destroy
 
   validates :amount, numericality: { greater_than: 1 }, presence: true
   

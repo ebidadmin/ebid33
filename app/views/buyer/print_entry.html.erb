@@ -5,6 +5,14 @@
 	<div id="" class="span5">
 		<%= render 'shared/info_vehicle' %>
 	</div>
+	<div id="" class="span5">
+		<dl>
+			<%= dl_helper 'Online',  long_date(@entry.online) %>
+			<%= dl_helper 'Decided',  long_date(@entry.decided) if @entry.decided %>
+			<%= dl_helper 'Relisted',  long_date(@entry.relisted) if @entry.relisted %>
+			<%=  end_of_workday(Time.now) %>
+		</dl>
+	</div>
 </div>
 
 <%= content_tag :section, class: 'entry messages' do %>

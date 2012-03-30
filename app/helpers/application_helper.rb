@@ -23,9 +23,9 @@ module ApplicationHelper
   
   def regular_date(date, requirement=nil)
     case requirement
-    when 'long' then date.strftime('%d %b %Y')
+    when 'short' then date.strftime("%d %b '%y")
     when 'day' then date.strftime("%d %b %Y, %a")
-    else date.strftime("%d %b '%y")
+    else date.strftime("%d %b %Y")
     end
   end
 

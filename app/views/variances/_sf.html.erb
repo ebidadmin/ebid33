@@ -1,11 +1,8 @@
-<%= content_tag :h2, 'Generate Comparative Pricing Analysis' %>
-
-<%= form_tag entry_variances_path(entry_id: @entry), method: :post do %>
+<%= simple_form_for [@entry, @variance] do |f| %>
 	<div class="well">
 		<div class="row">
 			<div class="span3">
-				<%= content_tag :p, 'Source of Canvass', class: 'strong' %>
-				<%= select_tag(:var_company, options_for_select(@var_companies), prompt: 'Choose Source/Shop' ) %>
+				<%= f.input :var_company, collection: @var_companies, label: 'Source of Canvass' %>
 			</div>
 			<div class="span2">
 				<%= content_tag :p, 'Discount' %>
@@ -13,6 +10,8 @@
 			</div>
 		</div>
 	</div>
+
+	<%= simple_fields_for :var_items do |vi| %>
 	<table class="table table-condensed table-striped">
 		<thead>
 			<%= content_tag :th, 'Parts' %>
@@ -30,9 +29,9 @@
 					<%= content_tag :span, item.name %>
 					<%#= content_tag :span, item.id %>
 				<% end %>
-				<%= content_tag :td, (text_field_tag "items[#{item.id}][qty]", item.quantity, class: 'span1 txtcenter'), class: 'span1 center' %>
+				<%= content_tag :td, (vi.input :qty, label: false, input_html: { value: item.quantity, class: 'span1 txtcenter' }), class: 'span1 center' %>
 				<%= content_tag :td, class: 'txtcenter', data: { content: "#{var_tooltip}", "original-title" => "#{var_title}" }, rel: "popover" do %>
-					<%= content_tag :p, (text_field_tag "items[#{item.id}][amt]", nil, class: 'span2 txtright') %>
+					<%= vi.input :amount, label: false, input_html: { class: 'span2 txtright' } %>
 				<% end %>
 				<%= content_tag :td, class: 'txtcenter' do %>
 					<% %w(original replacement surplus).each do |type| %>
@@ -47,13 +46,13 @@
 			</tr>
 		<% end %>
 	</table>
-
-	<%= submit_tag 'Compute', class: 'btn btn-primary btn-large pull-right' %>	
+	<% end %>
+	<div class="txtcenter">
+		<%= f.submit 'Compute', class: 'btn btn-primary btn-large span4' %>	
+	</div>
 <% end %>
 
 <% content_for :javascripts do %>
-	<%#= javascript_include_tag 'bootstrap-tooltip' %>
-	<%#= javascript_include_tag 'bootstrap-popover' %>
 	<script type="text/javascript" charset="utf-8">
 		$('td').popover();
 	</script>

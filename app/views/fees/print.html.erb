@@ -9,7 +9,10 @@
 <%= content_tag :p, "Period covered #{period_covered_helper(@all_fees, params[:q])}" %>
 
 <%= content_tag :h3, class: 'row' do %>
-	<%= content_tag :span, "Total: #{ph_currency(@all_fees.total_fee)}", class: 'span3' %>
+	<% if params[:t] == 'sf' %>
+		<%= content_tag :span, "Paid Orders: #{ph_currency(@all_fees.collect(&:bid_total).sum)}", class: 'span3' %>
+	<% end %>
+	<%= content_tag :span, "Total Fees: #{ph_currency(@all_fees.total_fee)}", class: 'span3' %>
 	<%#= content_tag :small, "Base: #{currency(@all_fees.base_fee)}", class: 'span2' %>
 	<%#= content_tag :small, "VAT: #{currency(@all_fees.vat)}", class: 'span2' %>
 	<%= content_tag :pre, "#{pluralize(@fees.count, 'part')} for #{pluralize(@fees.collect(&:entry_id).uniq.count, 'vehicle')}", class: 'pull-left' %>
@@ -50,6 +53,7 @@
 	      <%= content_tag :p, entry_link(entry) %>
 				<%= content_tag :span, entry.plate_no %>
 				<%= content_tag :em, "by #{entry.user.username}", class: 'small' %>
+			  <%= content_tag :p, "#{fees.count} of #{pluralize entry.line_items.size, 'item'}" %> 	
 			<% end %>
 
 			<td>
@@ -60,8 +64,11 @@
 							<% if f.reversal? %>
 								<%= content_tag :span, f.fee_type.upcase, :class => 'label'  %>
 							<% else %>
-								<%= content_tag :span, currency(f.bid_total), class: "" %>
+								<%= content_tag :b, currency(f.bid_total), class: "" %>
 								<%= content_tag :code, f.bid_type[0].upcase %>
+							<% end %>
+							<% if params[:t] == 'sf' %>
+							<%= content_tag :em, "Paid: #{regular_date(f.order_paid, 'short')}", class: "small" if f.order_paid %>
 							<% end %>
 						<% end %>
 						<%= content_tag :div, class: 'factors txtright small' do %>

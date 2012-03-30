@@ -2,5 +2,58 @@
 <% subtitle "#{@entry.variant} (#{@entry.plate_no})" %>
 
 <div id="variance-table">
-	<%= render 'inputs' %>
+	<%#= render 'inputs' %>
 </div>
+<%= content_tag :h2, 'Generate Comparative Pricing Analysis' %>
+
+<%= simple_form_for [@entry, @variance] do |f| %>
+	<div class="well">
+		<div class="row">
+			<div class="span3">
+				<%= f.association :var_company, collection: @var_companies, label: 'Source of Canvass' %>
+			</div>
+			<div class="span2">
+				<%= f.input :discount, collection: @available_discounts, include_blank: true %>
+			</div>
+		</div>
+	</div>
+
+	<table class="table table-condensed table-striped">
+		<thead>
+			<%= content_tag :th, 'Parts' %>
+			<%= content_tag :th, 'Qty', class: 'txtcenter' %>
+			<%= content_tag :th, class: 'txtcenter' do %>
+				<%= content_tag :p, 'Your Canvass' %>
+				<%= content_tag :b, 'Full Unit Price', class: 'label label-important' %>
+			<% end %>
+			<%= content_tag :th, 'Canvass Type', class: 'txtcenter' %>
+		</thead>
+		<% @entry.line_items.each_with_index do |item, index| %>
+			<tr>
+			<%= f.simple_fields_for :var_items do |vi| %>
+				<%= content_tag :td, class: 'span3' do %>
+					<%= content_tag :span, index + 1, class: 'label index'  %>
+					<%= content_tag :span, item.name %>
+					<%= vi.input :line_item_id, label: false, input_html: { value: item.id }, as: :hidden %>
+				<% end %>
+				<%= content_tag :td, (vi.input :qty, label: false, input_html: { value: item.quantity, class: 'span1 txtcenter' }), class: 'span1 center' %>
+				<%= content_tag :td, class: 'txtcenter', data: { content: "#{var_tooltip}", "original-title" => "#{var_title}" }, rel: "popover" do %>
+					<%= vi.input :var_base, label: false, input_html: { class: 'span2 txtright' } %>
+				<% end %>
+				<%= content_tag :td, class: 'txtcenter' do %>
+					<%= vi.input :var_type, label: false, collection: Variance::TYPES, as: :radio, checked: 'original' %>
+				<% end %>
+			<% end %>
+			</tr>
+		<% end %>
+	</table>
+	<div class="txtcenter">
+		<%= f.submit 'Compute', class: 'btn btn-primary btn-large span4' %>	
+	</div>
+<% end %>
+
+<% content_for :javascripts do %>
+	<script type="text/javascript" charset="utf-8">
+		$('td').popover();
+	</script>
+<% end %>

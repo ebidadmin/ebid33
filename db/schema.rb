@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120306070922) do
+ActiveRecord::Schema.define(:version => 20120326011227) do
 
   create_table "bids", :force => true do |t|
     t.integer  "user_id"
@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(:version => 20120306070922) do
   create_table "cities", :force => true do |t|
     t.string   "name"
     t.integer  "region_id"
-    t.integer  "creator_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -340,7 +340,7 @@ ActiveRecord::Schema.define(:version => 20120306070922) do
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
-    t.boolean  "processing",         :default => false
+    t.boolean  "photo_processing",   :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -409,8 +409,8 @@ ActiveRecord::Schema.define(:version => 20120306070922) do
     t.string   "address2"
     t.string   "retriever"
     t.integer  "items_count"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "surrenders", ["entry_id"], :name => "index_surrenders_on_entry_id"
@@ -470,14 +470,12 @@ ActiveRecord::Schema.define(:version => 20120306070922) do
   create_table "var_companies", :force => true do |t|
     t.string   "name"
     t.integer  "creator_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
-  create_table "variances", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "company_id"
-    t.integer  "entry_id"
+  create_table "var_items", :force => true do |t|
+    t.integer  "variance_id"
     t.integer  "line_item_id"
     t.integer  "qty",                                              :default => 1, :null => false
     t.decimal  "var_base",          :precision => 10, :scale => 2
@@ -485,22 +483,33 @@ ActiveRecord::Schema.define(:version => 20120306070922) do
     t.decimal  "var_amt",           :precision => 10, :scale => 2
     t.decimal  "var_total",         :precision => 10, :scale => 2
     t.string   "var_type"
-    t.integer  "var_company"
     t.integer  "bid_id"
     t.decimal  "amount",            :precision => 10, :scale => 2
     t.decimal  "total",             :precision => 10, :scale => 2
     t.string   "bid_type"
     t.integer  "seller_company_id"
     t.decimal  "variance",          :precision => 10, :scale => 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
   end
 
-  add_index "variances", ["bid_id"], :name => "index_variances_on_bid_id"
+  add_index "var_items", ["bid_id"], :name => "index_var_items_on_bid_id"
+  add_index "var_items", ["line_item_id"], :name => "index_var_items_on_line_item_id"
+  add_index "var_items", ["seller_company_id"], :name => "index_var_items_on_seller_company_id"
+  add_index "var_items", ["variance_id"], :name => "index_var_items_on_variance_id"
+
+  create_table "variances", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "company_id"
+    t.integer  "entry_id"
+    t.integer  "var_company"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   add_index "variances", ["company_id"], :name => "index_variances_on_company_id"
   add_index "variances", ["entry_id"], :name => "index_variances_on_entry_id"
-  add_index "variances", ["line_item_id"], :name => "index_variances_on_line_item_id"
-  add_index "variances", ["seller_company_id"], :name => "index_variances_on_seller_company_id"
   add_index "variances", ["user_id"], :name => "index_variances_on_user_id"
+  add_index "variances", ["var_company"], :name => "index_variances_on_var_company"
 
 end

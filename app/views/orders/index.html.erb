@@ -27,10 +27,10 @@
 	  <%= f.collection_select :seller_company_id_matches, Company.where(primary_role: 3), :id, :nickname, include_blank: true %>
 		<%= f.label 'Status' %>
 	  <%= f.select :status_matches, options_for_select(Order::TAGS_FOR_EDIT.map { |s| [s, s]}), include_blank: true %>
-	  <%= f.label 'Period Covered' %>
+	  <%= f.label 'Date Paid' %>
 		<%= content_tag :p do %>
-			<%= f.text_field :created_at_gteq, id: 'start', class: 'span1 small' %> -
-			<%= f.text_field :created_at_lteq, id: 'end', class: 'span1 small' %>
+			<%= f.text_field :paid_gteq, id: 'start', class: 'span1 small' %> -
+			<%= f.text_field :paid_lteq, id: 'end', class: 'span1 small' %>
 		<% end %>
 	  <%= content_tag :p do %>
 			<%= f.submit 'Search', class: 'btn btn-primary' %>

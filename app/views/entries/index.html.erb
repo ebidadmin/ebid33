@@ -33,7 +33,7 @@
 							<%= entry.orders.size %>
 						</span>
 						<% end %><br>
-						<%= content_tag :em, entry.user.username, class: 'small'  %>
+						<%= content_tag :em, link_to(entry.user.username, entry.user), class: 'small'  %>
 						<p>
 							<%= link_to 'edit', edit_entry_path(entry) %>
 							<%= link_to 'delete', entry, method: :delete, confirm: 'Are you sure?' %>

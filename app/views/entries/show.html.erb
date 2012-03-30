@@ -4,6 +4,7 @@
 <% content_for :sidebar do %>
 	<%= render 'shared/info_vehicle' %>
 	<%= render 'shared/sidebar_dates' %>
+	<%= dl_helper 'Created By', @entry.user.username %>
 <% end %>
 
 <%= render 'shared/photo_set' %>

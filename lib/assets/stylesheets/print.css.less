@@ -15,6 +15,7 @@ dd { width: 67%; }
 .floatright { float: right; }
 .negative { color: #C00; font-weight: normal; }
 .cancelled { text-decoration: line-through; }
+code { color: black;}
 
 #print-header { border-bottom: 1px solid black; margin: 0px auto; overflow: hidden; padding-bottom: 5px; position: relative; width: 780px;  }
 #print-header h1 { height: 95px; background: transparent url(../assets/ebidlogo.jpg) no-repeat; margin: 0; text-indent: -9999px; overflow: hidden;  }
@@ -69,6 +70,6 @@ td.bids { padding-right: 20px; padding-left: 20px; }
 	}
 	
 @media print {
-	#print-header, #print-nav, form, #confirmation { display: none; }
+	#print-header, #print-nav, form, #confirmation, .close { display: none; }
 }
 

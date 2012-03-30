@@ -39,7 +39,7 @@
 		 		<%= profile.input :phone %>
 		 		<%= profile.input :fax %>
 				<%= f.input :email, hint: "#{content_tag :span, 'Important: Put a valid email', class: 'label important'} We need this to send you notifications and messages.".html_safe %>
-				<%= f.input :opt_in, label: 'Receive Notifications by Email?', as: :radio %>
+				<%= f.input :opt_in, label: 'Receive Notifications by Email?', as: :radio_buttons %>
 			</div>
 		</div>
 	</fieldset>

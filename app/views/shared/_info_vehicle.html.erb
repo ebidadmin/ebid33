@@ -9,5 +9,4 @@
 	<%= dl_helper 'Motor No.',  @entry.motor_no, 'important' %>
 	<%#= dl_helper 'Date of Loss', @entry.date_of_loss.to_s(:long) if @entry.date_of_loss && @order %>
 	<%= dl_helper 'Terms', "#{@entry.term.term_name} / #{@entry.city.name}", 'important'  %>
-	<%#= dl_helper 'Created By', @entry.user.username if  @order %>
 <% end %>

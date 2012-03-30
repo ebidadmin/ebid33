@@ -4,7 +4,7 @@ class LineItem < ActiveRecord::Base
   belongs_to :order
   has_many :bids, dependent: :destroy
   has_many :fees
-  has_one :variance#, dependent: :destroy
+  has_one :var_item#, dependent: :destroy
   has_one :surrender_item#, dependent: :destroy
   
   # default_scope includes(:car_part, :bids)

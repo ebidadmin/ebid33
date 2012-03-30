@@ -28,7 +28,7 @@ class Entry < ActiveRecord::Base
   accepts_nested_attributes_for :orders, allow_destroy: true, reject_if: proc { |obj| obj.blank? }
   has_many :messages, dependent: :destroy
   has_many :fees
-  has_many :variances, dependent: :destroy
+  has_one :variance, dependent: :destroy
   has_many :surrenders, dependent: :destroy
   
   default_scope order('created_at DESC')
@@ -295,6 +295,10 @@ class Entry < ActiveRecord::Base
   
 	def get_date_for_sidebar(tag)
 	  self.send(tag.downcase)
+	end
+	
+	def time_online
+	  end_of_workday(Time.now)
 	end
 		
 	private

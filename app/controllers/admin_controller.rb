@@ -5,8 +5,8 @@ class AdminController < ApplicationController
     for company in Company.all
       if company.primary_role == 2 # buyer
         company.compute_buyer_ratio
-      # elsif company.primary_role == 3 # seller
-      #   company.compute_seller_ratio
+      elsif company.primary_role == 3 # seller
+        company.compute_seller_ratio
       end
       company.save!
     end

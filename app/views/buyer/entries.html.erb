@@ -28,11 +28,16 @@
 								<%= content_tag :i, '', class: 'icon-comment' %>
 								<%= entry.messages.size %>
 							</span>
-							<% end %>
+							<% end %><br>
 							<% if entry.orders.present? %>
-							<span class='highlight' rel='tooltip' title="<%= pluralize entry.orders.size, 'order' %>">
+							<span rel='tooltip' title="<%= pluralize entry.orders.size, 'order' %>">
 								<%= content_tag :i, '', class: 'icon-shopping-cart' %>
 								<%= entry.orders.size %>
+							</span>
+							<% end %>
+							<% if entry.variance.present? %>
+							<span class='highlight' rel='tooltip' title="With comparative pricing">
+								<%= content_tag :i, '', class: 'icon-list' %>
 							</span>
 							<% end %><br>
 							<%= entry_username_helper(entry)  %>
