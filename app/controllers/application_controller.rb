@@ -106,7 +106,7 @@ class ApplicationController < ActionController::Base
       @seller_company = Company.find(params[:q][:seller_company_id_matches]).nickname
     else
       # @seller_company = 'all sellers'
-      if can? :access, :all
+      if (can? :access, :all) || (can? :create, :entries)
          @seller_company = 'all sellers'
        else
          @seller_company = current_user.company.nickname

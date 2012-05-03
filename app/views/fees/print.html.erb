@@ -1,5 +1,5 @@
 <% if params[:t] == 'bf' %>
-	<% title "Decline Fees of #{@buyer_company}" %>
+	<% title "Decline Fees of #{@buyer_company} #{@branch if @branch}" %>
 	<% subtitle "for parts not ordered" %>
 <% else %>
 	<% title "Market Fees of #{@seller_company}" %>
@@ -16,7 +16,7 @@
 	<%#= content_tag :small, "Base: #{currency(@all_fees.base_fee)}", class: 'span2' %>
 	<%#= content_tag :small, "VAT: #{currency(@all_fees.vat)}", class: 'span2' %>
 	<%= content_tag :pre, "#{pluralize(@fees.count, 'part')} for #{pluralize(@fees.collect(&:entry_id).uniq.count, 'vehicle')}", class: 'pull-left' %>
-	<%= content_tag :small, "#{@seller_company.upcase}' share: #{currency(@all_fees.supplier_share)}", class: 'pull-right' if params[:t] == 'bf' %>
+	<%= content_tag :span, "#{@seller_company.upcase} share: #{currency(@all_fees.supplier_share)}", class: 'pull-right' if params[:t] == 'bf' %>
 <% end %>
 <hr>
 <%= content_tag :table, class: 'table table-condensed' do %>

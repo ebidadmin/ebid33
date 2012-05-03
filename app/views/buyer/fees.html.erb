@@ -1,12 +1,18 @@
 <% title 'Decline Fees' %>
 <% subtitle "for parts not ordered #{period_covered_helper(@all_fees, params[:q])}" %>
 
-<%= content_tag :h2, class: 'row' do %>
-	<%= content_tag :span, ph_currency(@all_fees.total_fee), class: 'span2' %>
+<%= content_tag :h3, class: 'row' do %>
+	<%= content_tag :span, ph_currency(@all_fees.total_fee), class: 'span3' %>
 	<%= content_tag :small, "Base: #{currency(@all_fees.base_fee)}", class: 'span2' %>
 	<%= content_tag :small, "VAT: #{currency(@all_fees.vat)}", class: 'span2' %>
-	<%= display_seller_company %>
 <% end %>
+<%= content_tag :h3, class: 'row' do %>
+	<%= content_tag :span, ph_currency(@all_fees.supplier_share), class: 'span3' %>
+	<%= content_tag :small, "#{pluralize(@all_fees.count, 'part')} for #{pluralize(@all_fees.collect(&:entry_id).uniq.count, 'vehicle')}", class: 'span3' %>
+	<%= display_seller_company %>
+	<%= content_tag :span, "#{@branch} only", class: 'label' if @branch %>
+<% end %>
+<hr>
 
 <% unless @all_fees.blank? %>
 	<%= content_tag :p, page_entries_info(@fees), class: 'muted' %>
@@ -92,6 +98,9 @@
 	<%= search_form_for @q, url: buyer_fees_path do |f| %>
 	  <%= f.label 'Plate No.' %>
 	  <%= f.text_field :entry_plate_no_cont, class: 'span2' %>
+		<%= f.label 'Branch' %>
+	  <%= content_tag :p, (f.collection_select :buyer_branch_id_eq, current_user.company.branches, :id, :name, include_blank: true) %>
+	  <%#= f.grouped_collection_select :buyer_branch_id_eq, Company.where(primary_role: 2), :branches, :nickname, :id, :name, {include_blank: true} %>
 	  <%= f.label 'Seller' %>
 	  <%= content_tag :p, (f.collection_select :seller_company_id_matches, Company.where(primary_role: 3), :id, :nickname, include_blank: true) %>
 	  <%= f.label 'Period Covered' %>

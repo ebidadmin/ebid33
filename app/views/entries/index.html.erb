@@ -6,7 +6,7 @@
 	<%= render 'entries/thead_index' %>
 
 	<%= content_tag :tbody do %>
-		<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
+		<% @entries.group_by{ |o| o.updated_at.beginning_of_day }.each do |date, entries| %>
 			<%= content_tag :tr do %>
 				<%= content_tag :td, colspan: 6, class: 'well' do %>
 					<%= content_tag :h5, regular_date(date) %>

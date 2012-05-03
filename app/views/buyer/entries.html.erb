@@ -7,7 +7,7 @@
 		<%= render 'entries/thead_index' %>
 		<%= content_tag :tbody do %>
 
-			<% @entries.group_by{ |o| o.created_at.beginning_of_day }.each do |date, entries| %>
+			<% @entries.group_by{ |o| o.updated_at.beginning_of_day }.each do |date, entries| %>
 
 				<%= content_tag :tr do %>
 					<%= content_tag :td, colspan: 6, class: 'well' do %>
@@ -28,9 +28,9 @@
 								<%= content_tag :i, '', class: 'icon-comment' %>
 								<%= entry.messages.size %>
 							</span>
-							<% end %><br>
+							<% end %>
 							<% if entry.orders.present? %>
-							<span rel='tooltip' title="<%= pluralize entry.orders.size, 'order' %>">
+							<br><span rel='tooltip' title="<%= pluralize entry.orders.size, 'order' %>">
 								<%= content_tag :i, '', class: 'icon-shopping-cart' %>
 								<%= entry.orders.size %>
 							</span>

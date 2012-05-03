@@ -6,6 +6,7 @@ class FeesController < ApplicationController
     @all_fees ||= @q.result
     @fees = @all_fees.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], [:seller_company], :order).paginate(page: params[:page], per_page: 20)
     
+    @branch = Branch.find(params[:q][:buyer_branch_id_eq]).name if params[:q] && params[:q][:buyer_branch_id_eq].present?
     buyer_present?
     seller_present?
   end
@@ -60,6 +61,7 @@ class FeesController < ApplicationController
     @all_fees ||= @q.result
     @fees = @all_fees.includes([:entry => [:user, :car_brand, :car_model]], [:line_item => :car_part], :seller_company)#.paginate(page: params[:page], per_page: 15)
     
+    @branch = Branch.find(params[:q][:buyer_branch_id_eq]).name if params[:q] && params[:q][:buyer_branch_id_eq].present?
     buyer_present?
     seller_present?
     render layout: 'print'

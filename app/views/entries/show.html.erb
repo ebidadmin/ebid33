@@ -67,14 +67,17 @@
 		</div>
 		<div class="btn-group">
 			<%= link_to '#', class: 'btn dropdown-toggle', "data-toggle" => "dropdown" do %>
-				<%= content_tag :i, '', class: 'icon-list' %>
+				<%= content_tag :i, '', class: 'icon-cog' %>
 				Tools
 				<%= content_tag :span, '', class: 'caret' %>
 			<% end %>
 			<ul class="dropdown-menu">
 				<%= nav_link('Parts Surrender', surrender_parts_path(@entry)) %>
-				<%= nav_link('Compute Variance', new_entry_variance_path(@entry)) %>
-				<%= nav_link('Show Variance', variance_path(id: @entry)) %>
+				<% if @entry.variance.blank? %>
+					<%= nav_link('Compute Variance', new_entry_variance_path(@entry)) %>
+				<% else %>
+					<%= nav_link('Show Variance', variance_path(id: @entry.variance.id, entry_id: @entry.id)) %>
+				<% end %>
 			</ul>
 			<%= link_with_icon('Preview', print_entry_path(@entry), 'print') %>
 			<%= link_to "Expire", expire_entries_path(id: @entry), class: 'btn' %>

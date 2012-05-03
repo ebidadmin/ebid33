@@ -16,6 +16,7 @@
 		<%= content_tag :span, ph_currency(@all_fees.supplier_share), class: 'span3' %>
 		<%= content_tag :small, "#{pluralize(@all_fees.count, 'part')} for #{pluralize(@all_fees.collect(&:entry_id).uniq.count, 'vehicle')}", class: 'span3' %>
 		<%= display_seller_company %>
+		<%= content_tag :span, "#{@branch} only", class: 'label' if @branch %>
 		<% end %>
 	<% else %>
 		<%= content_tag :h3, class: 'row' do %>
@@ -127,6 +128,7 @@
 	  <%= f.text_field :order_id_matches, class: 'span2' %>
 	  <%= f.label 'Buyer' %>
 	  <%= f.collection_select :buyer_company_id_matches, Company.where(primary_role: 2), :id, :nickname, include_blank: true %>
+	  <%= f.grouped_collection_select :buyer_branch_id_eq, Company.where(primary_role: 2), :branches, :nickname, :id, :name, {include_blank: true} %>
 	  <%= f.label 'Seller' %>
 	  <%= f.collection_select :seller_company_id_matches, Company.where(primary_role: 3), :id, :nickname, include_blank: true %>
 	  <%= f.label 'Period Covered' %>
